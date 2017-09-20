@@ -6,4 +6,8 @@ Here are some readme changes to test.
 Make some chanes on the dlb-readme-edits branch.
 This file is currently on the master branch.
 
+<<<<<<< HEAD
 Adding this line of text on branch2
+=======
+Adding this line of text on branch1
+>>>>>>> db-branch1
