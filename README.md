@@ -1,21 +1,10 @@
 # Software-Team
 This repo contains all software for past and current season robots, scouting software and miscellaneous pieces of software.
 
+## TyRapXVI
 
-Here are some readme changes to test. 
-Make some chanes on the dlb-readme-edits branch.
-This file is currently on the master branch.
+This directory contains the 2016 robot code.
 
+## TyRapXVII
 
-
-Adding this line of text on branch2
-
-Using branch2 via the web interface
-
-
-
-Adding this line of text on branch2
-
-Adding this line of text on branch1
-
-
+This directory contains the 2017 robot code.
