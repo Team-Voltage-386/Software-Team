@@ -298,18 +298,20 @@ public class AutoFunctions
 	    return direction.counterClockwise;
 	}
     }
-
+	/**
+	*Put the gear on the side peg using vision
+	*/
     public static void gearVision()
     {
 	double turn;
-	double error = getGearError();
+	double error = getGearError(); //See where the target currently is
 	int x = 0;
 	double speed;
 	IO.camera.setResolution(160, 120);
-	while (error == 0.1)
+	while (error == 0.1)//While you dont see the target and before you see it for the first time
 	{
 	    error = getGearError();
-	    if (accountForAll() == direction.clockwise)
+	    if (accountForAll() == direction.clockwise)//If its probably to the right, turn right. It knows which direction to go by smart dashboard input
 	    {
 		IO.drivetrain.tankDrive(Constants.forwards * Constants.baseTurnSpeed, 0);
 		if (RobotState.isOperatorControl())
@@ -317,7 +319,7 @@ public class AutoFunctions
 		    return;
 		}
 	    }
-	    if (accountForAll() == direction.counterClockwise)
+	    if (accountForAll() == direction.counterClockwise)//If its probably to the left, turn left
 	    {
 		IO.drivetrain.tankDrive(0, Constants.forwards * Constants.baseTurnSpeed);
 		if (RobotState.isOperatorControl())
@@ -326,17 +328,17 @@ public class AutoFunctions
 		}
 	    }
 	}
-	while (IO.gearUltrasonic.getInches() > 7)
+	while (IO.gearUltrasonic.getInches() > 7)//After you see it once and before you're in range
 	{
 	    x++;
-	    SmartDashboard.putNumber("vision loop count", x);
+	    SmartDashboard.putNumber("vision loop count", x);//debugging
 	    error = getGearError();
-	    if (Math.abs(error) >= 9)
+	    if (Math.abs(error) >= 9)//If more than 9 pixels off, turn in the correct direction
 	    {
 		speed = 0;
 		turn = (error / Math.abs(error))
 			* SmartDashboard.getNumber("Pixel Compensation", Constants.pixelCompensation);
-	    } else
+	    } else//If you're within the tolerance or you dont see it, go forward
 	    {
 		speed = -.7;
 		turn = 0;
@@ -346,9 +348,9 @@ public class AutoFunctions
 		return;
 	}
 
-	IO.gearDelivery.set(DoubleSolenoid.Value.kReverse);
+	IO.gearDelivery.set(DoubleSolenoid.Value.kReverse);//Once you are close to it drop the gear
 	Timer.delay(1);
-	while (IO.gearUltrasonic.getInches() < 7)
+	while (IO.gearUltrasonic.getInches() < 7)//Then leave
 	{
 	    IO.drivetrain.tankDrive(0.7, 0.7);
 	    if (RobotState.isOperatorControl())
@@ -371,27 +373,27 @@ public class AutoFunctions
 	ArrayList<Rect> contourList = new ArrayList<Rect>();
 	double error = 0;
 	IO.camera.setResolution(160, 120);
-	if (IO.cameraSink.grabFrame(image) == 0)
+	if (IO.cameraSink.grabFrame(image) == 0)//If theres no image, do nothing
 	{
 	    DriverStation.reportWarning("No image", false);
 	    return 0;
 	}
-	pipeline.process(image);
-	SmartDashboard.putNumber("contours detected post filter", pipeline.filterContoursOutput().size());
+	pipeline.process(image);//Process the image through the pipeline
+	SmartDashboard.putNumber("contours detected post filter", pipeline.filterContoursOutput().size()); //Debugging
 	System.out.println(pipeline.filterContoursOutput().size());
-	contourList.clear();
-	if (pipeline.filterContoursOutput().size() >= 2)
+	contourList.clear();//Clean the contour list from the last run
+	if (pipeline.filterContoursOutput().size() >= 2)//If there are enough contours to calculate
 	{
 	    objectIndex1 = 0;
 	    objectIndex2 = 1;
 	    // smallestDistance = 1000;
-	    for (MatOfPoint i : pipeline.filterContoursOutput())
+	    for (MatOfPoint i : pipeline.filterContoursOutput())//Add every contour to the contour list
 	    {
 		contourList.add(Imgproc.boundingRect(i));
 	    }
-	    target1 = contourList.get(objectIndex1);
-	    target2 = contourList.get(objectIndex2);
-	    if (target1.x < target2.x)
+	    target1 = contourList.get(objectIndex1);//Target one is the bigger target
+	    target2 = contourList.get(objectIndex2);//Target two is the smaller target
+	    if (target1.x < target2.x)//Figure out which target is on the left
 	    {
 		leftTarget = target1;
 		rightTarget = target2;
@@ -401,8 +403,8 @@ public class AutoFunctions
 		rightTarget = target1;
 	    }
 	    combinedTarget = new Rect(leftTarget.x, leftTarget.y, rightTarget.x + rightTarget.width - leftTarget.x,
-		    rightTarget.height);
-	    error = combinedTarget.x + (combinedTarget.width / 2) - (80);
+		    rightTarget.height);//Combine the rectangles
+	    error = combinedTarget.x + (combinedTarget.width / 2) - (80);//Return the center-x of the rectangle
 	} else
 	{
 	    error = 0.1;
