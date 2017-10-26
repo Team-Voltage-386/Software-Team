@@ -6,7 +6,11 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveForward extends Command {
 
+    private double distance;
+
     public DriveForward(double distance) {
+	this.distance = distance;
+
 	requires(Robot.driveTrain);
     }
 
@@ -20,7 +24,8 @@ public class DriveForward extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-
+	// TODO: determine how to drive forward for a specific distance
+	Robot.driveTrain.driveForward();
     }
 
     // Make this return true when this Command no longer needs to run execute()

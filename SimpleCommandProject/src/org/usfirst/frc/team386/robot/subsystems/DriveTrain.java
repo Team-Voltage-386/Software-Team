@@ -24,11 +24,26 @@ public class DriveTrain extends Subsystem {
 	setDefaultCommand(new TankDriveWithJoysticks());
     }
 
+    /**
+     * Control the robot drive with the left and right joysticks in tank mode.
+     * 
+     * @param left
+     *            The left joystick
+     * @param right
+     *            The right joystick
+     */
     public void drive(Joystick left, Joystick right) {
 	drive.setSafetyEnabled(true);
 	System.out.println("Invoking drive function within driveTrain subsystem");
 
 	drive.tankDrive(left, right);
 
+    }
+
+    /**
+     * Drive the robot forward at full speed.
+     */
+    public void driveForward() {
+	drive.tankDrive(1.0, 1.0);
     }
 }
