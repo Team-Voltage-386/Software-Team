@@ -6,36 +6,38 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class driveSpecificDistance extends Command {
 
-	public driveSpecificDistance(double distance) {
-		requires(Robot.driveTrain);
-	}
-	// Called just before this Command runs the first time
-	@Override
-	protected void initialize() {
-		// TBD - should probably be some initialization of the drive in here. Maybe set the motor speeds to zero?
-	}
+    public driveSpecificDistance(double distance) {
+	requires(Robot.driveTrain);
+    }
 
-	// Called repeatedly when this Command is scheduled to run
-	@Override
-	protected void execute() {
-		
-	}
+    // Called just before this Command runs the first time
+    @Override
+    protected void initialize() {
+	// TBD - should probably be some initialization of the drive in here. Maybe set
+	// the motor speeds to zero?
+    }
 
-	// Make this return true when this Command no longer needs to run execute()
-	@Override
-	protected boolean isFinished() {
-		return false;
-	}
+    // Called repeatedly when this Command is scheduled to run
+    @Override
+    protected void execute() {
 
-	// Called once after isFinished returns true
-	@Override
-	protected void end() {
-	}
+    }
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	@Override
-	protected void interrupted() {
-	}
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+	return false;
+    }
+
+    // Called once after isFinished returns true
+    @Override
+    protected void end() {
+    }
+
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    @Override
+    protected void interrupted() {
+    }
 
 }
