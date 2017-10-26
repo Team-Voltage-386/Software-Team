@@ -4,9 +4,9 @@ import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class driveSpecificDistance extends Command {
+public class DriveForward extends Command {
 
-    public driveSpecificDistance(double distance) {
+    public DriveForward(double distance) {
 	requires(Robot.driveTrain);
     }
 
