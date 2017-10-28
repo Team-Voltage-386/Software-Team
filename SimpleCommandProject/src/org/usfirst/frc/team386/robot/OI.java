@@ -20,20 +20,27 @@ public class OI {
 
     public Joystick leftStick = new Joystick(0); // set to ID 1 in DriverStation
     public Joystick rightStick = new Joystick(1); // set to ID 2 in DriverStation
+
     Relay decorationLight = new Relay(2);
 
-    public Button rightTriggerButton = new JoystickButton(rightStick, 1);
-    public Button rightButtonNumber2 = new JoystickButton(rightStick, 2);
-    public Button leftTriggerButton = new JoystickButton(leftStick, 1);
+    public Button rightJoystickButton1 = new JoystickButton(rightStick, 1);
+    public Button rightJoystickButton2 = new JoystickButton(rightStick, 2);
+    public Button leftJoystickButton1 = new JoystickButton(leftStick, 1);
 
     public OI() {
-	rightTriggerButton.whenPressed(new StartShooterCommand());
-	rightTriggerButton.whenReleased(new StopShooterCommand());
+	// The right joystick trigger button will start the shooter wheel when pressed
+	// and then turn the same shooter wheel off when released.
+	rightJoystickButton1.whenPressed(new StartShooterCommand());
+	rightJoystickButton1.whenReleased(new StopShooterCommand());
 
-	rightButtonNumber2.whenPressed(new ShootCommand());
-	rightButtonNumber2.whenReleased(new DoNotShootCommand());
+	// The button labeled 2 on the joystick will run all subsystems needed to shoot
+	// balls when pressed and will disable those subsystems when released.
+	rightJoystickButton2.whenPressed(new ShootCommand());
+	rightJoystickButton2.whenReleased(new DoNotShootCommand());
 
-	leftTriggerButton.whenPressed(new StartTriggerCommand());
-	leftTriggerButton.whenReleased(new StopTriggerCommand());
+	// The left joystick trigger button will start the feeder wheel when pressed and
+	// turn the same wheel off when released.
+	leftJoystickButton1.whenPressed(new StartTriggerCommand());
+	leftJoystickButton1.whenReleased(new StopTriggerCommand());
     }
 }
