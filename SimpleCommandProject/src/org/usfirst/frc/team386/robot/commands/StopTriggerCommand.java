@@ -5,13 +5,12 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Stop the trigger wheel.
  */
 public class StopTriggerCommand extends InstantCommand {
 
     public StopTriggerCommand() {
 	super();
-	// Use requires() here to declare subsystem dependencies
 	requires(Robot.feedSubsystem);
     }
 

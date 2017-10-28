@@ -11,16 +11,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class DriveTrain extends Subsystem {
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-
     private RobotDrive drive = new RobotDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 	    RobotMap.rearRightMotor);
 
     @Override
     public void initDefaultCommand() {
-	// Set the default command for a subsystem here.
-	// setDefaultCommand(new MySpecialCommand());
 	setDefaultCommand(new TankDriveWithJoysticks());
     }
 
@@ -35,13 +30,13 @@ public class DriveTrain extends Subsystem {
     public void drive(Joystick left, Joystick right) {
 	drive.setSafetyEnabled(true);
 	drive.tankDrive(left, right);
-
     }
 
     /**
      * Drive the robot forward at full speed.
      */
     public void driveForward() {
+	drive.setSafetyEnabled(true);
 	drive.tankDrive(1.0, 1.0);
     }
 }

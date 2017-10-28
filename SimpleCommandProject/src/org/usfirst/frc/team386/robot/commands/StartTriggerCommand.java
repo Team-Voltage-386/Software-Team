@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Start the shooting trigger wheel.
  */
 public class StartTriggerCommand extends Command {
 

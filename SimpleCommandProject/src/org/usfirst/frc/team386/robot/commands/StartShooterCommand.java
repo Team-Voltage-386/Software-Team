@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Start the shooter wheel.
  */
 public class StartShooterCommand extends Command {
 
