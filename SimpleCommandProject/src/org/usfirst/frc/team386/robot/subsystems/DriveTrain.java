@@ -34,8 +34,6 @@ public class DriveTrain extends Subsystem {
      */
     public void drive(Joystick left, Joystick right) {
 	drive.setSafetyEnabled(true);
-	System.out.println("Invoking drive function within driveTrain subsystem");
-
 	drive.tankDrive(left, right);
 
     }

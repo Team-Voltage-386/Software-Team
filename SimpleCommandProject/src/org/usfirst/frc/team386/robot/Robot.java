@@ -3,6 +3,8 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
 import org.usfirst.frc.team386.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team386.robot.subsystems.FeedSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.ShooterSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -21,6 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
     public static final DriveTrain driveTrain = new DriveTrain();
+    public static final ShooterSubsystem shootSubsystem = new ShooterSubsystem();
+    public static final FeedSubsystem feedSubsystem = new FeedSubsystem();
     public static OI oi;
 
     Command autonomousCommand;
@@ -86,7 +90,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
 	// Scheduler.getInstance().run();
-	System.out.println("inside autonomousPeriodic");
     }
 
     @Override
@@ -97,7 +100,6 @@ public class Robot extends IterativeRobot {
 	// this line or comment it out.
 	if (autonomousCommand != null)
 	    autonomousCommand.cancel();
-	System.out.println("inside teleopInit");
     }
 
     /**
@@ -106,7 +108,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 	Scheduler.getInstance().run();
-	System.out.println("this is my code in teleopPeriodic");
     }
 
     /**
