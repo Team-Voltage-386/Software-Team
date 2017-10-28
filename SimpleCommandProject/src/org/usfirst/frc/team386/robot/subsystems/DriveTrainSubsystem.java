@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- *
+ * Subsystem for operating the drive train and controlling vehicle movement.
  */
-public class DriveTrain extends Subsystem {
+public class DriveTrainSubsystem extends Subsystem {
     private RobotDrive drive = new RobotDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
 	    RobotMap.rearRightMotor);
 

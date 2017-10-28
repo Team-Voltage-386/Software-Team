@@ -20,7 +20,7 @@ public class StartShooterCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 	System.out.println("Running shooter wheel");
-	Robot.shootSubsystem.turnOnShooterWheel(-0.5);
+	Robot.shootSubsystem.turnOn(0.5);
     }
 
     // Make this return true when this Command no longer needs to run execute()

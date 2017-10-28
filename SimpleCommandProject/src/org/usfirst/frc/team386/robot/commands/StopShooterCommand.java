@@ -17,7 +17,7 @@ public class StopShooterCommand extends InstantCommand {
     // Called just before this Command runs the first time
     protected void initialize() {
 	// System.out.println("Stop shooter wheel");
-	Robot.shootSubsystem.turnOffShooterWheel();
+	Robot.shootSubsystem.turnOff();
     }
 
     // Called once after isFinished returns true

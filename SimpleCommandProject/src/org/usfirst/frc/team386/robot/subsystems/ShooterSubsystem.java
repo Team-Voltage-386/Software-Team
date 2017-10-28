@@ -18,19 +18,36 @@ public class ShooterSubsystem extends Subsystem {
     }
 
     /**
+     * Turn on the shooter wheel at the given speed. Using this method will always
+     * cause the shooter wheel to turn in the correct direction.
+     * 
+     * @param speed
+     *            Range from 0.0 to 1.0
+     */
+    public void turnOn(double speed) {
+	turnOn(speed, false);
+    }
+
+    /**
      * Turn on the shooter wheel at the given speed.
      * 
      * @param speed
-     *            Range from -1.0 to 1.0
+     *            Range from 0.0 to 1.0
+     * @param reverse
+     *            Set to true to reverse the shooter wheel.
      */
-    public void turnOnShooterWheel(double speed) {
-	shooter.setSpeed(speed);
+    public void turnOn(double speed, boolean reverse) {
+	if (reverse) {
+	    shooter.setSpeed(speed);
+	} else {
+	    shooter.setSpeed(-speed);
+	}
     }
 
     /**
      * Set the shooter wheel speed to 0.
      */
-    public void turnOffShooterWheel() {
+    public void turnOff() {
 	shooter.setSpeed(0);
     }
 }

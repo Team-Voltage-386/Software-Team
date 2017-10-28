@@ -16,7 +16,7 @@ public class StopTriggerCommand extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.feedSubsystem.turnOffTriggerWheel();
+	Robot.feedSubsystem.turnOff();
     }
 
 }

@@ -2,7 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
-import org.usfirst.frc.team386.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team386.robot.subsystems.DriveTrainSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.FeedSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ShooterSubsystem;
 
@@ -22,9 +22,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-    public static final DriveTrain driveTrain = new DriveTrain();
+    public static final DriveTrainSubsystem driveTrain = new DriveTrainSubsystem();
     public static final ShooterSubsystem shootSubsystem = new ShooterSubsystem();
     public static final FeedSubsystem feedSubsystem = new FeedSubsystem();
+
     public static OI oi;
 
     Command autonomousCommand;

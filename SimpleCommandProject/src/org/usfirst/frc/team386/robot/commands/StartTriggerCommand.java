@@ -19,7 +19,7 @@ public class StartTriggerCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.feedSubsystem.turnOnTriggerWheel(-0.2);
+	Robot.feedSubsystem.turnOn(0.2);
     }
 
     // Make this return true when this Command no longer needs to run execute()
