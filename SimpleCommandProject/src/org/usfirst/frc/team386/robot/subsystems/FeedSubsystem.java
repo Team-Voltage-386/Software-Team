@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class FeedSubsystem extends Subsystem {
 
-    private Spark trigger = new Spark(RobotMap.triggerMotor);
+    private Spark trigger;
+
+    public FeedSubsystem() {
+	this.trigger = new Spark(RobotMap.triggerMotor);
+    }
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
