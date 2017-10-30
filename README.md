@@ -15,3 +15,6 @@ This directory contains the 2016 robot code.
 ## TyRapXVII
 
 This directory contains the 2017 robot code.
+
+
+This is a test 	commit to the readme to determine if GH works on school network for commits and pushes/pulls.
