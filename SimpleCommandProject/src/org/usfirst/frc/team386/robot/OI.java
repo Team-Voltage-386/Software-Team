@@ -26,6 +26,7 @@ public class OI {
     public Button rightJoystickButton1 = new JoystickButton(rightStick, 1);
     public Button rightJoystickButton2 = new JoystickButton(rightStick, 2);
     public Button leftJoystickButton1 = new JoystickButton(leftStick, 1);
+    public Button leftJoystickButton2 = new JoystickButton(leftStick, 2);
 
     public OI() {
 	// The right joystick trigger button will start the shooter wheel when pressed
