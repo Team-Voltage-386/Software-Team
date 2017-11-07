@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
 import org.usfirst.frc.team386.robot.subsystems.AgitatorSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.CameraControl;
 import org.usfirst.frc.team386.robot.subsystems.DriveTrainSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.FeedSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ShooterSubsystem;
@@ -27,6 +28,7 @@ public class Robot extends IterativeRobot {
     public static final ShooterSubsystem shootSubsystem = new ShooterSubsystem();
     public static final FeedSubsystem feedSubsystem = new FeedSubsystem();
     public static final AgitatorSubsystem agitatorSubsystem = new AgitatorSubsystem();
+    public static final CameraControl cameracontrol = new CameraControl();
 
     public static OI oi;
 
