@@ -29,6 +29,8 @@ public class Robot extends IterativeRobot {
     public static final FeedSubsystem feedSubsystem = new FeedSubsystem();
     public static final AgitatorSubsystem agitatorSubsystem = new AgitatorSubsystem();
     public static final CameraControl cameracontrol = new CameraControl();
+    
+    public static final ObjectTracker objectTracker = new ObjectTracker();
 
     public static OI oi;
 
