@@ -24,6 +24,7 @@ public class DriveForward extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+	System.out.println("Drive forward " + distance);
 	// TODO: determine how to drive forward for a specific distance
 	Robot.driveTrain.driveForward();
     }
