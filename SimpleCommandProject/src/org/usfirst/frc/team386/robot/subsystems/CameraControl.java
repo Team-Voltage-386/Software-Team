@@ -21,7 +21,7 @@ public class CameraControl extends Subsystem {
     }
 
     public void center() {
-	servo.set(.5);
+	servo.set(0.5);
     }
 
     public void initDefaultCommand() {

@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
@@ -101,10 +100,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-	// This makes sure that the autonomous stops running when
-	// teleop starts running. If you want the autonomous to
-	// continue until interrupted by another command, remove
-	// this line or comment it out.
+	/* This makes sure that the autonomous stops running when
+	teleop starts running. If you want the autonomous to
+	continue until interrupted by another command, remove
+	this line or comment it out.
+	*/
 	if (autonomousCommand != null)
 	    autonomousCommand.cancel();
     }
