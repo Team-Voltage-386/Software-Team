@@ -1,1 +1,0 @@
-INDEX VERSION 1.130+C:\Users\serpe\Documents\GitHub\Software-Team\.metadata\.plugins\org.eclipse.jdt.core
