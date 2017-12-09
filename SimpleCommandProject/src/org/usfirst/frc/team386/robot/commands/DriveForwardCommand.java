@@ -4,11 +4,11 @@ import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveForward extends Command {
+public class DriveForwardCommand extends Command {
 
     private double distance;
 
-    public DriveForward(double distance) {
+    public DriveForwardCommand(double distance) {
 	this.distance = distance;
 
 	requires(Robot.driveTrain);

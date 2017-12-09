@@ -1,6 +1,6 @@
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
+import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticksCommand;
 import org.usfirst.frc.team386.robot.subsystems.AgitatorSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CameraControlSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveTrainSubsystem;
@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
-	chooser.addDefault("Default Auto", new TankDriveWithJoysticks());
+	chooser.addDefault("Default Auto", new TankDriveWithJoysticksCommand());
 	// chooser.addObject("My Auto", new MyAutoCommand());
 	SmartDashboard.putData("Auto mode", chooser);
     }

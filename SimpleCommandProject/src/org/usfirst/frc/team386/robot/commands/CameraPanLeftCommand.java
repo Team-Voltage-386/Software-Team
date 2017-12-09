@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CameraPanLeft extends Command {
+public class CameraPanLeftCommand extends Command {
 
-    public CameraPanLeft() 
+    public CameraPanLeftCommand() 
     {
 	 requires(Robot.cameracontrol);
     }

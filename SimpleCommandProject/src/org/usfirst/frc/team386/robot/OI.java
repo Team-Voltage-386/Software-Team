@@ -2,9 +2,9 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.StartTriggerCommand;
 import org.usfirst.frc.team386.robot.commands.StopTriggerCommand;
-import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerCenter;
-import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerLeft;
-import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerRight;
+import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerCenterCommand;
+import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerLeftCommand;
+import org.usfirst.frc.team386.robot.commands.UpdateObjectTrackerRightCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Relay;
@@ -54,8 +54,8 @@ public class OI {
 	leftJoystickButton1.whenPressed(new StartTriggerCommand());
 	leftJoystickButton1.whenReleased(new StopTriggerCommand());
 
-	leftJoystickButton4.whenPressed(new UpdateObjectTrackerLeft());
-	leftJoystickButton3.whenPressed(new UpdateObjectTrackerCenter());
-	leftJoystickButton5.whenPressed(new UpdateObjectTrackerRight());
+	leftJoystickButton4.whenPressed(new UpdateObjectTrackerLeftCommand());
+	leftJoystickButton3.whenPressed(new UpdateObjectTrackerCenterCommand());
+	leftJoystickButton5.whenPressed(new UpdateObjectTrackerRightCommand());
     }
 }

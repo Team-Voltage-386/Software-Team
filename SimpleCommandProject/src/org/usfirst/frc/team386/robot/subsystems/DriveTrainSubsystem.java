@@ -1,7 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticks;
+import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticksCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -20,7 +20,7 @@ public class DriveTrainSubsystem extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-	setDefaultCommand(new TankDriveWithJoysticks());
+	setDefaultCommand(new TankDriveWithJoysticksCommand());
     }
 
     /**

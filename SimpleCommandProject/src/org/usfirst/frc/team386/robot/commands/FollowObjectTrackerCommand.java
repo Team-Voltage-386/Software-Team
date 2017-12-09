@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class FollowObjectTracker extends Command {
+public class FollowObjectTrackerCommand extends Command {
 
-    public FollowObjectTracker() {
+    public FollowObjectTrackerCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.cameracontrol);

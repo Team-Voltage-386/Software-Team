@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class UpdateObjectTrackerCenter extends InstantCommand {
+public class UpdateObjectTrackerRightCommand extends InstantCommand {
 
-    public UpdateObjectTrackerCenter() {
+    public UpdateObjectTrackerRightCommand() {
 	super();
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
@@ -19,7 +19,7 @@ public class UpdateObjectTrackerCenter extends InstantCommand {
     // Called once when the command executes
     protected void initialize() {
 	if (Robot.objectTracker.isSimulated()) {
-	    ((SimulatedObjectTracker) Robot.objectTracker).simulateTrackCenter();
+	    ((SimulatedObjectTracker) Robot.objectTracker).simulateTrackRight();
 	}
     }
 

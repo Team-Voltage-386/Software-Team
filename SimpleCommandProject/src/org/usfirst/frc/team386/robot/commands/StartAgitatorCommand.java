@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class StartAgitator extends InstantCommand {
+public class StartAgitatorCommand extends InstantCommand {
 
-    public StartAgitator() {
+    public StartAgitatorCommand() {
 	super();
 	requires(Robot.agitatorSubsystem);
     }

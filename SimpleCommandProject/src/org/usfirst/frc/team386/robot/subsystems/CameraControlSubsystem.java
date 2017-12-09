@@ -1,6 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.commands.FollowObjectTracker;
+import org.usfirst.frc.team386.robot.commands.FollowObjectTrackerCommand;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -25,7 +25,7 @@ public class CameraControlSubsystem extends Subsystem {
     }
 
     public void initDefaultCommand() {
-	setDefaultCommand(new FollowObjectTracker());
+	setDefaultCommand(new FollowObjectTrackerCommand());
 
     }
 }

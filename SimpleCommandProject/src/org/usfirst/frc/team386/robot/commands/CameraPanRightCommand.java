@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CameraPanRight extends Command {
+public class CameraPanRightCommand extends Command {
 
-    public CameraPanRight() 
+    public CameraPanRightCommand() 
     {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.cameracontrol);

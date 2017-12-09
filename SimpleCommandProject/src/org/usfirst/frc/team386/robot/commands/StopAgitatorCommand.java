@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  * Stop the ball bucket agitator.
  */
-public class StopAgitator extends InstantCommand {
+public class StopAgitatorCommand extends InstantCommand {
 
-    public StopAgitator() {
+    public StopAgitatorCommand() {
 	super();
 	requires(Robot.agitatorSubsystem);
     }

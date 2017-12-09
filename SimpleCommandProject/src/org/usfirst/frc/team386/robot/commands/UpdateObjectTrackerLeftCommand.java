@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class UpdateObjectTrackerLeft extends InstantCommand {
+public class UpdateObjectTrackerLeftCommand extends InstantCommand {
 
-    public UpdateObjectTrackerLeft() {
+    public UpdateObjectTrackerLeftCommand() {
 	super();
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
