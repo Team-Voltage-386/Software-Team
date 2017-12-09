@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class CameraControl extends Subsystem {
+public class CameraControlSubsystem extends Subsystem {
 
     Servo servo = new Servo(4);
 

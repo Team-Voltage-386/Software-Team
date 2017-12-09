@@ -35,11 +35,11 @@ public class OpencvObjectTracker implements ObjectTracker {
     private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
 
     /**
-     * Construct a new ObjectTracker. It will use the camera with the ID 0 and an
+     * Construct a new OpencvObjectTracker. It will use the given camera ID and an
      * FPS value of 10. The HSV min/max values are for a green cup I have at home.
      */
-    public OpencvObjectTracker() {
-	this.cameraId = 0;
+    public OpencvObjectTracker(int cameraId) {
+	this.cameraId = cameraId;
 	this.fps = 10;
 	this.hsvMinValues = new Scalar(33, 108, 138);
 	this.hsvMaxValues = new Scalar(55, 255, 255);
@@ -137,7 +137,7 @@ public class OpencvObjectTracker implements ObjectTracker {
      */
     public static void main(String[] args) {
 	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	OpencvObjectTracker tracker = new OpencvObjectTracker();
+	OpencvObjectTracker tracker = new OpencvObjectTracker(0);
 	tracker.startCapture();
 	while (true) {
 	    if (tracker.isObjectPresent()) {
