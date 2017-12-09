@@ -3,6 +3,13 @@ package org.usfirst.frc.team386.robot;
 public interface ObjectTracker {
 
     /**
+     * Return true if the object tracking implementation is simulated.
+     * 
+     * @return True if tracking is simulated.
+     */
+    public boolean isSimulated();
+
+    /**
      * Return 1, 0, -1 depending on the direction the tracker must turn to follow an
      * object.
      * 

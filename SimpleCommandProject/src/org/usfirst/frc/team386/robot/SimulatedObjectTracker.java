@@ -4,6 +4,16 @@ public class SimulatedObjectTracker implements ObjectTracker {
 
     private int direction = 0;
 
+    /**
+     * Return true if the object tracking implementation is simulated.
+     * 
+     * @return True if tracking is simulated.
+     */
+    @Override
+    public boolean isSimulated() {
+	return true;
+    }
+
     @Override
     public int getDirection() {
 	return direction;

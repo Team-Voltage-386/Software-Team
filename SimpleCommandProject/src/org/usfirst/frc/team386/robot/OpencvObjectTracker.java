@@ -67,11 +67,22 @@ public class OpencvObjectTracker implements ObjectTracker {
     }
 
     /**
+     * Return true if the object tracking implementation is simulated.
+     * 
+     * @return True if tracking is simulated.
+     */
+    @Override
+    public boolean isSimulated() {
+	return false;
+    }
+
+    /**
      * Return 1, 0, -1 depending on the direction the tracker must turn to follow an
      * object.
      * 
      * @return 1 for right, 0 for stop, -1 for left
      */
+    @Override
     public int getDirection() {
 	return direction;
     }
@@ -81,6 +92,7 @@ public class OpencvObjectTracker implements ObjectTracker {
      * 
      * @return True if the object is present in the camera view.
      */
+    @Override
     public boolean isObjectPresent() {
 	return objectPresent;
     }

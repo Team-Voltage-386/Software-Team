@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
     public static final AgitatorSubsystem agitatorSubsystem = new AgitatorSubsystem();
     public static final CameraControl cameracontrol = new CameraControl();
 
-    public static final SimulatedObjectTracker objectTracker = new SimulatedObjectTracker();
+    public static final ObjectTracker objectTracker = new OpencvObjectTracker();
 
     public static OI oi;
 
