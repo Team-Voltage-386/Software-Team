@@ -20,7 +20,7 @@ public class OI {
     public Joystick leftStick = new Joystick(0); // set to ID 1 in DriverStation
     public Joystick rightStick = new Joystick(1); // set to ID 2 in DriverStation
 
-    Relay decorationLight = new Relay(2);
+    public Relay decorationLight = new Relay(RobotMap.decorationLight);
 
     public Button rightJoystickButton1 = new JoystickButton(rightStick, 1);
     public Button rightJoystickButton2 = new JoystickButton(rightStick, 2);
@@ -35,22 +35,25 @@ public class OI {
     public Button leftJoystickButton5 = new JoystickButton(leftStick, 5);
 
     public OI() {
-	/* The right joystick trigger button will start the shooter wheel when pressed
-	and then turn the same shooter wheel off when released.
-	rightJoystickButton5.whenPressed(new CameraPanRight());
-	rightJoystickButton3.whenPressed(new CameraCenterCommand());
-	rightJoystickButton4.whenPressed(new CameraPanLeft());
-	*/
+	/*
+	 * The right joystick trigger button will start the shooter wheel when pressed
+	 * and then turn the same shooter wheel off when released.
+	 * rightJoystickButton5.whenPressed(new CameraPanRight());
+	 * rightJoystickButton3.whenPressed(new CameraCenterCommand());
+	 * rightJoystickButton4.whenPressed(new CameraPanLeft());
+	 */
 
-	/* The button labeled 2 on the joystick will run all subsystems needed to shoot
-	balls when pressed and will disable those subsystems when released.
-	rightJoystickButton2.whenPressed(new ShootCommand());
-	rightJoystickButton2.whenReleased(new DoNotShootCommand());
-	*/
-	
-	/* The left joystick trigger button will start the feeder wheel when pressed and
-	turn the same wheel off when released.
-	*/
+	/*
+	 * The button labeled 2 on the joystick will run all subsystems needed to shoot
+	 * balls when pressed and will disable those subsystems when released.
+	 * rightJoystickButton2.whenPressed(new ShootCommand());
+	 * rightJoystickButton2.whenReleased(new DoNotShootCommand());
+	 */
+
+	/*
+	 * The left joystick trigger button will start the feeder wheel when pressed and
+	 * turn the same wheel off when released.
+	 */
 	leftJoystickButton1.whenPressed(new StartTriggerCommand());
 	leftJoystickButton1.whenReleased(new StopTriggerCommand());
 

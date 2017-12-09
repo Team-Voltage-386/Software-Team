@@ -21,6 +21,8 @@ public class RobotMap {
     public static int backCamera = 0;
     public static int frontCamera = 1;
 
+    public static int decorationLight = 2;
+
     /*
      * If you are using multiple modules, make sure to define both the port number
      * and the module. For example you with a rangefinder: public static int
