@@ -11,6 +11,7 @@ public class StopAgitatorCommand extends InstantCommand {
 
 	public StopAgitatorCommand() {
 		super();
+		// Uses the agitator subsystem
 		requires(Robot.agitatorSubsystem);
 	}
 
