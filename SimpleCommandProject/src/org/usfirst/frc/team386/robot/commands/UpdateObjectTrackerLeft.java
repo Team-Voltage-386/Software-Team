@@ -1,7 +1,7 @@
 package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
-import org.usfirst.frc.team386.robot.SimulatedObjectTracker;
+import org.usfirst.frc.team386.robot.vision.SimulatedObjectTracker;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 

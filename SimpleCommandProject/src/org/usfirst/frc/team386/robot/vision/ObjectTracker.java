@@ -1,4 +1,4 @@
-package org.usfirst.frc.team386.robot;
+package org.usfirst.frc.team386.robot.vision;
 
 public interface ObjectTracker {
 

@@ -6,6 +6,8 @@ import org.usfirst.frc.team386.robot.subsystems.CameraControl;
 import org.usfirst.frc.team386.robot.subsystems.DriveTrainSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.FeedSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ShooterSubsystem;
+import org.usfirst.frc.team386.robot.vision.ObjectTracker;
+import org.usfirst.frc.team386.robot.vision.OpencvObjectTracker;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
