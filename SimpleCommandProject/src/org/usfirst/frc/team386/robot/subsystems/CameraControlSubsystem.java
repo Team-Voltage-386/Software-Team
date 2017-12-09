@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.FollowObjectTrackerCommand;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class CameraControlSubsystem extends Subsystem {
 
-    Servo servo = new Servo(4);
+    Servo servo = new Servo(RobotMap.cameraServo);
 
     public void panleft() {
 	servo.set(0);
