@@ -1,23 +1,20 @@
 package org.usfirst.frc.team386.robot;
 
-public class ObjectTracker {
+public interface ObjectTracker {
 
-	private int direction = 0;
-	
-	public int getDirection() {
-		return direction;
-	}
-	
-	public void simulateTrackLeft() {
-		this.direction = -1;
-	}
-	
-	public void simulateTrackRight() {
-		this.direction = 1;
-	}
-	
-	public void simulateTrackCenter() {
-		this.direction = 0;
-	}
-	
+    /**
+     * Return 1, 0, -1 depending on the direction the tracker must turn to follow an
+     * object.
+     * 
+     * @return 1 for right, 0 for stop, -1 for left
+     */
+    public int getDirection();
+
+    /**
+     * Return true if the object is present somewhere in the camera's view.
+     * 
+     * @return True if the object is present in the camera view.
+     */
+    public boolean isObjectPresent();
+
 }
