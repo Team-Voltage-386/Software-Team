@@ -217,32 +217,24 @@ public class OpencvObjectTracker implements ObjectTracker {
 			    this.objectPresent = true;
 
 			    for (int i = 0; i < contours.size(); i++) {
-				// Calculate the bounding rectangle of the contour
 				MatOfPoint contour = contours.get(i);
+
 				Rect boundingRect = Imgproc.boundingRect(contour);
-
-				// Calculate the center target bounding rectangle
 				Rect centerTarget = getCenterTargetRect(frame);
-
-				// Convert from the opencv Rect to a java.awt.Rectangle to make it possible to
-				// use intersects().
-				// Rectangle r1 = new Rectangle(boundingRect.x, boundingRect.y,
-				// boundingRect.width,
-				// boundingRect.height);
-				// Rectangle r2 = new Rectangle(centerTarget.x, centerTarget.y,
-				// centerTarget.width,
-				// centerTarget.height);
 
 				// If the bounding rectangle and target intersect, then the direction is 0, the
 				// target is centered
 				if (intersects(boundingRect, centerTarget)) {
+				    System.out.println("Object centered");
 				    this.direction = 0;
 				} else {
 				    if (boundingRect.x > centerTarget.x + centerTarget.width) {
+					System.out.println("Object is to the right");
 					// If the bounding rectangle's X value is greater than the center target X +
 					// width, then the object is to the right
 					this.direction = 1;
 				    } else {
+					System.out.println("Object is to the left");
 					// Otherwise the object is to the left
 					this.direction = -1;
 				    }
@@ -273,29 +265,14 @@ public class OpencvObjectTracker implements ObjectTracker {
 	int x = (frame.width() / 2) - (width / 2);
 	int y = (frame.height() / 2) - (height / 2);
 	return new Rect(x, y, width, height);
-	// return new Record(0, 0, frame.width(), frame.height());
     }
 
-    // Method: Intersect (Rect A, Rect B)
-    // left = max(A.x, B.x)
-    // top = max(A.y, B.y)
-    // right = min(A.x + A.width, B.x + B.width)
-    // bottom = min(A.y + A.height, B.y + B.height)
-    // if(left <= right && top <= bottom) return Rect(left, top, right - left,
-    // bottom - top)
-    // else return Rect()
     private boolean intersects(Rect a, Rect b) {
-	System.out.println("bounding rect:" + a);
-	System.out.println("target rect:" + b);
 	int left = Math.max(a.x, b.x);
 	int top = Math.max(a.y, b.y);
 	int right = Math.min(a.x + a.width, b.x + b.width);
 	int bottom = Math.min(a.y + a.height, b.y + b.height);
-	if (left <= right && top <= bottom) {
-	    return true;
-	} else {
-	    return false;
-	}
+	return left <= right && top <= bottom;
     }
 
 }
