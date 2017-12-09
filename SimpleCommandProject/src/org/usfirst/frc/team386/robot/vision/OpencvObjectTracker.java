@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.vision;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -227,14 +226,16 @@ public class OpencvObjectTracker implements ObjectTracker {
 
 				// Convert from the opencv Rect to a java.awt.Rectangle to make it possible to
 				// use intersects().
-				Rectangle r1 = new Rectangle(boundingRect.x, boundingRect.y, boundingRect.width,
-					boundingRect.height);
-				Rectangle r2 = new Rectangle(centerTarget.x, centerTarget.y, centerTarget.width,
-					centerTarget.height);
+				// Rectangle r1 = new Rectangle(boundingRect.x, boundingRect.y,
+				// boundingRect.width,
+				// boundingRect.height);
+				// Rectangle r2 = new Rectangle(centerTarget.x, centerTarget.y,
+				// centerTarget.width,
+				// centerTarget.height);
 
 				// If the bounding rectangle and target intersect, then the direction is 0, the
 				// target is centered
-				if (r1.intersects(r2)) {
+				if (intersects(boundingRect, centerTarget)) {
 				    this.direction = 0;
 				} else {
 				    if (boundingRect.x > centerTarget.x + centerTarget.width) {
@@ -272,6 +273,29 @@ public class OpencvObjectTracker implements ObjectTracker {
 	int x = (frame.width() / 2) - (width / 2);
 	int y = (frame.height() / 2) - (height / 2);
 	return new Rect(x, y, width, height);
+	// return new Record(0, 0, frame.width(), frame.height());
+    }
+
+    // Method: Intersect (Rect A, Rect B)
+    // left = max(A.x, B.x)
+    // top = max(A.y, B.y)
+    // right = min(A.x + A.width, B.x + B.width)
+    // bottom = min(A.y + A.height, B.y + B.height)
+    // if(left <= right && top <= bottom) return Rect(left, top, right - left,
+    // bottom - top)
+    // else return Rect()
+    private boolean intersects(Rect a, Rect b) {
+	System.out.println("bounding rect:" + a);
+	System.out.println("target rect:" + b);
+	int left = Math.max(a.x, b.x);
+	int top = Math.max(a.y, b.y);
+	int right = Math.min(a.x + a.width, b.x + b.width);
+	int bottom = Math.min(a.y + a.height, b.y + b.height);
+	if (left <= right && top <= bottom) {
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
 }
