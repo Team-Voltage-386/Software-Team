@@ -23,9 +23,9 @@ public class FollowObjectTrackerCommand extends Command {
     protected void execute() {
     	int direction = Robot.objectTracker.getDirection();
     	if (direction == 1) {
-    		Robot.cameracontrol.panright();
+    		Robot.cameracontrol.panRight();
     	} else if (direction == -1) {
-    		Robot.cameracontrol.panleft();
+    		Robot.cameracontrol.panLeft();
     	} else if (direction == 0) {
     		Robot.cameracontrol.center();
     	} else {

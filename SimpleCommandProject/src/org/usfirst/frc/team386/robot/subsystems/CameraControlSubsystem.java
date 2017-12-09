@@ -13,11 +13,11 @@ public class CameraControlSubsystem extends Subsystem {
 
     Servo servo = new Servo(RobotMap.cameraServo);
 
-    public void panleft() {
+    public void panLeft() {
 	servo.set(0);
     }
 
-    public void panright() {
+    public void panRight() {
 	servo.set(1);
     }
 
