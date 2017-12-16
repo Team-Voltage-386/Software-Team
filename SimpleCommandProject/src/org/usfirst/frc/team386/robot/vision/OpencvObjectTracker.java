@@ -144,6 +144,7 @@ public class OpencvObjectTracker implements ObjectTracker {
 			if (tracker.isObjectPresent()) {
 				System.out.println(tracker.getDirection());
 			} else {
+<<<<<<< HEAD
 				System.out.println("Object not present");
 			}
 
@@ -165,6 +166,34 @@ public class OpencvObjectTracker implements ObjectTracker {
 
 		System.out.println("Current frame grab rate: " + (long) fps + "fps");
 		System.out.println("Calculated frame grab schedule: " + frameGrabSchedule + "ms");
+=======
+			    // The object is present in the camera's view, but not centered
+			    this.objectPresent = true;
+
+			    for (int i = 0; i < contours.size(); i++) {
+				MatOfPoint contour = contours.get(i);
+
+				Rect boundingRect = Imgproc.boundingRect(contour);
+				Rect centerTarget = getCenterTargetRect(frame);
+
+				// If the bounding rectangle and target intersect, then the direction is 0, the
+				// target is centered
+				if (intersects(boundingRect, centerTarget)) {
+				    System.out.println("Object centered");
+				    this.direction = 0;
+				} else {
+				    if (boundingRect.x > centerTarget.x + centerTarget.width) {
+					System.out.println("Object is to the right");
+					// If the bounding rectangle's X value is greater than the center target X +
+					// width, then the object is to the right
+					this.direction = 1;
+				    } else {
+					System.out.println("Object is to the left");
+					// Otherwise the object is to the left
+					this.direction = -1;
+				    }
+				}
+>>>>>>> 21580e41a67544553b5d95d7d64ad7a8942cba5d
 
 		return frameGrabSchedule;
 	}
@@ -274,6 +303,7 @@ public class OpencvObjectTracker implements ObjectTracker {
 		frame.release();
 	}
 
+<<<<<<< HEAD
 	private Rect getCenterTargetRect(Mat frame) {
 		int width = 200;
 		int height = 100;
@@ -304,5 +334,25 @@ public class OpencvObjectTracker implements ObjectTracker {
 			return false;
 		}
 	}
+=======
+	frame.release();
+    }
+
+    private Rect getCenterTargetRect(Mat frame) {
+	int width = 200;
+	int height = 100;
+	int x = (frame.width() / 2) - (width / 2);
+	int y = (frame.height() / 2) - (height / 2);
+	return new Rect(x, y, width, height);
+    }
+
+    private boolean intersects(Rect a, Rect b) {
+	int left = Math.max(a.x, b.x);
+	int top = Math.max(a.y, b.y);
+	int right = Math.min(a.x + a.width, b.x + b.width);
+	int bottom = Math.min(a.y + a.height, b.y + b.height);
+	return left <= right && top <= bottom;
+    }
+>>>>>>> 21580e41a67544553b5d95d7d64ad7a8942cba5d
 
 }

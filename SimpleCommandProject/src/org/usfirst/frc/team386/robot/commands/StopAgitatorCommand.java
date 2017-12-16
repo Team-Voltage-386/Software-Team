@@ -9,14 +9,15 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class StopAgitatorCommand extends InstantCommand {
 
-    public StopAgitatorCommand() {
-	super();
-	requires(Robot.agitatorSubsystem);
-    }
+	public StopAgitatorCommand() {
+		super();
+		// Uses the agitator subsystem
+		requires(Robot.agitatorSubsystem);
+	}
 
-    // Called once when the command executes
-    protected void initialize() {
-	Robot.agitatorSubsystem.stop();
-    }
+	// Called once when the command executes
+	protected void initialize() {
+		Robot.agitatorSubsystem.stop();
+	}
 
 }
