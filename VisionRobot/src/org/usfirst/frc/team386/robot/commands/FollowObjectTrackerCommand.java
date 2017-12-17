@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Command;
  * servos.
  */
 public class FollowObjectTrackerCommand extends Command {
+    public static double STEP_SIZE = 0.5;
+
     public FollowObjectTrackerCommand() {
 	requires(Robot.cameraControlSubsystem);
     }
@@ -21,14 +23,14 @@ public class FollowObjectTrackerCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	System.out.println("Polling camera");
+	// System.out.println(LocalDateTime.now() + " - polling camera");
 	int direction = Robot.objectTracker.getDirection();
 	if (direction == 1) {
-	    Robot.cameraControlSubsystem.rotateRight(5.0);
+	    Robot.cameraControlSubsystem.rotateRight(STEP_SIZE);
 	} else if (direction == -1) {
-	    Robot.cameraControlSubsystem.rotateLeft(5.0);
+	    Robot.cameraControlSubsystem.rotateLeft(STEP_SIZE);
 	} else if (direction == 0) {
-	    Robot.cameraControlSubsystem.center();
+	    // Don't move
 	} else {
 	    throw new RuntimeException("Received unsupported value from object tracker: " + direction);
 	}

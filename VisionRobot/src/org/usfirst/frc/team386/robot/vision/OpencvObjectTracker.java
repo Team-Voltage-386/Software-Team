@@ -17,256 +17,277 @@ import org.opencv.videoio.VideoCapture;
 
 public class OpencvObjectTracker implements ObjectTracker {
 
-	public static final int UPDATE_DELAY = 2000;
+    public static final int UPDATE_DELAY = 2000;
 
-	private int direction = 0;
-	private boolean objectPresent = false;
+    private int direction = 0;
+    private boolean objectPresent = true;
 
-	private int cameraId;
-	private float fps;
-	private Scalar hsvMinValues;
-	private Scalar hsvMaxValues;
+    private int cameraId;
+    private float fps;
+    private Scalar hsvMinValues;
+    private Scalar hsvMaxValues;
 
-	private VideoCapture camera = new VideoCapture();
-	private ScheduledExecutorService timer;
+    private VideoCapture camera = new VideoCapture();
+    private ScheduledExecutorService timer;
 
-	private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
-	private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
+    private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
+    private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
 
-	/**
-	 * Construct a new OpencvObjectTracker. It will use the given camera ID and an
-	 * FPS value of 10. The HSV min/max values are for a green cup I have at home.
-	 */
-	public OpencvObjectTracker(int cameraId) {
-		this.cameraId = cameraId;
-		this.fps = 10;
-		this.hsvMinValues = new Scalar(33, 108, 138);
-		this.hsvMaxValues = new Scalar(55, 255, 255);
-	}
+    /**
+     * Construct a new OpencvObjectTracker. It will use the given camera ID and an
+     * FPS value of 10. The HSV min/max values are for a green cup I have at home.
+     */
+    public OpencvObjectTracker(int cameraId) {
+	this.cameraId = cameraId;
+	this.fps = 30;
+	this.hsvMinValues = new Scalar(33, 108, 138);
+	this.hsvMaxValues = new Scalar(55, 255, 255);
+    }
 
-	/**
-	 * Construct a new ObjectTracker with the given camera ID and FPS setting.
-	 * Objects with HSV values between the specified minimum and maximum HSV values
-	 * will be tracked.
-	 * 
-	 * @param cameraId
-	 *            The camera ID
-	 * @param fps
-	 *            The FPS value
-	 * @param hsvMinValues
-	 *            The minimum HSV values.
-	 * @param hsvMaxValues
-	 *            The maximum HSV values.
-	 */
-	public OpencvObjectTracker(int cameraId, int fps, Scalar hsvMinValues, Scalar hsvMaxValues) {
-		this.cameraId = cameraId;
-		this.fps = fps;
-		this.hsvMinValues = hsvMinValues;
-		this.hsvMaxValues = hsvMaxValues;
-	}
+    /**
+     * Construct a new ObjectTracker with the given camera ID and FPS setting.
+     * Objects with HSV values between the specified minimum and maximum HSV values
+     * will be tracked.
+     * 
+     * @param cameraId
+     *            The camera ID
+     * @param fps
+     *            The FPS value
+     * @param hsvMinValues
+     *            The minimum HSV values.
+     * @param hsvMaxValues
+     *            The maximum HSV values.
+     */
+    public OpencvObjectTracker(int cameraId, int fps, Scalar hsvMinValues, Scalar hsvMaxValues) {
+	this.cameraId = cameraId;
+	this.fps = fps;
+	this.hsvMinValues = hsvMinValues;
+	this.hsvMaxValues = hsvMaxValues;
+    }
 
-	@Override
-	public void start() {
-		startCapture();
-	}
+    @Override
+    public void start() {
+	startCapture();
+    }
 
-	@Override
-	public void stop() {
-		stopCapture();
-	}
+    @Override
+    public void stop() {
+	stopCapture();
+    }
 
-	@Override
-	public boolean isSimulated() {
-		return false;
-	}
+    @Override
+    public boolean isSimulated() {
+	return false;
+    }
 
-	@Override
-	public int getDirection() {
-		return direction;
-	}
+    @Override
+    public int getDirection() {
+	return direction;
+    }
 
-	@Override
-	public boolean isObjectPresent() {
-		return objectPresent;
-	}
+    @Override
+    public boolean isObjectPresent() {
+	return objectPresent;
+    }
 
-	/**
-	 * Set up the camera and start grabbing frames.
-	 */
-	public void startCapture() {
-		System.out.println("Starting camera with ID " + cameraId);
-		this.camera.open(cameraId);
-		if (this.camera.isOpened()) {
-			System.out.println("Camera is running");
-			Runnable frameGrabber = new Runnable() {
-				@Override
-				public void run() {
-					processFrame();
-				}
-			};
-			System.out.println("Starting frame grabber");
-			this.timer = Executors.newSingleThreadScheduledExecutor();
-			this.timer.scheduleAtFixedRate(frameGrabber, 0, getFrameGrabSchedule(), TimeUnit.MILLISECONDS);
+    /**
+     * Set up the camera and start grabbing frames.
+     */
+    public void startCapture() {
+	System.out.println("Starting camera with ID " + cameraId);
+	this.camera.open(cameraId);
+	if (this.camera.isOpened()) {
+	    System.out.println("Camera is running");
+	    Runnable frameGrabber = new Runnable() {
+		@Override
+		public void run() {
+		    processFrame();
 		}
+	    };
+	    System.out.println("Starting frame grabber");
+	    this.timer = Executors.newSingleThreadScheduledExecutor();
+	    this.timer.scheduleAtFixedRate(frameGrabber, 0, getFrameGrabSchedule(), TimeUnit.MILLISECONDS);
 	}
+    }
 
-	/**
-	 * Stop the frame grabber.
-	 */
-	public void stopCapture() {
-		this.timer.shutdown();
-		System.out.println("Frame grabber stopped");
-		this.camera.release();
-		System.out.println("Camera is released");
+    /**
+     * Stop the frame grabber.
+     */
+    public void stopCapture() {
+	if (this.camera.isOpened()) {
+	    this.timer.shutdown();
+	    System.out.println("Frame grabber stopped");
+	    this.camera.release();
+	    System.out.println("Camera is released");
 	}
+    }
 
-	/**
-	 * Run the object tracker demonstration. This is an entry point for testing the
-	 * tracker, it is not intended to be used when the tracker is used within the
-	 * robot.
-	 * 
-	 * @param args
-	 *            List of command line arguments
-	 */
-	public static void main(String[] args) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		OpencvObjectTracker tracker = new OpencvObjectTracker(0);
-		tracker.startCapture();
-		while (true) {
-			if (tracker.isObjectPresent()) {
-				System.out.println(tracker.getDirection());
-			} else {
+    /**
+     * Run the object tracker demonstration. This is an entry point for testing the
+     * tracker, it is not intended to be used when the tracker is used within the
+     * robot.
+     * 
+     * @param args
+     *            List of command line arguments
+     */
+    public static void main(String[] args) {
+	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	OpencvObjectTracker tracker = new OpencvObjectTracker(0);
+	tracker.startCapture();
+	int direction = -255;
+	while (true) {
+	    if (tracker.isObjectPresent()) {
+		int newDirection = tracker.getDirection();
+		if (direction != newDirection) {
+		    System.out.println(newDirection);
+		    direction = newDirection;
+		}
+	    } else {
+		if (direction != 255) {
+		    System.out.println("Object not present");
+		    direction = 255;
+		}
+	    }
+
+	    try {
+		Thread.sleep(UPDATE_DELAY);
+	    } catch (InterruptedException e) {
+		System.out.println("Thread interrupted, continuing");
+	    }
+	}
+    }
+
+    /**
+     * Calculate the frame grab schedule. Converts FPS to milliseconds of delay.
+     * 
+     * @return The number of milliseconds to delay between grabs.
+     */
+    protected long getFrameGrabSchedule() {
+	long frameGrabSchedule = (long) ((1f / fps) * 1000f);
+
+	System.out.println("Current frame grab rate: " + (long) fps + "fps");
+	System.out.println("Calculated frame grab schedule: " + frameGrabSchedule + "ms");
+
+	return frameGrabSchedule;
+    }
+
+    protected void processFrame() {
+	Mat frame = new Mat();
+
+	// check if the capture is open
+	if (this.camera.isOpened()) {
+	    try {
+		// read the current frame
+		this.camera.read(frame);
+
+		// if the frame is not empty, process it
+		if (!frame.empty()) {
+		    // System.out.println("Processing frame");
+		    Mat blurredImage = new Mat();
+		    Mat hsvImage = new Mat();
+		    Mat mask = new Mat();
+		    Mat morphOutput = new Mat();
+		    List<MatOfPoint> contours = new ArrayList<>();
+		    Mat hierarchy = new Mat();
+
+		    try {
+			// remove some noise
+			Size blurSize = new Size(7, 7);
+			Imgproc.blur(frame, blurredImage, blurSize);
+
+			// convert the frame to HSV
+			Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
+
+			// fill in the mask that is used to find the objects
+			Core.inRange(hsvImage, hsvMinValues, hsvMaxValues, mask);
+
+			// morphological operators
+			// dilate with large element, erode with small element
+			Imgproc.erode(mask, morphOutput, erodeElement);
+			Imgproc.erode(morphOutput, morphOutput, erodeElement);
+
+			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+
+			// Find contours
+			Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP,
+				Imgproc.CHAIN_APPROX_SIMPLE);
+
+			if (contours.size() == 0) {
+			    // The object does not appear to be present anywhere in the camera's view
+			    if (objectPresent) {
 				System.out.println("Object not present");
-			}
+			    }
+			    this.objectPresent = false;
+			    this.direction = 0;
+			} else {
+			    // The object is present in the camera's view, but not centered
+			    System.out.println("Found " + contours.size() + " contours");
+			    for (int i = 0; i < contours.size(); i++) {
+				MatOfPoint contour = contours.get(i);
 
-			try {
-				Thread.sleep(UPDATE_DELAY);
-			} catch (InterruptedException e) {
-				System.out.println("Thread interrupted, continuing");
-			}
-		}
-	}
+				Rect boundingRect = Imgproc.boundingRect(contour);
+				System.out.println("Bounding rect: " + boundingRect);
+				Rect centerTarget = getCenterTargetRect(frame);
 
-	/**
-	 * Calculate the frame grab schedule. Converts FPS to milliseconds of delay.
-	 * 
-	 * @return The number of milliseconds to delay between grabs.
-	 */
-	protected long getFrameGrabSchedule() {
-		long frameGrabSchedule = (long) ((1f / fps) * 1000f);
-
-		System.out.println("Current frame grab rate: " + (long) fps + "fps");
-		System.out.println("Calculated frame grab schedule: " + frameGrabSchedule + "ms");
-
-		return frameGrabSchedule;
-	}
-
-	protected void processFrame() {
-		Mat frame = new Mat();
-
-		// check if the capture is open
-		if (this.camera.isOpened()) {
-			try {
-				// read the current frame
-				this.camera.read(frame);
-
-				// if the frame is not empty, process it
-				if (!frame.empty()) {
-					// System.out.println("Processing frame");
-					Mat blurredImage = new Mat();
-					Mat hsvImage = new Mat();
-					Mat mask = new Mat();
-					Mat morphOutput = new Mat();
-					List<MatOfPoint> contours = new ArrayList<>();
-					Mat hierarchy = new Mat();
-
-					try {
-						// remove some noise
-						Size blurSize = new Size(7, 7);
-						Imgproc.blur(frame, blurredImage, blurSize);
-
-						// convert the frame to HSV
-						Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
-
-						// fill in the mask that is used to find the objects
-						Core.inRange(hsvImage, hsvMinValues, hsvMaxValues, mask);
-
-						// morphological operators
-						// dilate with large element, erode with small element
-						Imgproc.erode(mask, morphOutput, erodeElement);
-						Imgproc.erode(morphOutput, morphOutput, erodeElement);
-
-						Imgproc.dilate(morphOutput, morphOutput, dilateElement);
-						Imgproc.dilate(morphOutput, morphOutput, dilateElement);
-
-						// Find contours
-						Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP,
-								Imgproc.CHAIN_APPROX_SIMPLE);
-
-						if (contours.size() == 0) {
-							// The object does not appear to be present anywhere in the camera's view
-							this.objectPresent = false;
-						} else {
-							// The object is present in the camera's view, but not centered
-							this.objectPresent = true;
-
-							for (int i = 0; i < contours.size(); i++) {
-								MatOfPoint contour = contours.get(i);
-
-								Rect boundingRect = Imgproc.boundingRect(contour);
-								Rect centerTarget = getCenterTargetRect(frame);
-
-								// If the bounding rectangle and target intersect, then the direction is 0, the
-								// target is centered
-								if (intersects(boundingRect, centerTarget)) {
-									System.out.println("Object centered");
-									this.direction = 0;
-								} else {
-									if (boundingRect.x > centerTarget.x + centerTarget.width) {
-										System.out.println("Object is to the right");
-										// If the bounding rectangle's X value is greater than the center target X +
-										// width, then the object is to the right
-										this.direction = 1;
-									} else {
-										System.out.println("Object is to the left");
-										// Otherwise the object is to the left
-										this.direction = -1;
-									}
-								}
-
-								contour.release();
-							}
-						}
-					} finally {
-						blurredImage.release();
-						hsvImage.release();
-						mask.release();
-						morphOutput.release();
-						hierarchy.release();
-					}
+				// If the bounding rectangle and target intersect, then the direction is 0, the
+				// target is centered
+				if (intersects(boundingRect, centerTarget)) {
+				    if (this.direction != 0)
+					System.out.println("Object centered");
+				    this.direction = 0;
+				} else {
+				    if (boundingRect.x > centerTarget.x + centerTarget.width) {
+					if (this.direction != 1)
+					    System.out.println("Object is to the right");
+					// If the bounding rectangle's X value is greater than the center target X +
+					// width, then the object is to the right
+					this.direction = 1;
+				    } else {
+					if (this.direction != -1)
+					    System.out.println("Object is to the left");
+					// Otherwise the object is to the left
+					this.direction = -1;
+				    }
 				}
-			} catch (Exception e) {
-				System.err.println("Exception during the image elaboration: " + e);
+
+				contour.release();
+			    }
+			    this.objectPresent = true;
 			}
+		    } finally {
+			blurredImage.release();
+			hsvImage.release();
+			mask.release();
+			morphOutput.release();
+			hierarchy.release();
+		    }
 		}
-
-		frame.release();
+	    } catch (Exception e) {
+		System.err.println("Exception during the image elaboration: " + e);
+	    }
 	}
 
-	private Rect getCenterTargetRect(Mat frame) {
-		int width = 200;
-		int height = 100;
-		int x = (frame.width() / 2) - (width / 2);
-		int y = (frame.height() / 2) - (height / 2);
-		return new Rect(x, y, width, height);
-	}
+	frame.release();
+    }
 
-	private boolean intersects(Rect a, Rect b) {
-		int left = Math.max(a.x, b.x);
-		int top = Math.max(a.y, b.y);
-		int right = Math.min(a.x + a.width, b.x + b.width);
-		int bottom = Math.min(a.y + a.height, b.y + b.height);
-		return left <= right && top <= bottom;
-	}
+    private Rect getCenterTargetRect(Mat frame) {
+	// System.out.println("Frame: " + frame);
+	int width = 200;
+	int height = frame.height();
+	int x = (frame.width() / 2) - (width / 2);
+	// int y = (frame.height() / 2) - (height / 2);
+	Rect rect = new Rect(x, 0, width, height);
+	// System.out.println("Center target rect: " + rect);
+	return rect;
+    }
+
+    private boolean intersects(Rect a, Rect b) {
+	int left = Math.max(a.x, b.x);
+	int top = Math.max(a.y, b.y);
+	int right = Math.min(a.x + a.width, b.x + b.width);
+	int bottom = Math.min(a.y + a.height, b.y + b.height);
+	return left <= right && top <= bottom;
+    }
 
 }

@@ -38,7 +38,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	objectTracker = new OpencvObjectTracker(RobotMap.camera);
-	objectTracker.start();
 
 	chooser.addDefault("Default Auto", new FollowObjectTrackerCommand());
 	// chooser.addObject("My Auto", new MyAutoCommand());
@@ -103,6 +102,9 @@ public class Robot extends IterativeRobot {
 	// this line or comment it out.
 	if (autonomousCommand != null)
 	    autonomousCommand.cancel();
+
+	// Start object tracking
+	objectTracker.start();
     }
 
     /**

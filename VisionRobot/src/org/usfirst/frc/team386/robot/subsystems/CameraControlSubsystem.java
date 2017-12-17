@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class CameraControlSubsystem extends Subsystem {
     Servo servo = new Servo(RobotMap.cameraHorizontalServo);
 
+    double lastAngle = 0.0;
+
     /**
      * Rotate the camera to the left `value` degress.
      * 
@@ -19,8 +21,12 @@ public class CameraControlSubsystem extends Subsystem {
      *            The number of degrees to rotate.
      */
     public void rotateLeft(double value) {
-	double angle = servo.getAngle() - value;
-	servo.setAngle(Math.max(angle, 0));
+	// System.out.println("Starting angle: " + lastAngle);
+	double angle = Math.max(servo.getAngle() - value, 0.0);
+	// System.out.println("Rotating left to " + angle + " degrees.");
+	servo.setAngle(angle);
+	// System.out.println("Ending angle: " + servo.getAngle());
+	this.lastAngle = angle;
     }
 
     /**
@@ -30,8 +36,12 @@ public class CameraControlSubsystem extends Subsystem {
      *            The number of degrees to rotate.
      */
     public void rotateRight(double value) {
-	double angle = servo.getAngle() + value;
-	servo.setAngle(Math.min(angle, 180));
+	// System.out.println("Starting angle: " + lastAngle);
+	double angle = Math.min(servo.getAngle() + value, 180);
+	// System.out.println("Rotating right to " + angle + "degrees.");
+	servo.setAngle(angle);
+	// System.out.println("Ending angle: " + servo.getAngle());
+	this.lastAngle = angle;
     }
 
     /**
@@ -39,6 +49,7 @@ public class CameraControlSubsystem extends Subsystem {
      */
     public void center() {
 	servo.set(0.5);
+	this.lastAngle = servo.getAngle();
     }
 
     /**
