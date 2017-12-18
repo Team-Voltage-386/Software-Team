@@ -1,10 +1,14 @@
 package org.usfirst.frc.team386.robot;
 
+import org.opencv.core.Mat;
 import org.usfirst.frc.team386.robot.commands.FollowObjectTrackerCommand;
 import org.usfirst.frc.team386.robot.subsystems.CameraControlSubsystem;
-import org.usfirst.frc.team386.robot.vision.ObjectTracker;
 import org.usfirst.frc.team386.robot.vision.OpencvObjectTracker;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -23,7 +27,7 @@ public class Robot extends IterativeRobot {
 
     public static final CameraControlSubsystem cameraControlSubsystem = new CameraControlSubsystem();
 
-    public static ObjectTracker objectTracker;
+    public static OpencvObjectTracker objectTracker;
 
     public static OI oi;
 
@@ -38,10 +42,30 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	objectTracker = new OpencvObjectTracker(RobotMap.camera);
-
 	chooser.addDefault("Default Auto", new FollowObjectTrackerCommand());
 	// chooser.addObject("My Auto", new MyAutoCommand());
 	SmartDashboard.putData("Auto mode", chooser);
+
+	new Thread(() -> {
+	    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	    camera.setResolution(160, 120);
+	    CvSink cvSink = CameraServer.getInstance().getVideo(camera);
+
+	    CvSource videoOut = CameraServer.getInstance().putVideo("Display", 160, 120);
+	    CvSource morphOut = CameraServer.getInstance().putVideo("Morph", 160, 120);
+	    Mat source = new Mat();
+	    Mat dest = new Mat();
+
+	    while (!Thread.interrupted()) {
+		long val = cvSink.grabFrame(source);
+
+		if (val != 0 && !source.empty()) {
+		    videoOut.putFrame(source);
+		    objectTracker.processFrame(source, dest);
+		    morphOut.putFrame(dest);
+		}
+	    }
+	}).start();
     }
 
     /**
@@ -51,7 +75,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
-	objectTracker.stop();
+	// objectTracker.stop();
     }
 
     @Override
@@ -104,7 +128,7 @@ public class Robot extends IterativeRobot {
 	    autonomousCommand.cancel();
 
 	// Start object tracking
-	objectTracker.start();
+	// objectTracker.start();
     }
 
     /**

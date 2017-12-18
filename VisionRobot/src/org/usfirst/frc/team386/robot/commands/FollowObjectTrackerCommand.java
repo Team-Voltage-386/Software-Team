@@ -18,12 +18,12 @@ public class FollowObjectTrackerCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
 	System.out.println("Initializing the camera subsystem");
+	Robot.objectTracker.clearDirection();
 	Robot.cameraControlSubsystem.center();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	// System.out.println(LocalDateTime.now() + " - polling camera");
 	int direction = Robot.objectTracker.getDirection();
 	if (direction == 1) {
 	    Robot.cameraControlSubsystem.rotateRight(STEP_SIZE);

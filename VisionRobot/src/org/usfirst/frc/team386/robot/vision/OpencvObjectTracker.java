@@ -15,6 +15,9 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
+import edu.wpi.cscore.CvSource;
+import edu.wpi.first.wpilibj.CameraServer;
+
 public class OpencvObjectTracker implements ObjectTracker {
 
     public static final int UPDATE_DELAY = 2000;
@@ -28,6 +31,8 @@ public class OpencvObjectTracker implements ObjectTracker {
     private Scalar hsvMaxValues;
 
     private VideoCapture camera = new VideoCapture();
+    private CvSource videoOut = CameraServer.getInstance().putVideo("Display", 640, 480);
+    private CvSource morphOut = CameraServer.getInstance().putVideo("Morph", 640, 480);
     private ScheduledExecutorService timer;
 
     private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
@@ -80,6 +85,10 @@ public class OpencvObjectTracker implements ObjectTracker {
 	return false;
     }
 
+    public void clearDirection() {
+	this.direction = 0;
+    }
+
     @Override
     public int getDirection() {
 	return direction;
@@ -98,10 +107,14 @@ public class OpencvObjectTracker implements ObjectTracker {
 	this.camera.open(cameraId);
 	if (this.camera.isOpened()) {
 	    System.out.println("Camera is running");
+	    // Mat objects need to be reused and released whenever you are done using them
+	    Mat frame = new Mat();
+	    Mat out = new Mat();
+
 	    Runnable frameGrabber = new Runnable() {
 		@Override
 		public void run() {
-		    processFrame();
+		    readFrame(frame, out);
 		}
 	    };
 	    System.out.println("Starting frame grabber");
@@ -123,41 +136,6 @@ public class OpencvObjectTracker implements ObjectTracker {
     }
 
     /**
-     * Run the object tracker demonstration. This is an entry point for testing the
-     * tracker, it is not intended to be used when the tracker is used within the
-     * robot.
-     * 
-     * @param args
-     *            List of command line arguments
-     */
-    public static void main(String[] args) {
-	System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	OpencvObjectTracker tracker = new OpencvObjectTracker(0);
-	tracker.startCapture();
-	int direction = -255;
-	while (true) {
-	    if (tracker.isObjectPresent()) {
-		int newDirection = tracker.getDirection();
-		if (direction != newDirection) {
-		    System.out.println(newDirection);
-		    direction = newDirection;
-		}
-	    } else {
-		if (direction != 255) {
-		    System.out.println("Object not present");
-		    direction = 255;
-		}
-	    }
-
-	    try {
-		Thread.sleep(UPDATE_DELAY);
-	    } catch (InterruptedException e) {
-		System.out.println("Thread interrupted, continuing");
-	    }
-	}
-    }
-
-    /**
      * Calculate the frame grab schedule. Converts FPS to milliseconds of delay.
      * 
      * @return The number of milliseconds to delay between grabs.
@@ -171,9 +149,7 @@ public class OpencvObjectTracker implements ObjectTracker {
 	return frameGrabSchedule;
     }
 
-    protected void processFrame() {
-	Mat frame = new Mat();
-
+    protected void readFrame(Mat frame, Mat out) {
 	// check if the capture is open
 	if (this.camera.isOpened()) {
 	    try {
@@ -182,86 +158,10 @@ public class OpencvObjectTracker implements ObjectTracker {
 
 		// if the frame is not empty, process it
 		if (!frame.empty()) {
-		    // System.out.println("Processing frame");
-		    Mat blurredImage = new Mat();
-		    Mat hsvImage = new Mat();
-		    Mat mask = new Mat();
-		    Mat morphOutput = new Mat();
-		    List<MatOfPoint> contours = new ArrayList<>();
-		    Mat hierarchy = new Mat();
+		    videoOut.putFrame(frame);
+		    processFrame(frame, out);
+		    morphOut.putFrame(out);
 
-		    try {
-			// remove some noise
-			Size blurSize = new Size(7, 7);
-			Imgproc.blur(frame, blurredImage, blurSize);
-
-			// convert the frame to HSV
-			Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
-
-			// fill in the mask that is used to find the objects
-			Core.inRange(hsvImage, hsvMinValues, hsvMaxValues, mask);
-
-			// morphological operators
-			// dilate with large element, erode with small element
-			Imgproc.erode(mask, morphOutput, erodeElement);
-			Imgproc.erode(morphOutput, morphOutput, erodeElement);
-
-			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
-			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
-
-			// Find contours
-			Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP,
-				Imgproc.CHAIN_APPROX_SIMPLE);
-
-			if (contours.size() == 0) {
-			    // The object does not appear to be present anywhere in the camera's view
-			    if (objectPresent) {
-				System.out.println("Object not present");
-			    }
-			    this.objectPresent = false;
-			    this.direction = 0;
-			} else {
-			    // The object is present in the camera's view, but not centered
-			    System.out.println("Found " + contours.size() + " contours");
-			    for (int i = 0; i < contours.size(); i++) {
-				MatOfPoint contour = contours.get(i);
-
-				Rect boundingRect = Imgproc.boundingRect(contour);
-				System.out.println("Bounding rect: " + boundingRect);
-				Rect centerTarget = getCenterTargetRect(frame);
-
-				// If the bounding rectangle and target intersect, then the direction is 0, the
-				// target is centered
-				if (intersects(boundingRect, centerTarget)) {
-				    if (this.direction != 0)
-					System.out.println("Object centered");
-				    this.direction = 0;
-				} else {
-				    if (boundingRect.x > centerTarget.x + centerTarget.width) {
-					if (this.direction != 1)
-					    System.out.println("Object is to the right");
-					// If the bounding rectangle's X value is greater than the center target X +
-					// width, then the object is to the right
-					this.direction = 1;
-				    } else {
-					if (this.direction != -1)
-					    System.out.println("Object is to the left");
-					// Otherwise the object is to the left
-					this.direction = -1;
-				    }
-				}
-
-				contour.release();
-			    }
-			    this.objectPresent = true;
-			}
-		    } finally {
-			blurredImage.release();
-			hsvImage.release();
-			mask.release();
-			morphOutput.release();
-			hierarchy.release();
-		    }
 		}
 	    } catch (Exception e) {
 		System.err.println("Exception during the image elaboration: " + e);
@@ -269,11 +169,97 @@ public class OpencvObjectTracker implements ObjectTracker {
 	}
 
 	frame.release();
+	out.release();
+    }
+
+    public void processFrame(Mat frame, Mat processedFrame) {
+	// System.out.println("Processing frame");
+	Mat blurredImage = new Mat();
+	Mat hsvImage = new Mat();
+	Mat mask = new Mat();
+	Mat morphOutput = new Mat();
+	List<MatOfPoint> contours = new ArrayList<>();
+	Mat hierarchy = new Mat();
+
+	try {
+	    // remove some noise
+	    Size blurSize = new Size(7, 7);
+	    Imgproc.blur(frame, blurredImage, blurSize);
+
+	    // convert the frame to HSV
+	    Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
+
+	    // fill in the mask that is used to find the objects
+	    Core.inRange(hsvImage, hsvMinValues, hsvMaxValues, mask);
+
+	    // morphological operators
+	    // dilate with large element, erode with small element
+	    Imgproc.erode(mask, morphOutput, erodeElement);
+	    Imgproc.erode(morphOutput, morphOutput, erodeElement);
+
+	    Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+	    Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+
+	    if (processedFrame != null) {
+		morphOutput.copyTo(processedFrame);
+	    }
+
+	    // Find contours
+	    Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+
+	    if (contours.size() == 0) {
+		// The object does not appear to be present anywhere in the camera's view
+		if (objectPresent) {
+		    System.out.println("Object not present");
+		}
+		this.objectPresent = false;
+		// this.direction = 0;
+	    } else {
+		// The object is present in the camera's view, but not centered
+		// System.out.println("Found " + contours.size() + " contours");
+		for (int i = 0; i < contours.size(); i++) {
+		    MatOfPoint contour = contours.get(i);
+
+		    Rect boundingRect = Imgproc.boundingRect(contour);
+		    // System.out.println("Bounding rect: " + boundingRect);
+		    Rect centerTarget = getCenterTargetRect(frame);
+
+		    // If the bounding rectangle and target intersect, then the direction is 0, the
+		    // target is centered
+		    if (intersects(boundingRect, centerTarget)) {
+			if (this.direction != 0)
+			    System.out.println("Object centered");
+			this.direction = 0;
+		    } else {
+			if (boundingRect.x > centerTarget.x + centerTarget.width) {
+			    if (this.direction != 1)
+				System.out.println("Object is to the right");
+			    // If the bounding rectangle's X value is greater than the center target X +
+			    // width, then the object is to the right
+			    this.direction = 1;
+			} else {
+			    if (this.direction != -1)
+				System.out.println("Object is to the left");
+			    // Otherwise the object is to the left
+			    this.direction = -1;
+			}
+		    }
+
+		    contour.release();
+		}
+		this.objectPresent = true;
+	    }
+	} finally {
+	    blurredImage.release();
+	    hsvImage.release();
+	    mask.release();
+	    morphOutput.release();
+	    hierarchy.release();
+	}
     }
 
     private Rect getCenterTargetRect(Mat frame) {
-	// System.out.println("Frame: " + frame);
-	int width = 200;
+	int width = frame.width() / 8;
 	int height = frame.height();
 	int x = (frame.width() / 2) - (width / 2);
 	// int y = (frame.height() / 2) - (height / 2);
