@@ -2,9 +2,6 @@ package org.usfirst.frc.team386.robot.vision;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -13,163 +10,83 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
 
+import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 
-public class OpencvObjectTracker implements ObjectTracker {
+public class OpencvObjectTracker {
 
     public static final int UPDATE_DELAY = 2000;
 
     private int direction = 0;
     private boolean objectPresent = true;
 
-    private int cameraId;
-    private float fps;
     private Scalar hsvMinValues;
     private Scalar hsvMaxValues;
-
-    private VideoCapture camera = new VideoCapture();
-    private CvSource videoOut = CameraServer.getInstance().putVideo("Display", 640, 480);
-    private CvSource morphOut = CameraServer.getInstance().putVideo("Morph", 640, 480);
-    private ScheduledExecutorService timer;
 
     private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
     private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
 
     /**
-     * Construct a new OpencvObjectTracker. It will use the given camera ID and an
-     * FPS value of 10. The HSV min/max values are for a green cup I have at home.
+     * Construct a new OpencvObjectTracker.The HSV min/max values are for a green
+     * cup I have at home.
      */
-    public OpencvObjectTracker(int cameraId) {
-	this.cameraId = cameraId;
-	this.fps = 30;
+    public OpencvObjectTracker() {
 	this.hsvMinValues = new Scalar(33, 108, 138);
 	this.hsvMaxValues = new Scalar(55, 255, 255);
+	start();
     }
 
     /**
-     * Construct a new ObjectTracker with the given camera ID and FPS setting.
-     * Objects with HSV values between the specified minimum and maximum HSV values
-     * will be tracked.
-     * 
-     * @param cameraId
-     *            The camera ID
-     * @param fps
-     *            The FPS value
+     * Construct a new ObjectTracker. Objects with HSV values between the specified
+     * minimum and maximum HSV values will be tracked.
+     *
      * @param hsvMinValues
      *            The minimum HSV values.
      * @param hsvMaxValues
      *            The maximum HSV values.
      */
-    public OpencvObjectTracker(int cameraId, int fps, Scalar hsvMinValues, Scalar hsvMaxValues) {
-	this.cameraId = cameraId;
-	this.fps = fps;
+    public OpencvObjectTracker(Scalar hsvMinValues, Scalar hsvMaxValues) {
 	this.hsvMinValues = hsvMinValues;
 	this.hsvMaxValues = hsvMaxValues;
+	start();
     }
 
-    @Override
-    public void start() {
-	startCapture();
-    }
+    private void start() {
+	new Thread(() -> {
+	    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	    camera.setResolution(160, 120);
+	    CvSink cvSink = CameraServer.getInstance().getVideo(camera);
 
-    @Override
-    public void stop() {
-	stopCapture();
-    }
+	    CvSource videoOut = CameraServer.getInstance().putVideo("Display", 160, 120);
+	    CvSource morphOut = CameraServer.getInstance().putVideo("Morph", 160, 120);
+	    Mat source = new Mat();
+	    Mat dest = new Mat();
 
-    @Override
-    public boolean isSimulated() {
-	return false;
+	    while (!Thread.interrupted()) {
+		long val = cvSink.grabFrame(source);
+
+		if (val != 0 && !source.empty()) {
+		    videoOut.putFrame(source);
+		    processFrame(source, dest);
+		    morphOut.putFrame(dest);
+		}
+	    }
+	}).start();
     }
 
     public void clearDirection() {
 	this.direction = 0;
     }
 
-    @Override
     public int getDirection() {
 	return direction;
     }
 
-    @Override
     public boolean isObjectPresent() {
 	return objectPresent;
-    }
-
-    /**
-     * Set up the camera and start grabbing frames.
-     */
-    public void startCapture() {
-	System.out.println("Starting camera with ID " + cameraId);
-	this.camera.open(cameraId);
-	if (this.camera.isOpened()) {
-	    System.out.println("Camera is running");
-	    // Mat objects need to be reused and released whenever you are done using them
-	    Mat frame = new Mat();
-	    Mat out = new Mat();
-
-	    Runnable frameGrabber = new Runnable() {
-		@Override
-		public void run() {
-		    readFrame(frame, out);
-		}
-	    };
-	    System.out.println("Starting frame grabber");
-	    this.timer = Executors.newSingleThreadScheduledExecutor();
-	    this.timer.scheduleAtFixedRate(frameGrabber, 0, getFrameGrabSchedule(), TimeUnit.MILLISECONDS);
-	}
-    }
-
-    /**
-     * Stop the frame grabber.
-     */
-    public void stopCapture() {
-	if (this.camera.isOpened()) {
-	    this.timer.shutdown();
-	    System.out.println("Frame grabber stopped");
-	    this.camera.release();
-	    System.out.println("Camera is released");
-	}
-    }
-
-    /**
-     * Calculate the frame grab schedule. Converts FPS to milliseconds of delay.
-     * 
-     * @return The number of milliseconds to delay between grabs.
-     */
-    protected long getFrameGrabSchedule() {
-	long frameGrabSchedule = (long) ((1f / fps) * 1000f);
-
-	System.out.println("Current frame grab rate: " + (long) fps + "fps");
-	System.out.println("Calculated frame grab schedule: " + frameGrabSchedule + "ms");
-
-	return frameGrabSchedule;
-    }
-
-    protected void readFrame(Mat frame, Mat out) {
-	// check if the capture is open
-	if (this.camera.isOpened()) {
-	    try {
-		// read the current frame
-		this.camera.read(frame);
-
-		// if the frame is not empty, process it
-		if (!frame.empty()) {
-		    videoOut.putFrame(frame);
-		    processFrame(frame, out);
-		    morphOut.putFrame(out);
-
-		}
-	    } catch (Exception e) {
-		System.err.println("Exception during the image elaboration: " + e);
-	    }
-	}
-
-	frame.release();
-	out.release();
     }
 
     public void processFrame(Mat frame, Mat processedFrame) {
