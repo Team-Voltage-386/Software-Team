@@ -53,6 +53,17 @@ public class CameraControlSubsystem extends Subsystem {
     }
 
     /**
+     * Set the servo to the specific angle.
+     * 
+     * @param angle
+     *            The angle between 0.0 and 180.0
+     */
+    public void setAngle(double angle) {
+	servo.setAngle(angle);
+	this.lastAngle = servo.getAngle();
+    }
+
+    /**
      * Initialize the default command, which is to follow the object tracker.
      */
     public void initDefaultCommand() {

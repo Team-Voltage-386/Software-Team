@@ -1,13 +1,12 @@
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.FollowObjectTrackerCommand;
+import org.usfirst.frc.team386.robot.commands.SystemTestCommand;
 import org.usfirst.frc.team386.robot.subsystems.CameraControlSubsystem;
 import org.usfirst.frc.team386.robot.vision.OpencvObjectTracker;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -27,6 +26,7 @@ public class Robot extends IterativeRobot {
     public static OI oi;
 
     Command autonomousCommand;
+    Command systemTestCommand = new SystemTestCommand();
     SendableChooser<Command> chooser = new SendableChooser<>();
 
     /**
@@ -37,9 +37,15 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	objectTracker = new OpencvObjectTracker();
-	chooser.addDefault("Default Auto", new FollowObjectTrackerCommand());
+	// chooser.addDefault("Default Auto", new FollowObjectTrackerCommand());
 	// chooser.addObject("My Auto", new MyAutoCommand());
-	SmartDashboard.putData("Auto mode", chooser);
+	// SmartDashboard.putData("Auto mode", chooser);
+	SmartDashboard.putNumber("Hue Min", 0.0);
+	SmartDashboard.putNumber("Hue Max", 100.0);
+	SmartDashboard.putNumber("Saturation Min", 0.0);
+	SmartDashboard.putNumber("Saturation Max", 255.0);
+	SmartDashboard.putNumber("Value Min", 0.0);
+	SmartDashboard.putNumber("Value Max", 255.0);
     }
 
     /**
@@ -110,11 +116,17 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().run();
     }
 
+    @Override
+    public void testInit() {
+	if (systemTestCommand != null)
+	    systemTestCommand.start();
+    }
+
     /**
      * This function is called periodically during test mode
      */
     @Override
     public void testPeriodic() {
-	LiveWindow.run();
+	// LiveWindow.run();
     }
 }

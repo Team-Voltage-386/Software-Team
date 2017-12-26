@@ -26,8 +26,8 @@ public class OpencvObjectTracker {
     private Scalar hsvMinValues;
     private Scalar hsvMaxValues;
 
-    private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
-    private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
+    private Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(6, 6));
+    private Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(2, 2));
 
     /**
      * Construct a new OpencvObjectTracker.The HSV min/max values are for a green
@@ -54,6 +54,14 @@ public class OpencvObjectTracker {
 	start();
     }
 
+    public void setHsvMinValues(Scalar hsvMinValues) {
+	this.hsvMinValues = hsvMinValues;
+    }
+
+    public void setHsvMaxValues(Scalar hsvMaxValues) {
+	this.hsvMaxValues = hsvMaxValues;
+    }
+
     private void start() {
 	new Thread(() -> {
 	    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -69,8 +77,8 @@ public class OpencvObjectTracker {
 		long val = cvSink.grabFrame(source);
 
 		if (val != 0 && !source.empty()) {
-		    videoOut.putFrame(source);
 		    processFrame(source, dest);
+		    videoOut.putFrame(source);
 		    morphOut.putFrame(dest);
 		}
 	    }
@@ -100,7 +108,7 @@ public class OpencvObjectTracker {
 
 	try {
 	    // remove some noise
-	    Size blurSize = new Size(7, 7);
+	    Size blurSize = new Size(2, 2);
 	    Imgproc.blur(frame, blurredImage, blurSize);
 
 	    // convert the frame to HSV
@@ -141,9 +149,19 @@ public class OpencvObjectTracker {
 		    // System.out.println("Bounding rect: " + boundingRect);
 		    Rect centerTarget = getCenterTargetRect(frame);
 
+		    // Draw target
+		    Scalar centerTargetColor = new Scalar(0, 0, 255);
+		    int centerTargetThickness = 2;
+		    Imgproc.rectangle(frame, centerTarget.tl(), centerTarget.br(), centerTargetColor,
+			    centerTargetThickness);
+
 		    // If the bounding rectangle and target intersect, then the direction is 0, the
 		    // target is centered
 		    if (intersects(boundingRect, centerTarget)) {
+			centerTargetColor = new Scalar(0, 230, 0);
+			centerTargetThickness = 2;
+			Imgproc.rectangle(frame, centerTarget.tl(), centerTarget.br(), centerTargetColor,
+				centerTargetThickness);
 			if (this.direction != 0)
 			    System.out.println("Object centered");
 			this.direction = 0;
@@ -176,12 +194,11 @@ public class OpencvObjectTracker {
     }
 
     private Rect getCenterTargetRect(Mat frame) {
-	int width = frame.width() / 8;
+	int width = frame.width() / 16;
 	int height = frame.height();
 	int x = (frame.width() / 2) - (width / 2);
 	// int y = (frame.height() / 2) - (height / 2);
 	Rect rect = new Rect(x, 0, width, height);
-	// System.out.println("Center target rect: " + rect);
 	return rect;
     }
 
