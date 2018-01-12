@@ -13,11 +13,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically
@@ -36,27 +38,26 @@ public class Robot extends IterativeRobot {
 	Compressor compressor = new Compressor(0);
 	public static Joystick right = new Joystick(0);
 	public static Joystick left = new Joystick(1);
+	Encoder leftEncodee = new Encoder(0,2);
+	Encoder rightEncodee = new Encoder(1,3);
 	public GearShift gearShift = new GearShift();
+	SmartDashboard smarty = new SmartDashboard();
 	@Override
 	public void robotInit() {
+		rightEncodee.reset();
+		leftEncodee.reset();
 		System.out.println("Started");
 		leftSlave1.follow(frontLeft);
     	leftSlave2.follow(frontLeft);
     	rightSlave1.follow(frontRight);
     	rightSlave2.follow(frontRight);
-		frontRight.configContinuousCurrentLimit(10, 0);
-		
-		frontLeft.configContinuousCurrentLimit(10, 0);
-		
+		frontRight.configContinuousCurrentLimit(20, 0);
+		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
-		
 		frontLeft.enableCurrentLimit(true);
-//		rearRight.configOpenloopRamp(2, 0);
-//		midRight.configOpenloopRamp(2, 0);
-//		frontRight.configOpenloopRamp(2, 0);
-//		rearLeft.configOpenloopRamp(2, 0);
-//		midLeft.configOpenloopRamp(2, 0);
-//		frontRight.configOpenloopRamp(2, 0);
+		
+		frontRight.configOpenloopRamp(.1, 0);
+		frontLeft.configOpenloopRamp(.11, 0);
 		
 		compressor.start();
 		gearShift.start();
@@ -64,7 +65,16 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void teleopInit() {
-		
+		rightEncodee.reset();
+		leftEncodee.reset();
+	}
+	public double deadBand(double in, double limit) {
+		if(Math.abs(in) < limit) {
+			return 0;
+		}
+		else {
+			return in;
+		}
 	}
 
 	
@@ -72,13 +82,22 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
-		drive.tankDrive(left.getY(), right.getY());	
+		double leftY = left.getY();
+		double rightY = right.getY();
+		drive.tankDrive(deadBand(leftY, .1), deadBand(rightY, .1));
+		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
+		SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
+		
+//		System.out.println("Right Encoder:"+rightEncodee.get());
+//		System.out.println("Left Encoder:"+leftEncodee.get());
+		
 	}
 	
 //	public void shift() {
 //		DoubleSolenoid piston = new DoubleSolenoid(0,1);
 //		if(left.getRawButtonPressed(0)== true)
 //		{
+	
 //			if(piston.)
 //		}
 //		
