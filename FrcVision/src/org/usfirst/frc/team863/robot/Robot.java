@@ -27,6 +27,8 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -58,6 +60,8 @@ public class Robot extends IterativeRobot {
 	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
 	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
 	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
+	Ultrasonic ultra = new Ultrasonic(2,3);
+	DifferentialDrive drive = new DifferentialDrive(frontLeft,frontRight);
 	@Override
 	public void robotInit() {
 		//SmartDashboard.putNumber("Hue", 0);
@@ -78,7 +82,6 @@ public class Robot extends IterativeRobot {
 		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
 		frontLeft.enableCurrentLimit(true);
-		
 		frontRight.configOpenloopRamp(.1, 0);
 		frontLeft.configOpenloopRamp(.1, 0);
          outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
@@ -125,50 +128,38 @@ public class Robot extends IterativeRobot {
 
 	Mat image = new Mat();
 	ArrayList<Rect> rects = new ArrayList<Rect>();
+	Rect target1;
+	Rect target2;
+	Rect leftTarget;
+	Rect rightTarget;
+	Rect combinedTarget;
+	double speed;
+	double turn;
+	double error = 0;
+	
 	@Override
 	public void teleopPeriodic(){
-		
-         
-
-          
-             cvSink.grabFrame(image);
-             Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
- 			 Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
- 			 Imgproc.blur(image, image, new Size(7, 7));
- 			 Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);
-             Scalar minValues = new Scalar(SmartDashboard.getNumber("HMin", 0), SmartDashboard.getNumber("SMin", 0), SmartDashboard.getNumber("VMin", 0));
- 			 Scalar maxValues = new Scalar(SmartDashboard.getNumber("HueMax", 180), SmartDashboard.getNumber("SaturationMax", 255), SmartDashboard.getNumber("ValueMax", 255));
- 			 Core.inRange(image, minValues, maxValues, image);
- 			 
- 			Imgproc.erode(image, image, erodeElement);//Once or twice
- 			/*Imgproc.erode(image, image, erodeElement);
-			Imgproc.dilate(image, image, dilateElement);*/
-			Imgproc.dilate(image, image, dilateElement);
-			outputStream.putFrame(image);
-			List<MatOfPoint> contours = new ArrayList<>();
-			Mat hierarchy = new Mat();
-
-			// find contours
-			Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
-			MatOfPoint2f approxCurve = new MatOfPoint2f();
-			//find bounding rectangle
-			rects.clear();
-			for (int i=0; i<contours.size(); i++)
-		    {
-		        MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(0).toArray() );
-		        double approxDistance = Imgproc.arcLength(contour2f, true)*0.02;
-		        Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
-		        MatOfPoint points = new MatOfPoint( approxCurve.toArray() );
-		        Rect rect = Imgproc.boundingRect(points);
-		        rects.add(rect);
-		    }
-			String rectsStr = "";
-			for(int i = 0; i < rects.size(); i++) {
-				rectsStr += rects.get(i).toString() + "\n";
+			
+			while(ultra.getRangeInches() > 8)
+			{
+				if(Math.abs(error) >= 9)
+				{
+					speed = 0;
+					turn = (error/Math.abs(error) *.5);
+					calculateError();
+				}
+				else
+				{
+					speed = .5;
+					turn = 0;
+					calculateError();
+				}
+				drive.arcadeDrive(speed, turn);
 			}
 			
-			SmartDashboard.putString("Rect M8", rectsStr);
-			//double diff = 
+			
+			
+			
  			//System.out.println(cvSink.getError());
          
 	}
@@ -178,5 +169,81 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+	public Rect[] findBiggest(ArrayList<Rect> rects)
+	{
+		Rect biggest = new Rect(0,0,0,0);
+		Rect secondBiggest = new Rect(0,0,0,0);
+		for(int i=0; i<rects.size();i++)
+		{
+			if(rects.get(i).height > biggest.height) {
+				secondBiggest = biggest;
+				biggest = rects.get(i);
+			}
+			else if(rects.get(i).height > secondBiggest.height)
+			{
+				secondBiggest = rects.get(i);
+			}
+		}
+		return new Rect[] {biggest, secondBiggest}; 
+	}
+	public double calculateError()
+	{
+		 cvSink.grabFrame(image);
+         Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
+			 Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
+			 Imgproc.blur(image, image, new Size(7, 7));
+			 Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);
+         Scalar minValues = new Scalar(SmartDashboard.getNumber("HMin", 0), SmartDashboard.getNumber("SMin", 0), SmartDashboard.getNumber("VMin", 0));
+			 Scalar maxValues = new Scalar(SmartDashboard.getNumber("HueMax", 180), SmartDashboard.getNumber("SaturationMax", 255), SmartDashboard.getNumber("ValueMax", 255));
+			 Core.inRange(image, minValues, maxValues, image);
+			 
+			Imgproc.erode(image, image, erodeElement);//Once or twice
+			/*Imgproc.erode(image, image, erodeElement);
+		Imgproc.dilate(image, image, dilateElement);*/
+		Imgproc.dilate(image, image, dilateElement);
+		outputStream.putFrame(image);
+		List<MatOfPoint> contours = new ArrayList<>();
+		Mat hierarchy = new Mat();
+
+		// find contours
+		Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+		MatOfPoint2f approxCurve = new MatOfPoint2f();
+		//find bounding rectangle
+		rects.clear();
+		for (int i=0; i<contours.size(); i++)
+	    {
+	        MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(0).toArray() );
+	        double approxDistance = Imgproc.arcLength(contour2f, true)*0.02;
+	        Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
+	        MatOfPoint points = new MatOfPoint( approxCurve.toArray() );
+	        Rect rect = Imgproc.boundingRect(points);
+	        rects.add(rect);
+	    }
+		String rectsStr = "";
+		for(int i = 0; i < rects.size(); i++) {
+			rectsStr += rects.get(i).toString() + "\n";
+		}
+		if(rects.size() >= 2) {
+			Rect[] rect2 = findBiggest(rects);
+			if(rect2[0].x < rect2[1].x) {
+			leftTarget = rect2[0];
+			rightTarget = rect2[1];
+			}
+			else
+			{
+				leftTarget = rect2[1];
+				rightTarget = rect2[0];
+			}
+			
+			combinedTarget = new Rect(leftTarget.x,leftTarget.y,rightTarget.x + rightTarget.width - leftTarget.x,rightTarget.height);
+			error = combinedTarget.x + (combinedTarget.width/2) - (320); //make sure thats right
+			}
+			else
+			{
+				error = 0;
+			}
+		SmartDashboard.putString("Rect M8", rectsStr);
+		return error;
 	}
 }
