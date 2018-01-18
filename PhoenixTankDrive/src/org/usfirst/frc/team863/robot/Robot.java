@@ -97,9 +97,11 @@ public class Robot extends IterativeRobot {
 //		System.out.println("Left Encoder:"+leftEncodee.get());
 		
 	}
-	public void moveForward(double xfeet){
-		//double revolutions = xfeet/4.75;
-		while(RobotState.isAutonomous() && Math.abs(leftEncodee.getRaw()) < 256) /*|| (Math.abs(rightEncodee.getRaw()) < 256) */ {
+	public void moveForward(double xinch){
+		double cir = 18.8;
+		double encodeeRatio = 3;
+		double revs = ((xinch*256)/(cir*encodeeRatio));
+		while(RobotState.isAutonomous() && Math.abs(leftEncodee.getRaw()) < revs) /*|| (Math.abs(rightEncodee.getRaw()) < 256) */ {
 			SmartDashboard.putNumber("Left Encodee Number :D ", leftEncodee.getRaw());
 			//System.out.println("Left Encodee Number :D "+leftEncodee.getRaw());
 			SmartDashboard.putNumber("the always Right num: ", rightEncodee.getRaw());
