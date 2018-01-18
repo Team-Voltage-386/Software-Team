@@ -7,17 +7,13 @@
 
 package org.usfirst.frc.team863.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -38,8 +34,8 @@ public class Robot extends IterativeRobot {
 	Compressor compressor = new Compressor(0);
 	public static Joystick right = new Joystick(0);
 	public static Joystick left = new Joystick(1);
-	Encoder leftEncodee = new Encoder(0,2);
-	Encoder rightEncodee = new Encoder(1,3);
+	Encoder leftEncodee = new Encoder(0,1);
+	Encoder rightEncodee = new Encoder(2,3);
 	public GearShift gearShift = new GearShift();
 	SmartDashboard smarty = new SmartDashboard();
 	@Override
@@ -78,21 +74,43 @@ public class Robot extends IterativeRobot {
 	}
 
 	
-	
-	
 	@Override
 	public void teleopPeriodic() {
+		//leftEncodee.reset();
+		//rightEncodee.reset();
+		SmartDashboard.putBoolean("Its Alive!", isAutonomous());
+		SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
+		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
+		SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
 		double leftY = left.getY();
 		double rightY = right.getY();
-		drive.tankDrive(deadBand(leftY, .1), deadBand(rightY, .1));
+		drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
 		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
 		SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
-		
 //		System.out.println("Right Encoder:"+rightEncodee.get());
 //		System.out.println("Left Encoder:"+leftEncodee.get());
 		
 	}
-	
+	public void moveForward(double xfeet){
+		//double revolutions = xfeet/4.75;
+		while(RobotState.isAutonomous() && Math.abs(leftEncodee.getRaw()) < 256) /*|| (Math.abs(rightEncodee.getRaw()) < 256) */ {
+			SmartDashboard.putNumber("Left Encodee Number :D ", leftEncodee.getRaw());
+			//System.out.println("Left Encodee Number :D "+leftEncodee.getRaw());
+			SmartDashboard.putNumber("the always Right num: ", rightEncodee.getRaw());
+			//System.out.println("the always Right num: "+rightEncodee.getRaw());
+			drive.tankDrive(0.5, 0.5);
+		}
+		drive.tankDrive(0, 0);
+	}
+	public void autonomousInit(){
+		leftEncodee.reset();
+		rightEncodee.reset();
+		SmartDashboard.putBoolean("Its Alive!", isAutonomous());
+		SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
+		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
+		SmartDashboard.putBoolean("mind control!!2", RobotState.isOperatorControl());
+		moveForward(5);
+	}
 //	public void shift() {
 //		DoubleSolenoid piston = new DoubleSolenoid(0,1);
 //		if(left.getRawButtonPressed(0)== true)
