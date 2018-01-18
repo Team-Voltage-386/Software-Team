@@ -7,20 +7,17 @@
 
 package org.usfirst.frc.team863.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import Utility.AnalogUltrasonic;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import Utility.AnalogUltrasonic;
 
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically
@@ -44,6 +41,8 @@ public class Robot extends IterativeRobot {
 	public GearShift gearShift = new GearShift();
 	SmartDashboard smarty = new SmartDashboard();
 	public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
+	//public Ultrasonic ultra2 = new Ultrasonic(0,1);
+	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	@Override
 	public void robotInit() {
 		rightEncodee.reset();
@@ -111,11 +110,15 @@ public class Robot extends IterativeRobot {
 	}
 	public void autonomousPeriodic()
 	{
-	    while(!isOperatorControl() && ultra.getInches() > 7)
+	    while(!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) //test thursday
 	    {
 		drive.tankDrive(.5, .5);
 		SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
 		SmartDashboard.putNumber("Ultra", ultra.getInches());
+	    }
+	    while(!isOperatorControl() && Math.abs(gyro.getAngle() )< 80)
+	    {
+		drive.tankDrive(-.5, .5);
 	    }
 	    drive.tankDrive(0,0);
 	}
