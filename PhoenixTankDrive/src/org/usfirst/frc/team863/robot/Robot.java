@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import Utility.AnalogUltrasonic;
 
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically
@@ -42,15 +43,16 @@ public class Robot extends IterativeRobot {
 	Encoder rightEncodee = new Encoder(1,3);
 	public GearShift gearShift = new GearShift();
 	SmartDashboard smarty = new SmartDashboard();
+	public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
 	@Override
 	public void robotInit() {
 		rightEncodee.reset();
 		leftEncodee.reset();
 		System.out.println("Started");
 		leftSlave1.follow(frontLeft);
-    	leftSlave2.follow(frontLeft);
-    	rightSlave1.follow(frontRight);
-    	rightSlave2.follow(frontRight);
+		leftSlave2.follow(frontLeft);
+		rightSlave1.follow(frontRight);
+		rightSlave2.follow(frontRight);
 		frontRight.configContinuousCurrentLimit(20, 0);
 		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
@@ -102,4 +104,19 @@ public class Robot extends IterativeRobot {
 //		}
 //		
 //	}
+	public void autonomousInit()
+	{
+	    leftEncodee.reset();
+	    rightEncodee.reset();
+	}
+	public void autonomousPeriodic()
+	{
+	    while(!isOperatorControl() && ultra.getInches() > 7)
+	    {
+		drive.tankDrive(.5, .5);
+		SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
+		SmartDashboard.putNumber("Ultra", ultra.getInches());
+	    }
+	    drive.tankDrive(0,0);
+	}
 }
