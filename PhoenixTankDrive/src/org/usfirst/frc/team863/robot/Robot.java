@@ -9,11 +9,14 @@ package org.usfirst.frc.team863.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import Utility.AnalogUltrasonic;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
+//import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -38,15 +41,18 @@ public class Robot extends IterativeRobot {
 	Encoder rightEncodee = new Encoder(2,3);
 	public GearShift gearShift = new GearShift();
 	SmartDashboard smarty = new SmartDashboard();
+	public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
+	//public Ultrasonic ultra2 = new Ultrasonic(0,1);
+	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	@Override
 	public void robotInit() {
 		rightEncodee.reset();
 		leftEncodee.reset();
 		System.out.println("Started");
 		leftSlave1.follow(frontLeft);
-    	leftSlave2.follow(frontLeft);
-    	rightSlave1.follow(frontRight);
-    	rightSlave2.follow(frontRight);
+		leftSlave2.follow(frontLeft);
+		rightSlave1.follow(frontRight);
+		rightSlave2.follow(frontRight);
 		frontRight.configContinuousCurrentLimit(20, 0);
 		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
@@ -102,7 +108,7 @@ public class Robot extends IterativeRobot {
 		}
 		drive.tankDrive(0, 0);
 	}
-	public void autonomousInit(){
+	/*public void autonomousInit(){
 		leftEncodee.reset();
 		rightEncodee.reset();
 		SmartDashboard.putBoolean("Its Alive!", isAutonomous());
@@ -110,7 +116,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
 		SmartDashboard.putBoolean("mind control!!2", RobotState.isOperatorControl());
 		moveForward(5);
-	}
+	}*/
 //	public void shift() {
 //		DoubleSolenoid piston = new DoubleSolenoid(0,1);
 //		if(left.getRawButtonPressed(0)== true)
@@ -120,4 +126,23 @@ public class Robot extends IterativeRobot {
 //		}
 //		
 //	}
+	public void autonomousInit()
+	{
+	    leftEncodee.reset();
+	    rightEncodee.reset();
+	}
+	public void autonomousPeriodic()
+	{
+	    while(!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) //test thursday
+	    {
+		drive.tankDrive(.5, .5);
+		SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
+		SmartDashboard.putNumber("Ultra", ultra.getInches());
+	    }
+	    while(!isOperatorControl() && Math.abs(gyro.getAngle() )< 80)
+	    {
+		drive.tankDrive(-.5, .5);
+	    }
+	    drive.tankDrive(0,0);
+	}
 }
