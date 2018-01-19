@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.XboxController;
 //import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 	Compressor compressor = new Compressor(0);
 	public static Joystick right = new Joystick(0);
 	public static Joystick left = new Joystick(1);
+	public static Joystick manipulator = new Joystick(2);
 	Encoder leftEncodee = new Encoder(0,1);
 	Encoder rightEncodee = new Encoder(2,3);
 	public GearShift gearShift = new GearShift();
@@ -90,7 +92,10 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
 		double leftY = left.getY();
 		double rightY = right.getY();
-		drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
+		//drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
+		drive.arcadeDrive(deadBand(manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+		SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
+		SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
 		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
 		SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
 //		System.out.println("Right Encoder:"+rightEncodee.get());
@@ -108,7 +113,7 @@ public class Robot extends IterativeRobot {
 			//System.out.println("the always Right num: "+rightEncodee.getRaw());
 			drive.tankDrive(0.5, 0.5);
 		}
-		drive.tankDrive(0, 0);
+		drive.tankDrive(0, 0); //drives forward at 0 speed
 	}
 	/*public void autonomousInit(){
 		leftEncodee.reset();
@@ -119,19 +124,20 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("mind control!!2", RobotState.isOperatorControl());
 		moveForward(5);
 	}*/
-//	public void shift() {
-//		DoubleSolenoid piston = new DoubleSolenoid(0,1);
-//		if(left.getRawButtonPressed(0)== true)
-//		{
+/*	public void shift() {
+		DoubleSolenoid piston = new DoubleSolenoid(0,1);
+		if(left.getRawButtonPressed(0)== true)
+		{
 	
-//			if(piston.)
-//		}
-//		
-//	}
+			if(piston.)
+		}
+		
+	}*/
 	public void autonomousInit()
 	{
 	    leftEncodee.reset();
 	    rightEncodee.reset();
+	    //hello world
 	}
 	public void autonomousPeriodic()
 	{
