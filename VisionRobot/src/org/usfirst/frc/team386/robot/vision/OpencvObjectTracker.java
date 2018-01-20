@@ -34,8 +34,8 @@ public class OpencvObjectTracker {
      * cup I have at home.
      */
     public OpencvObjectTracker() {
-	this.hsvMinValues = new Scalar(33, 108, 138);
-	this.hsvMaxValues = new Scalar(55, 255, 255);
+	this.hsvMinValues = new Scalar(18, 57, 5);
+	this.hsvMaxValues = new Scalar(34, 218, 255);
 	start();
     }
 
