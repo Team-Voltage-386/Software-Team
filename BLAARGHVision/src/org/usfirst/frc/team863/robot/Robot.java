@@ -23,7 +23,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
+
+
 public class Robot extends IterativeRobot {
+	boolean robostat = true;
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
@@ -43,6 +46,9 @@ public class Robot extends IterativeRobot {
 	
 	Joystick leftJoystick = new Joystick(0); //Designates joysticks
 	Joystick rightJoystick = new Joystick(1);
+	
+	Joystick rumblePad = new Joystick(2);
+	
 
 	
 	/**
@@ -51,6 +57,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		SmartDashboard.putNumber("Joystick Y value", leftJoystick.getY());
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
@@ -78,14 +85,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		
-	}
-
-	/**
-	 * This function is called periodically during autonomous.
-	 */
-	@Override
-	public void autonomousPeriodic() {
 		while(sonic.getRangeInches()>10) {  //Instructs robot to drive while ultrasonic is more than 10 in. from something(?)
 			drive.tankDrive(.4,.4);
 		}
@@ -94,12 +93,26 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
+	 * This function is called periodically during autonomous.
+	 */
+	@Override
+	public void autonomousPeriodic() {
+		
+		
+	}
+
+	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
 	public void teleopPeriodic() {
+		if(robostat == true){
 		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
-	}
+		}
+		else if(robostat == false) {
+		drive.arcadeDrive(-1*rumblePad.getY(), rumblePad.getZ()); //Yay arcade drive
+		}
+		}
 
 	/**
 	 * This function is called periodically during test mode.
