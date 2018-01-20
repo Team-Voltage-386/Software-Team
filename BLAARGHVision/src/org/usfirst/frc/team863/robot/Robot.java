@@ -60,6 +60,9 @@ public class Robot extends IterativeRobot {
 		rightSlave2.follow(frontRight);
 		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.configContinuousCurrentLimit(20, 0);
+		
+		frontLeft.enableCurrentLimit(true);
+		frontRight.enableCurrentLimit(true);
 	}
 
 	/**
