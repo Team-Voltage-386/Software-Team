@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+
 public class Robot extends IterativeRobot {
 
     public static final DriveGearSubsystem driveGearSubsystem = new DriveGearSubsystem();
+    public CANTalon frontLeft = new CANTalon(5);
 
     public static OI oi;
 
