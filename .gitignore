@@ -1,0 +1,9 @@
+#OS
+*.DS_Store
+.metadata/*
+.metadata
+/.metadata
+*.class
+.recommenders
+.recommenders/*
+/.recommenders
