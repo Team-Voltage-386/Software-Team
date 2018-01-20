@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
-	boolean robostat = true;
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
@@ -57,7 +56,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		SmartDashboard.putNumber("Joystick Y value", leftJoystick.getY());
+		SmartDashboard.putBoolean("Tank Or Arcade", true);
 		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
@@ -106,10 +105,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		if(robostat == true){
+		
+		if(SmartDashboard.getBoolean("Tank Or Arcade", true) == true){
 		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
 		}
-		else if(robostat == false) {
+		else{
 		drive.arcadeDrive(-1*rumblePad.getY(), rumblePad.getZ()); //Yay arcade drive
 		}
 		}
