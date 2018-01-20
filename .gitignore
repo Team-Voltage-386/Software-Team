@@ -10,3 +10,4 @@
 .recommenders
 .recommenders/*
 /.recommenders
+/*.project

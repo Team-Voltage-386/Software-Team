@@ -75,10 +75,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		while(sonic.getRangeInches()>10) {  //Instructs robot to drive while ultrasonic is more than 10 in. from something(?)
-			drive.tankDrive(.4,.4);
-		}
-		drive.tankDrive(0, 0);
+		
 	}
 
 	/**
@@ -86,7 +83,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
+		while(sonic.getRangeInches()>10) {  //Instructs robot to drive while ultrasonic is more than 10 in. from something(?)
+			drive.tankDrive(.4,.4);
+		}
+		drive.tankDrive(0, 0);
 		
 	}
 
