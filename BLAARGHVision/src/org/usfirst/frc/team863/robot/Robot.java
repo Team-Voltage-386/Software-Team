@@ -58,6 +58,11 @@ public class Robot extends IterativeRobot {
 		leftSlave2.follow(frontLeft); //Enslaves motors to master motors
 		rightSlave1.follow(frontRight);
 		rightSlave2.follow(frontRight);
+		frontLeft.configContinuousCurrentLimit(20, 0);
+		frontRight.configContinuousCurrentLimit(20, 0);
+		
+		frontLeft.enableCurrentLimit(true);
+		frontRight.enableCurrentLimit(true);
 	}
 
 	/**
