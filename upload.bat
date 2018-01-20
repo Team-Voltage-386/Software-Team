@@ -2,9 +2,9 @@
 title upload changes
 
 setlocal enabledelayedexpansion
-set bf=.metadata .recommenders
+set bf=".metadata" ".recommenders"
 set blocked=%bf%
-for %%i in (*) do set blocked=!blocked! %%i
+for %%i in (*) do set blocked=!blocked! "%%i"
 ::this for loop looks for files (not dirs) in the repo and adds them to blocked
 set bc=0
 for %%i in (%blocked%) do set /a "bc=!bc!+1"
@@ -13,13 +13,13 @@ set dirlist=
 for /f "tokens=* USEBACKQ" %%i in (`dir /b`) do (
 	set count=0
 	for %%e in (%blocked%) do (
-		if not %%i==%%e (
+		if not "%%i"==%%e (
 			set /a "count=!count!+1"
 		)
 		::checks item with current item in blocked list, if they dont match, then it adds 1 to count
 		if !count!==!bc! (
 			::if the current line has been checked through every blocked line count/total, then let it pass ::
-			set dirlist=!dirlist! %%i
+			set dirlist=!dirlist! "%%i"
 		)
 	)
 )

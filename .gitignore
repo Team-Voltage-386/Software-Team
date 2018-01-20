@@ -1,0 +1,15 @@
+#OS
+.metadata
+.metadata/*
+/.metadata
+/.metadata/*
+.recommenders
+.recommenders/*
+/.recommenders
+/.recommenders/*
+*.class
+*.classpath
+bin
+bin/*
+dist
+dist/*
