@@ -7,17 +7,19 @@
 
 package org.usfirst.frc.team863.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import Utility.AnalogUltrasonic;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.XboxController;
+//import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This is a demo program showing the use of the RobotDrive class, specifically
@@ -36,27 +38,30 @@ public class Robot extends IterativeRobot {
 	Compressor compressor = new Compressor(0);
 	public static Joystick right = new Joystick(0);
 	public static Joystick left = new Joystick(1);
+	public static Joystick manipulator = new Joystick(2);
+	Encoder leftEncodee = new Encoder(0,1);
+	Encoder rightEncodee = new Encoder(2,3);
 	public GearShift gearShift = new GearShift();
+	SmartDashboard smarty = new SmartDashboard();
+	public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
+	//public Ultrasonic ultra2 = new Ultrasonic(0,1);
+	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 	@Override
 	public void robotInit() {
+		rightEncodee.reset();
+		leftEncodee.reset();
 		System.out.println("Started");
 		leftSlave1.follow(frontLeft);
-    	leftSlave2.follow(frontLeft);
-    	rightSlave1.follow(frontRight);
-    	rightSlave2.follow(frontRight);
-		frontRight.configContinuousCurrentLimit(10, 0);
-		
-		frontLeft.configContinuousCurrentLimit(10, 0);
-		
+		leftSlave2.follow(frontLeft);
+		rightSlave1.follow(frontRight);
+		rightSlave2.follow(frontRight);
+		frontRight.configContinuousCurrentLimit(20, 0);
+		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
-		
 		frontLeft.enableCurrentLimit(true);
-//		rearRight.configOpenloopRamp(2, 0);
-//		midRight.configOpenloopRamp(2, 0);
-//		frontRight.configOpenloopRamp(2, 0);
-//		rearLeft.configOpenloopRamp(2, 0);
-//		midLeft.configOpenloopRamp(2, 0);
-//		frontRight.configOpenloopRamp(2, 0);
+		
+		frontRight.configOpenloopRamp(.1, 0);
+		frontLeft.configOpenloopRamp(.11, 0);
 		
 		compressor.start();
 		gearShift.start();
@@ -64,23 +69,88 @@ public class Robot extends IterativeRobot {
 	}
 	@Override
 	public void teleopInit() {
-		
+		rightEncodee.reset();
+		leftEncodee.reset();
+	}
+	public double deadBand(double in, double limit) {
+		if(Math.abs(in) < limit) {
+			return 0;
+		}
+		else {
+			return in;
+		}
 	}
 
 	
-	
-	
 	@Override
 	public void teleopPeriodic() {
-		drive.tankDrive(left.getY(), right.getY());	
+		//leftEncodee.reset();
+		//rightEncodee.reset();
+		SmartDashboard.putBoolean("Its Alive!", isAutonomous());
+		SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
+		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
+		SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
+		double leftY = left.getY();
+		double rightY = right.getY();
+		//drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
+		drive.arcadeDrive(deadBand(manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+		SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
+		SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
+		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
+		SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
+//		System.out.println("Right Encoder:"+rightEncodee.get());
+//		System.out.println("Left Encoder:"+leftEncodee.get());
+		
 	}
+	public void moveForward(double xinch){
+		double cir = 18.8;
+		double encodeeRatio = 3;
+		double revs = ((xinch*256)/(cir*encodeeRatio));
+		while(RobotState.isAutonomous() && Math.abs(leftEncodee.getRaw()) < revs) /*|| (Math.abs(rightEncodee.getRaw()) < 256) */ {
+			SmartDashboard.putNumber("Left Encodee Number :D ", leftEncodee.getRaw());
+			//System.out.println("Left Encodee Number :D "+leftEncodee.getRaw());
+			SmartDashboard.putNumber("the always Right num: ", rightEncodee.getRaw());
+			//System.out.println("the always Right num: "+rightEncodee.getRaw());
+			drive.tankDrive(0.5, 0.5);
+		}
+		drive.tankDrive(0, 0); //drives forward at 0 speed
+	}
+	/*public void autonomousInit(){
+		leftEncodee.reset();
+		rightEncodee.reset();
+		SmartDashboard.putBoolean("Its Alive!", isAutonomous());
+		SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
+		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
+		SmartDashboard.putBoolean("mind control!!2", RobotState.isOperatorControl());
+		moveForward(5);
+	}*/
+/*	public void shift() {
+		DoubleSolenoid piston = new DoubleSolenoid(0,1);
+		if(left.getRawButtonPressed(0)== true)
+		{
 	
-//	public void shift() {
-//		DoubleSolenoid piston = new DoubleSolenoid(0,1);
-//		if(left.getRawButtonPressed(0)== true)
-//		{
-//			if(piston.)
-//		}
-//		
-//	}
+			if(piston.)
+		}
+		
+	}*/
+	public void autonomousInit()
+	{
+	    leftEncodee.reset();
+	    rightEncodee.reset();
+	    //hello world
+	}
+	public void autonomousPeriodic()
+	{
+	    while(!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) //test thursday
+	    {
+		drive.tankDrive(.5, .5);
+		SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
+		SmartDashboard.putNumber("Ultra", ultra.getInches());
+	    }
+	    while(!isOperatorControl() && Math.abs(gyro.getAngle() )< 80)
+	    {
+		drive.tankDrive(-.5, .5);
+	    }
+	    drive.tankDrive(0,0);
+	}
 }

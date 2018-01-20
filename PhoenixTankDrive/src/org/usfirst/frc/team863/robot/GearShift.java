@@ -16,7 +16,7 @@ public class GearShift extends Thread {
 	public void run() {
 		while (!Thread.interrupted()) {
 			if (RobotState.isOperatorControl()) {
-				boolean buttonPressed = Robot.right.getRawButton(1);
+				boolean buttonPressed = /*Robot.right.getRawButton(1)*/ Robot.manipulator.getRawButton(5);
 				//System.out.println("Thread running" + previous + buttonPressed);
 				if (buttonPressed == true && previous == false) {
 					System.out.println(gearState);

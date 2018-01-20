@@ -9,6 +9,9 @@
 	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix-sources.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
+<<<<<<< HEAD
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
+=======
+>>>>>>> 24be4c8b46857bc9afbe9bd81e5dbb50f7ccb1c7
 	<classpathentry kind="output" path="bin"/>
 </classpath>
