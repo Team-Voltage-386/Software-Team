@@ -29,11 +29,11 @@ public class Robot extends IterativeRobot {
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
-	WPI_TalonSRX frontLeft = new WPI_TalonSRX(1);
+	WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); //Designates master motors
 	WPI_TalonSRX frontRight = new WPI_TalonSRX(4);
 	
 	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
-	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
+	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3); //Designates slave motors
 	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
 	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
 	
@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 	
 	DifferentialDrive drive = new DifferentialDrive(frontLeft,frontRight);
 	
-	Joystick leftJoystick = new Joystick(0);
+	Joystick leftJoystick = new Joystick(0); //Designates joysticks
 	Joystick rightJoystick = new Joystick(1);
 
 	
@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		leftSlave1.follow(frontLeft);
-		leftSlave2.follow(frontLeft);
+		leftSlave2.follow(frontLeft); //Enslaves motors to master motors
 		rightSlave1.follow(frontRight);
 		rightSlave2.follow(frontRight);
 	}
@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		while(sonic.getRangeInches()>10) {  //Instructs robot to drive while ultrasonic is more than 10 in. from something(?)
+		while(sonic.getRangeInches()>10) {  //Instructs robot to drive while ultrasonic is greater than 10 in. from something(?)
 			drive.tankDrive(.4,.4);
 		}
 		drive.tankDrive(0, 0);
