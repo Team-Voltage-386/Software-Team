@@ -103,8 +103,10 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control.
 	 */
-	@Override
+	 @Override
 	public void teleopPeriodic() {
+		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY()); 
+	} 
 		
 		if(SmartDashboard.getBoolean("Tank Or Arcade", true) == true){
 		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
