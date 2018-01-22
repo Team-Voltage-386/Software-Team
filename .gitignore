@@ -8,8 +8,8 @@
 /.recommenders
 /.recommenders/*
 *.class
-*.classpath
-/**/.classpath
+# *.classpath
+# /**/.classpath
 bin
 bin/*
 dist
