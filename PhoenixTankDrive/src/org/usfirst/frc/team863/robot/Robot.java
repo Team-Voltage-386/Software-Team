@@ -93,7 +93,7 @@ public class Robot extends IterativeRobot {
 		double leftY = left.getY();
 		double rightY = right.getY();
 		//drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
-		drive.arcadeDrive(deadBand(manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+		drive.arcadeDrive(deadBand(-1*manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(4), .1));
 		SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
 		SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
 		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
