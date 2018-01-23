@@ -12,6 +12,8 @@
 # /**/.classpath
 bin
 bin/*
+build
+build/*
 dist
 dist/*
 /.metadata/
