@@ -4,18 +4,23 @@ import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.TankDriveWithJoysticksCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
  * Subsystem for operating the drive train and controlling vehicle movement.
  */
 public class DriveTrainSubsystem extends Subsystem {
-    private RobotDrive drive;
+    private DifferentialDrive drive;
 
     public DriveTrainSubsystem() {
-	this.drive = new RobotDrive(RobotMap.frontLeftMotor, RobotMap.rearLeftMotor, RobotMap.frontRightMotor,
-		RobotMap.rearRightMotor);
+	SpeedControllerGroup leftGroup = new SpeedControllerGroup(new Spark(RobotMap.frontLeftMotor),
+		new Spark(RobotMap.rearLeftMotor));
+	SpeedControllerGroup rightGroup = new SpeedControllerGroup(new Spark(RobotMap.frontRightMotor),
+		new Spark(RobotMap.rearRightMotor));
+	this.drive = new DifferentialDrive(leftGroup, rightGroup);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class DriveTrainSubsystem extends Subsystem {
      */
     public void drive(Joystick left, Joystick right) {
 	drive.setSafetyEnabled(true);
-	drive.tankDrive(left, right);
+	drive.tankDrive(left.getThrottle(), right.getThrottle());
     }
 
     /**
