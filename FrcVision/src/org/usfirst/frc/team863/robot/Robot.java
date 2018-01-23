@@ -85,6 +85,7 @@ public class Robot extends IterativeRobot {
 		frontRight.configOpenloopRamp(.1, 0);
 		frontLeft.configOpenloopRamp(.1, 0);
          outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+         ultra.setAutomaticMode(true);
 	}
 
 	/**
