@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 	Joystick leftJoystick = new Joystick(0); //Designates joysticks
 	Joystick rightJoystick = new Joystick(1);
 	
-	Joystick rumblePad = new Joystick(2);
+//	Joystick rumblePad = new Joystick(2);
 	
 
 	
@@ -88,7 +88,10 @@ public class Robot extends IterativeRobot {
 			drive.tankDrive(.4,.4);
 		}
 		drive.tankDrive(0, 0);
-		
+		while(sonic.getRangeInches()<50) {
+			drive.arcadeDrive(-0.4, 0);
+		}
+		drive.tankDrive(0, 0);
 	}
 
 	/**
@@ -105,16 +108,13 @@ public class Robot extends IterativeRobot {
 	 */
 	 @Override
 	public void teleopPeriodic() {
-		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY()); 
-	} 
 		
-		if(SmartDashboard.getBoolean("Tank Or Arcade", true) == true){
+		 
 		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
-		}
-		else{
-		drive.arcadeDrive(-1*rumblePad.getY(), rumblePad.getZ()); //Yay arcade drive
-		}
-		}
+		
+//		drive.arcadeDrive(-1*rumblePad.getY(), rumblePad.getZ());
+	 }
+		
 
 	/**
 	 * This function is called periodically during test mode.
