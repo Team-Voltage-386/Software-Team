@@ -1,6 +1,10 @@
 
 package org.usfirst.frc.team386.robot;
 
+import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -17,6 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
+	public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
+	public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
+	public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
 	public static OI oi;
 
