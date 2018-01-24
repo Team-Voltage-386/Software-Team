@@ -73,6 +73,7 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		rightEncodee.reset();
 		leftEncodee.reset();
+		SmartDashboard.putNumber("Deadband", 0);
 	}
 	public double deadBand(double in, double limit) {
 		if(Math.abs(in) < limit) {
@@ -90,9 +91,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		double leftY = left.getY();
 		double rightY = right.getY();
-		drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
-		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
-		SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
+		leftY = deadBand(leftY, SmartDashboard.getNumber("Deadband", 0));
+		rightY = deadBand(rightY, SmartDashboard.getNumber("Deadband", 0));
+		//drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
+		drive.arcadeDrive(leftY, rightY);
+		//SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
+		//SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
 		
 //		System.out.println("Right Encoder:"+rightEncodee.get());
 //		System.out.println("Left Encoder:"+leftEncodee.get());
