@@ -54,6 +54,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		gyro.reset();
 		m_autoSelected = m_chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
@@ -71,7 +72,7 @@ public class Robot extends IterativeRobot {
 				break;
 			case kDefaultAuto:
 			default:
-				System.out.println("Gyro angle: " + gyro.getAngle());
+				System.out.println("Gyro angle: " + (int)gyro.getAngle());
 				// Put default auto code here
 				break;
 		}
