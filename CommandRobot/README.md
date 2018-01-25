@@ -1,0 +1,1 @@
+This project is a practice project to use the WPILib command pattern to control the 2017 Team Voltage robot
