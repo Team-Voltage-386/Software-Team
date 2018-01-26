@@ -33,6 +33,12 @@ public class Robot extends IterativeRobot
 	public void robotInit() 
 	{
 		arduino = new I2C(I2C.Port.kOnboard, 8);
+		
+	}
+	@Override
+	public void disabledInit()
+	{
+		Robot.UpdateLEDs("DISABLED");
 	}
 
 	/**
@@ -46,10 +52,11 @@ public class Robot extends IterativeRobot
 	 * the switch structure below with additional strings. If using the
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
+	
 	@Override
 	public void autonomousInit()
 	{
-		
+		Robot.UpdateLEDs("AUTO");
 	}
 
 	/**
@@ -58,16 +65,21 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousPeriodic() 
 	{
-		Robot.UpdateLEDs("AUTO");
+
 	}
 
 	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopPeriodic() 
+	public void teleopInit() 
 	{
 		Robot.UpdateLEDs("TELEOP");
+	}
+	@Override
+	public void teleopPeriodic() 
+	{
+
 	}
 
 	/**
