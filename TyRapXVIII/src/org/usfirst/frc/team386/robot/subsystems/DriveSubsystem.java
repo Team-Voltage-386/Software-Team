@@ -36,9 +36,16 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void drive(double xSpeed, double zRotation) {
-	drive.arcadeDrive(xSpeed, zRotation);
-	// drive.arcadeDrive(deadBand(-1*manipulator.getRawAxis(1), .1),
-	// deadBand(manipulator.getRawAxis(4), .1));
+	// drive.arcadeDrive(xSpeed, zRotation);
+	drive.arcadeDrive(deadBand(-1 * xSpeed, .1), deadBand(zRotation, .1));
+    }
+
+    private double deadBand(double in, double limit) {
+	if (Math.abs(in) < limit) {
+	    return 0;
+	} else {
+	    return in;
+	}
     }
 
     // Put methods for controlling this subsystem
