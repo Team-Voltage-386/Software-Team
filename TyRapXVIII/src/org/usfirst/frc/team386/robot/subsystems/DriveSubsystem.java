@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -24,6 +25,8 @@ public class DriveSubsystem extends Subsystem {
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
     Compressor compressor = new Compressor(0);
     DoubleSolenoid solenoid = new DoubleSolenoid(0, 1);
+    Encoder leftEncoder = new Encoder(0, 1);
+    Encoder rightEncoder = new Encoder(2, 3);
 
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
@@ -72,5 +75,28 @@ public class DriveSubsystem extends Subsystem {
 	    solenoid.set(DoubleSolenoid.Value.kReverse);
 	}
 
+    }
+
+    public void resetEncoders() {
+	leftEncoder.reset();
+	rightEncoder.reset();
+    }
+
+    public void moveForward(double xinch) {
+	double cir = 18.8;
+	double encoderRatio = 3;
+	double revs = ((xinch * 256) / (cir * encoderRatio));
+	while (Math.abs(leftEncoder.getRaw()) < revs) /*
+						       * || (Math.abs(rightEncodee.getRaw()) < 256)
+						       */ {
+	    // SmartDashboard.putNumber("Left Encodee Number :D ", leftEncoder.getRaw());
+	    // System.out.println("Left Encodee Number :D
+	    // "+leftEncodee.getRaw());
+	    // SmartDashboard.putNumber("the always Right num: ", rightEncoder.getRaw());
+	    // System.out.println("the always Right num:
+	    // "+rightEncodee.getRaw());
+	    drive.tankDrive(1.0, 1.0);
+	}
+	drive.tankDrive(0, 0); // drives forward at 0 speed
     }
 }
