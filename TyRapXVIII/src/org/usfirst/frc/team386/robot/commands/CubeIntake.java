@@ -1,5 +1,7 @@
 package org.usfirst.frc.team386.robot.commands;
 
+import org.usfirst.frc.team386.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -8,8 +10,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class CubeIntake extends Command {
 
     public CubeIntake() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+	// Use requires() here to declare subsystem dependencies
+	requires(Robot.cubeSubsystem);
     }
 
     // Called just before this Command runs the first time
@@ -22,7 +24,7 @@ public class CubeIntake extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+	return false;
     }
 
     // Called once after isFinished returns true

@@ -4,6 +4,7 @@ import Utility.AnalogUltrasonic;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -17,9 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	Talon left = new Talon(9);
 	Talon right = new Talon(8);
-	AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
+	AnalogUltrasonic ultra1 = new AnalogUltrasonic(0,1.18,10.3);
 	AnalogUltrasonic ultra2 = new AnalogUltrasonic(1,1.18,10.3);
-	Joystick controler = new Joystick(0);
+	Joystick controller = new Joystick(0);
 	final String leftName = "Left speed";
 	final String rightName = "Right Speed";
 	boolean on;
@@ -39,23 +40,57 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		SmartDashboard.putNumber("ultra2", ultra2.getInches());
-		if (controler.getRawButtonPressed(2)) {
+		SmartDashboard.putNumber("ultra1", ultra1.getInches());
+		if (controller.getRawButtonPressed(2)) {
 			SmartDashboard.putNumber(leftName, -1 * SmartDashboard.getNumber(leftName, 0));
 			SmartDashboard.putNumber(rightName, -1 * SmartDashboard.getNumber(rightName, 0));
 		}
-		if (controler.getRawButtonPressed(1)) {
+		if (controller.getRawButtonPressed(1)) {
 			on = !on;
 		}
 		double leftOut = SmartDashboard.getNumber(leftName, 0);
 		double rightOut = SmartDashboard.getNumber(rightName, 0);
 		SmartDashboard.putNumber("Left out", leftOut);
 		SmartDashboard.putNumber("Right out", rightOut);
-		if (on) {
+		int rightUltrasonic = (int) (ultra2.getInches()*10);
+		int leftUltrasonic = (int) (ultra1.getInches()*10);
+		if(controller.getRawButtonPressed(3))
+		{
+			double startTime = Timer.getFPGATimestamp();
+			SmartDashboard.putBoolean("button pressed", true);
+			while(Timer.getFPGATimestamp() - .2 < startTime) {
+				left.set(leftOut*-1);
+				right.set(rightOut*-1);
+				SmartDashboard.putBoolean("forward", true);
+			}
+			left.set(0);
+			right.set(0);
+			double secondStartTime = Timer.getFPGATimestamp();
+			while(Timer.getFPGATimestamp() - .2 < secondStartTime)
+			{
+				left.set(leftOut);
+				right.set(rightOut);
+				SmartDashboard.putBoolean("backwards", true);
+			}
+		}
+	/*	if (on) {
 			SmartDashboard.putBoolean("button pressed", on);
 			if (SmartDashboard.getNumber(leftName, 0) > 0) {
 				if (ultra2.getInches() > 2) {
+					if(rightUltrasonic > leftUltrasonic) //ultra2 = right, ultra1 = left
+					{
+						left.set(leftOut*50);
+						right.set(rightOut);
+					}
+					else if(leftUltrasonic > rightUltrasonic)
+					{
+						left.set(leftOut);
+						right.set(rightOut*.50);
+					}
+					else if(leftUltrasonic == rightUltrasonic) {
 					left.set(leftOut);
 					right.set(rightOut);
+					}
 				} else {
 					left.set(0);
 					right.set(0);
@@ -68,5 +103,9 @@ public class Robot extends IterativeRobot {
 			left.set(0);
 			right.set(0);
 		}
-	}
+	}*/
+	left.set(controller.getRawAxis(1));
+	right.set(controller.getRawAxis(3));
+}
+ 
 }
