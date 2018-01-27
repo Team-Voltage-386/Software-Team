@@ -26,10 +26,11 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.KalmanFilter;
 import org.opencv.videoio.VideoCapture;
 import com.github.sarxos.webcam.Webcam;
 
-public class HoughLines {
+public class Contours {
 	static Mat mat;
 	static Mat invMat;
 	static BufferedImage image;
@@ -65,15 +66,10 @@ public class HoughLines {
 			Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(20, 20));
 
 			Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-			Core.inRange(mat, new Scalar(20, 100, 105), new Scalar(40, 255, 255), mat);
-			Imgproc.dilate(mat, mat, dilateElement);
-//			Imgproc.dilate(mat, mat, dilateElement);
-			Imgproc.erode(mat, mat, erodeElement);
+			Core.inRange(mat, new Scalar(20, 130, 130), new Scalar(40, 255, 255), mat);
 //			Imgproc.erode(mat, mat, erodeElement);
 //			Imgproc.dilate(mat, mat, dilateElement);
 			ImageIO.write(matToBufferedImage(mat), "PNG", new File("mat.png"));
-			Mat backdrop = new Mat(new Size(mat.width(), mat.height()), CvType.CV_8UC1);
-			mat.copyTo(backdrop);
 			for(int r = 0; r < base.rows(); r++) {
 				for(int c = 0; c < base.cols(); c++) {
 					//System.out.println(mat.get(r, c)[0]);
@@ -82,7 +78,6 @@ public class HoughLines {
 					}
 				}
 			}
-			
 			System.out.println("We good");
 			ImageIO.write(matToBufferedImage(base), "PNG", new File("backAgain.png"));
 			Mat grey = new Mat();
@@ -93,99 +88,54 @@ public class HoughLines {
 			
 			
 			Mat edges = new Mat();
-			Imgproc.Canny(grey, edges, 100, 200);
+			Imgproc.Canny(grey, edges, 60, 230);
 			
-			//Imgproc.dilate(edges, edges, dilateElement);
-			//Imgproc.erode(edges, edges, erodeElement);
+			//Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9)));
+			//Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9)));
 
 			Mat colorEdges = new Mat();
 			Mat lines = new Mat(new Size(mat.width(), mat.height()), CvType.CV_8UC3);
 			//Mat vectors = new Mat();
-			Mat contours = new Mat();
+			List<MatOfPoint> contours = new ArrayList<>();
 			List<MatOfPoint> goodContours = new ArrayList<>();
 			Mat hierarchy = new Mat();
-//			Mat corners = new Mat();
-//			Imgproc.cornerHarris(grey, corners, 9, 5, .1);
-//			System.out.println(corners.cols() + ", " + corners.get(0, 0).length);
-//			for( int j = 0; j < corners.rows() ; j++){
-//		        for( int i = 0; i < corners.cols(); i++){
-//		            if (corners.get(j,i)[0] > .01){
-//		        		System.out.println(i + ", " + j + " : " + corners.get(j,i)[0]);
-//		                Imgproc.circle(base, new Point(i,j), 5 , new Scalar(255, 255, 255), 2 ,8 , 0);
-//		                j += 1;
-//		            }
-//		        }
-//		    }
-			Mat lineMat = new Mat(new Size(mat.width(), mat.height()), CvType.CV_8UC1);
-			
-			Imgproc.HoughLinesP(edges, contours, mat.width() / mat.height() , Math.PI/180, 1);
-			System.out.println(contours.rows());
-			for (int i = 0; i < contours.rows(); i++) {
-		        double data[] = contours.get(i, 0);
-//		        double rho1 = data[0];
-//		        double theta1 = data[1];
-//		        Boolean skip = false;
-//		        for(int j = 0; j < i; j++) {
-//		        	if(Math.abs(contours.get(j,  0)[0] - rho1) < 30 && Math.abs(contours.get(j,  0)[1] - theta1) < Math.PI/15) {
-//		        		System.out.println(Math.abs(contours.get(j,  0)[0] - rho1));
-//		        		contours.put(i, 0, 0, 0);
-//		        		skip = true;
-//		        		break;
-//		        	}
-//		        }
-//		        if(!skip) {
-//		        double cosTheta = Math.cos(theta1);
-//		        double sinTheta = Math.sin(theta1);
-//		        double x0 = cosTheta * rho1;
-//		        double y0 = sinTheta * rho1;
-//		        Point pt1 = new Point(x0 + 10000 * (-sinTheta), y0 + 10000 * cosTheta);
-//		        Point pt2 = new Point(x0 - 10000 * (-sinTheta), y0 - 10000 * cosTheta);
-		        //Imgproc.line(base, pt1, pt2, new Scalar(0, 0, 255), 1);
-//		        Imgproc.line(lineMat, pt1, pt2, new Scalar(255), 5);
-		        Imgproc.line(lineMat, new Point(data[0], data[1]), new Point(data[2], data[3]), new Scalar(255));
-		        }
-//		    }
-			//Core.bitwise_and(lineMat.inv(), backdrop, lineMat);
-			//Imgproc.dilate(lineMat, lineMat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9)));
-			//Imgproc.erode(lineMat, lineMat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9)));
-			for(int r = 0; r < base.rows(); r++) {
-				for(int c = 0; c < base.cols(); c++) {
-					//System.out.println(mat.get(r, c)[0]);
-					if(lineMat.get(r, c)[0] == 255){
-						mat.put(r, c, new double[] {0});
+			Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE,new Point(0,0) );
+			for (int i=0; i<contours.size(); i++) {
+			    if ((true)) {   //has parent, inner (hole) contour of a closed edge (looks good)
+			    	Imgproc.drawContours(lines, contours, i, new Scalar(rng.nextInt(25)*10,rng.nextInt(25)*10,rng.nextInt(25)*10), 1);
+					goodContours.add(contours.get(i));
+			    }
+			}   	//contours.remove(i);
+
+			for(MatOfPoint points : contours) {
+				for(int y = 10; y < points.height()-10; y++) {
+					double[] point = points.get(y, 0);
+					double[] nextPoint = points.get(y + 10, 0);
+					double[] prevPoint = points.get(y - 10, 0);
+					if(Math.abs(Math.atan((point[1] - prevPoint[1])/ (point[0] - prevPoint[0])) - Math.atan((point[1] - nextPoint[1])/ (point[0] - nextPoint[0]))) > Math.PI/2.1) {
+						Imgproc.circle(lines, new Point(point[0], point[1]), 5 , new Scalar(255, 255, 255), 2 ,8 , 0);
+						System.out.println(point[0] + ", " + point[1]);
 					}
 				}
 			}
-			Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(30, 30)));
-			//Imgproc.HoughLinesP(edges, vectors, 1, Math.PI/180, 10);
-			ImageIO.write(matToBufferedImage(mat), "PNG", new File("lines.png"));
-			List<MatOfPoint> finalContours = new ArrayList<MatOfPoint>();
-			//Imgproc.findContours(lineMat.submat(new Rect(0, 0, lineMat.width(), lineMat.height()-75)), finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-//			for(int r = 0; r < base.rows(); r++) {
-//				for(int c = 0; c < base.cols(); c++) {
-//					//System.out.println(mat.get(r, c)[0]);
-//					if(mat.get(r, c)[0] == 0){
-//						lineMat.put(r, c, new double[] {0, 0, 0});
-//					}
-//				}
-//			}
-			Imgproc.findContours(mat, finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+			ImageIO.write(matToBufferedImage(lines), "PNG", new File("lines.png"));
 			List<RotatedRect> rects = new ArrayList<>();
 
-			for (int i=0; i<finalContours.size(); i++)
+			for (int i=0; i<goodContours.size(); i++)
 		    {
-				Imgproc.drawContours(base, finalContours, i,new Scalar(255, 255, 255));
-				RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(finalContours.get(i).toArray()));
-				if(rect.size.height > 20 && rect.size.width > 20 && rect.size.width < mat.width())
+				RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(goodContours.get(i).toArray()));
+				if(rect.size.height > 20 && rect.size.width > 20)
 					rects.add(rect);
 		    }
 			for(RotatedRect r : rects) {
 				Point[] vertices = new Point[4];
 			    r.points(vertices);
 			    MatOfPoint points = new MatOfPoint(vertices);
-			    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 9);
+			    Imgproc.drawContours(lines, Arrays.asList(points), -1, new Scalar(255, 255, 255), 9);
 				//Imgproc.rectangle(lines, new Point(r.x, r.y), new Point(r.x + r.width, r.y + r.height), new Scalar(255, 255, 255));
 			}
+			//Imgproc.HoughLinesP(edges, vectors, 1, Math.PI/180, 10);
+			//ImageIO.write(matToBufferedImage(lines), "PNG", new File("lines.png"));
 			/*for(int c = 0; c < lines.width(); c++) {
 				for(int r = 0; r < lines.height(); r++) {
 					System.out.println(r + ", " + c + ", " + lines.get(r, c));
@@ -197,7 +147,7 @@ public class HoughLines {
 					Imgproc.line(lines, new Point(vectors.get(r, c)[0], vectors.get(r, c)[1]),  new Point(vectors.get(r, c)[2], vectors.get(r, c)[3]), new Scalar(255));
 				}
 			}*/
-			ImageIO.write(matToBufferedImage(base), "PNG", new File("rectangles.png"));
+			ImageIO.write(matToBufferedImage(lines), "PNG", new File("rectangles.png"));
 			edges.copyTo(colorEdges);
 			Imgproc.cvtColor(colorEdges, colorEdges, Imgproc.COLOR_GRAY2BGRA);
 			//step 2
