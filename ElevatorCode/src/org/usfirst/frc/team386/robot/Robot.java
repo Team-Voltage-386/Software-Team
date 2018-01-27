@@ -8,9 +8,10 @@
 package org.usfirst.frc.team386.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.I2C;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,26 +20,24 @@ import edu.wpi.first.wpilibj.I2C;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
-public class Robot extends IterativeRobot 
-{
-
-	public static I2C arduino;
-	
+public class Robot extends IterativeRobot {
+	private static final String kDefaultAuto = "Default";
+	private static final String kCustomAuto = "My Auto";
+	Spark elevatorOne = new Spark(0);
+	Spark elevatorTwo = new Spark(1);
+	Joystick manip = new Joystick(0);
+	private String m_autoSelected;
+	private SendableChooser<String> m_chooser = new SendableChooser<>();
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
-	public void robotInit() 
-	{
-		arduino = new I2C(I2C.Port.kOnboard, 8);
-		
-	}
-	@Override
-	public void disabledInit()
-	{
-		Robot.UpdateLEDs("DISABLED");
+	public void robotInit() {
+		m_chooser.addDefault("Default Auto", kDefaultAuto);
+		m_chooser.addObject("My Auto", kCustomAuto);
+		SmartDashboard.putData("Auto choices", m_chooser);
 	}
 
 	/**
@@ -52,57 +51,42 @@ public class Robot extends IterativeRobot
 	 * the switch structure below with additional strings. If using the
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
-	
 	@Override
-	public void autonomousInit()
-	{
-		Robot.UpdateLEDs("AUTO");
+	public void autonomousInit() {
+		m_autoSelected = m_chooser.getSelected();
+		// autoSelected = SmartDashboard.getString("Auto Selector",
+		// defaultAuto);
+		System.out.println("Auto selected: " + m_autoSelected);
 	}
 
 	/**
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
-	public void autonomousPeriodic() 
-	{
-
+	public void autonomousPeriodic() {
+		switch (m_autoSelected) {
+			case kCustomAuto:
+				// Put custom auto code here
+				break;
+			case kDefaultAuto:
+			default:
+				// Put default auto code here
+				break;
+		}
 	}
 
 	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void teleopInit() 
-	{
-		Robot.UpdateLEDs("TELEOP");
-	}
-	@Override
-	public void teleopPeriodic() 
-	{
-
+	public void teleopPeriodic() {
+		//elevatorOne.set
 	}
 
 	/**
 	 * This function is called periodically during test mode.
 	 */
 	@Override
-	public void testPeriodic() 
-	{
+	public void testPeriodic() {
 	}
-	
-	static void UpdateLEDs(String WriteString)
-	{
-		char[] CharArray = WriteString.toCharArray();
-		byte[] RobotColor = new byte[CharArray.length];
-		for (int i = 0; i < CharArray.length; i++)
-		{
-			RobotColor[i] = (byte) CharArray[i];
-		}
-		
-		//arduino.transaction(RobotColor, RobotColor.length, null, 0);
-		arduino.writeBulk(RobotColor, RobotColor.length);
-		
-		
-	}
-	
 }

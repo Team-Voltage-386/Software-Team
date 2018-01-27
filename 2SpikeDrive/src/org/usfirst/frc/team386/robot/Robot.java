@@ -1,5 +1,7 @@
 package org.usfirst.frc.team386.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import Utility.AnalogUltrasonic;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -16,8 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-	Talon left = new Talon(9);
-	Talon right = new Talon(8);
+	WPI_TalonSRX left = new WPI_TalonSRX(13);
+	WPI_TalonSRX right = new WPI_TalonSRX(14);
 	AnalogUltrasonic ultra1 = new AnalogUltrasonic(0,1.18,10.3);
 	AnalogUltrasonic ultra2 = new AnalogUltrasonic(1,1.18,10.3);
 	Joystick controller = new Joystick(0);
@@ -105,7 +107,7 @@ public class Robot extends IterativeRobot {
 		}
 	}*/
 	left.set(controller.getRawAxis(1));
-	right.set(controller.getRawAxis(3));
+	right.set(controller.getRawAxis(5));
 }
  
 }

@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CubeIntake extends Command {
+public class ArcadeDrive extends Command {
 
-    public CubeIntake() {
+    public ArcadeDrive() {
 	// Use requires() here to declare subsystem dependencies
-	requires(Robot.cubeSubsystem);
+	requires(Robot.driveSubsystem);
     }
 
     // Called just before this Command runs the first time
@@ -20,6 +20,7 @@ public class CubeIntake extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+	Robot.driveSubsystem.drive(Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(4));
     }
 
     // Make this return true when this Command no longer needs to run execute()
