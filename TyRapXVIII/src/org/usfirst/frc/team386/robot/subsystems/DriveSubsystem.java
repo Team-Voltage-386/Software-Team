@@ -85,10 +85,11 @@ public class DriveSubsystem extends Subsystem {
     public void moveForward(double xinch) {
 	double cir = 18.8;
 	double encoderRatio = 3;
-	double revs = ((xinch * 256) / (cir * encoderRatio));
-	while (Math.abs(leftEncoder.getRaw()) < revs) /*
-						       * || (Math.abs(rightEncodee.getRaw()) < 256)
-						       */ {
+	double ticksRequired = ((xinch * 768) / (cir * encoderRatio));
+	// double ticksRequired = (256 / cir) * xinch;
+	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) /*
+							        * || (Math.abs(rightEncodee.getRaw()) < 256)
+							        */ {
 	    // SmartDashboard.putNumber("Left Encodee Number :D ", leftEncoder.getRaw());
 	    // System.out.println("Left Encodee Number :D
 	    // "+leftEncodee.getRaw());
