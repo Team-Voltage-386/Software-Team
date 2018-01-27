@@ -10,7 +10,9 @@ package org.usfirst.frc.team863.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import Utility.AnalogUltrasonic;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -26,12 +28,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * it contains the code necessary to operate a robot with tank drive.
  */
 public class Robot extends IterativeRobot {
+	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); 		/* device IDs here (1 of 2) */
 	WPI_TalonSRX frontRight = new WPI_TalonSRX(4);
 
 	/* extra talons for six motor drives */
 	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
 	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
+	
 	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
 	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
 	DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
@@ -59,7 +63,6 @@ public class Robot extends IterativeRobot {
 		frontLeft.configContinuousCurrentLimit(20, 0);
 		frontRight.enableCurrentLimit(true);
 		frontLeft.enableCurrentLimit(true);
-		
 		frontRight.configOpenloopRamp(.1, 0);
 		frontLeft.configOpenloopRamp(.11, 0);
 		
@@ -90,10 +93,13 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
 		SmartDashboard.putBoolean("mind control!!", isOperatorControl());
 		SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
+		SmartDashboard.putNumber("left encoder", leftEncodee.get());
+		SmartDashboard.putNumber("right encoder", rightEncodee.get());
 		double leftY = left.getY();
 		double rightY = right.getY();
-		//drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
-		drive.arcadeDrive(deadBand(-1*manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(4), .1));
+		//drive.tankDrive((-1*deadBand(manipulator.getRawAxis(3), .1)), (-1*deadBand(manipulator.getRawAxis(1), .1)));
+		drive.arcadeDrive(deadBand(-1*manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+		
 		SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
 		SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
 		SmartDashboard.putNumber("Left Encoder", leftEncodee.get()*-1);
