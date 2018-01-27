@@ -82,20 +82,13 @@ public class DriveSubsystem extends Subsystem {
 	rightEncoder.reset();
     }
 
-    public void moveForward(double xinch) {
+    public void moveForward(double inches) {
 	double cir = 18.8;
 	double encoderRatio = 3;
-	double ticksRequired = ((xinch * 768) / (cir * encoderRatio));
-	// double ticksRequired = (256 / cir) * xinch;
-	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) /*
-							        * || (Math.abs(rightEncodee.getRaw()) < 256)
-							        */ {
-	    // SmartDashboard.putNumber("Left Encodee Number :D ", leftEncoder.getRaw());
-	    // System.out.println("Left Encodee Number :D
-	    // "+leftEncodee.getRaw());
-	    // SmartDashboard.putNumber("the always Right num: ", rightEncoder.getRaw());
-	    // System.out.println("the always Right num:
-	    // "+rightEncodee.getRaw());
+	double ticksPerRotation = 256;
+	// double ticksRequired = (inches * ticksPerRotation) / (cir * encoderRatio);
+	double ticksRequired = ((ticksPerRotation * encoderRatio) / cir) * inches;
+	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
 	    drive.tankDrive(1.0, 1.0);
 	}
 	drive.tankDrive(0, 0); // drives forward at 0 speed
