@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -21,13 +20,7 @@ public class ArcadeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	if (Robot.oi.manipulator.getRawButton(8)) {
-	    SmartDashboard.putBoolean("button value", Robot.oi.manipulator.getRawButton(8));
-	    Robot.driveSubsystem.driveArcade(Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(2));
-	} else {
-	    Robot.driveSubsystem.driveArcade(.75 * Robot.oi.manipulator.getRawAxis(1),
-		    Robot.oi.manipulator.getRawAxis(2));
-	}
+	Robot.driveSubsystem.driveArcade(Robot.oi.xboxControl.getRawAxis(1), Robot.oi.xboxControl.getRawAxis(2));
     }
 
     // Make this return true when this Command no longer needs to run execute()

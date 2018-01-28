@@ -43,6 +43,11 @@ public class DriveSubsystem extends Subsystem {
 
     Command defaultCommand;
 
+    public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
+    public static final double BOOST_SPEED_MULTIPLIER = 1.0;
+
+    double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
+
     /**
      * Construct a new DriveSubsystem.
      */
@@ -59,6 +64,7 @@ public class DriveSubsystem extends Subsystem {
 
 	frontRight.configOpenloopRamp(.1, 0);
 	frontLeft.configOpenloopRamp(.1, 0);
+
 	compressor.start();
 
 	solenoid.set(LOW_GEAR);
@@ -73,12 +79,19 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	// drive.arcadeDrive(xSpeed, zRotation);
-	drive.arcadeDrive(deadBand(-1 * xSpeed, .1), deadBand(zRotation, .1));
+	drive.arcadeDrive(deadBand((-1 * speedMultiplier) * xSpeed, .1), deadBand(zRotation, .1));
     }
 
     public void driveTank(double ySpeed, double y2Speed) {
-	drive.tankDrive(deadBand(-1 * ySpeed, .1), deadBand(-1 * y2Speed, .1));
+	drive.tankDrive(deadBand((-1 * speedMultiplier) * ySpeed, .1), deadBand((-1 * speedMultiplier) * y2Speed, .1));
+    }
+
+    public void startBoost() {
+	speedMultiplier = BOOST_SPEED_MULTIPLIER;
+    }
+
+    public void stopBoost() {
+	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
     }
 
     private double deadBand(double in, double limit) {
@@ -89,11 +102,11 @@ public class DriveSubsystem extends Subsystem {
 	}
     }
 
-    public void changeDriveMode() {
-	if (defaultCommand.getClass() == ArcadeDrive.class) {
-	    setDefaultCommand(new TankDrive());
-	} else {
+    public void setDriveMode(boolean arcadeMode) {
+	if (arcadeMode) {
 	    setDefaultCommand(new ArcadeDrive());
+	} else {
+	    setDefaultCommand(new TankDrive());
 	}
     }
 

@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
     SendableChooser<Command> chooser = new SendableChooser<>();
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
+    public static final String DRIVE_MODE_KEY = "Arcade drive?";
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -43,6 +45,7 @@ public class Robot extends IterativeRobot {
 	chooser.addDefault("Default Auto", new AutoMode1());
 	// chooser.addObject("My Auto", new MyAutoCommand());
 	SmartDashboard.putData("Auto mode", chooser);
+	SmartDashboard.putBoolean(DRIVE_MODE_KEY, true);
     }
 
     /**
@@ -98,6 +101,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_KEY, true));
+
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
@@ -112,8 +117,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 	Scheduler.getInstance().run();
-	// read from smart dashboard, switch drive?
-	// Robot.driveSubsystem.changeDriveMode();
+
     }
 
     /**
