@@ -3,30 +3,21 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- *
- */
-public class ArcadeDrive extends Command {
-
-    public ArcadeDrive() {
-	// Use requires() here to declare subsystem dependencies
+public class TankDrive extends Command {
+    public TankDrive() {
 	requires(Robot.driveSubsystem);
     }
 
-    // Called just before this Command runs the first time
     protected void initialize() {
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	if (Robot.oi.manipulator.getRawButton(8)) {
-	    SmartDashboard.putBoolean("button value", Robot.oi.manipulator.getRawButton(8));
-	    Robot.driveSubsystem.driveArcade(Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(2));
+	if (Robot.oi.leftJoy.getRawButton(2)) {
+	    Robot.driveSubsystem.driveTank(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
 	} else {
-	    Robot.driveSubsystem.driveArcade(.75 * Robot.oi.manipulator.getRawAxis(1),
-		    Robot.oi.manipulator.getRawAxis(2));
+	    Robot.driveSubsystem.driveTank(.75 * Robot.oi.leftJoy.getY(), .75 * Robot.oi.rightJoy.getY());
 	}
     }
 
@@ -43,4 +34,5 @@ public class ArcadeDrive extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
     }
+
 }

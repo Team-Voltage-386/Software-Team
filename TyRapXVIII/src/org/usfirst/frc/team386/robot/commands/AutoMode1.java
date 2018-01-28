@@ -17,7 +17,7 @@ public class AutoMode1 extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.moveForward(360);
+	Robot.driveSubsystem.moveForward(120);
     }
 
 }

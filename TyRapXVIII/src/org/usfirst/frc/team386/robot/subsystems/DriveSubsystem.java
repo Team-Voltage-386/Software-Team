@@ -1,13 +1,16 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.OI;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team386.robot.commands.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -18,9 +21,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class DriveSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
-
-    private static final double ENCODER_RATIO = 3.0;
-    private static final double TICKS_PER_ROTATION = 256;
 
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
     WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
@@ -41,6 +41,8 @@ public class DriveSubsystem extends Subsystem {
     Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB);
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
+    Command defaultCommand;
+
     /**
      * Construct a new DriveSubsystem.
      */
@@ -56,19 +58,10 @@ public class DriveSubsystem extends Subsystem {
 	frontLeft.enableCurrentLimit(true);
 
 	frontRight.configOpenloopRamp(.1, 0);
-	frontLeft.configOpenloopRamp(.11, 0);
-
+	frontLeft.configOpenloopRamp(.1, 0);
 	compressor.start();
 
 	solenoid.set(LOW_GEAR);
-    }
-
-    /**
-     * Sets a default command that is run at start and whenever no other command is
-     * running.
-     */
-    public void initDefaultCommand() {
-	setDefaultCommand(new ArcadeDrive());
     }
 
     /**
@@ -79,8 +72,13 @@ public class DriveSubsystem extends Subsystem {
      * @param zRotation
      *            The rotation
      */
-    public void drive(double speed, double rotation) {
-	drive.arcadeDrive(deadBand(-1 * speed, .1), deadBand(rotation, .1));
+    public void driveArcade(double xSpeed, double zRotation) {
+	// drive.arcadeDrive(xSpeed, zRotation);
+	drive.arcadeDrive(deadBand(-1 * xSpeed, .1), deadBand(zRotation, .1));
+    }
+
+    public void driveTank(double ySpeed, double y2Speed) {
+	drive.tankDrive(deadBand(-1 * ySpeed, .1), deadBand(-1 * y2Speed, .1));
     }
 
     private double deadBand(double in, double limit) {
@@ -89,6 +87,25 @@ public class DriveSubsystem extends Subsystem {
 	} else {
 	    return in;
 	}
+    }
+
+    public void changeDriveMode() {
+	if (defaultCommand.getClass() == ArcadeDrive.class) {
+	    setDefaultCommand(new TankDrive());
+	} else {
+	    setDefaultCommand(new ArcadeDrive());
+	}
+    }
+
+    /**
+     * Sets a default command that is run at start and whenever no other command is
+     * running.
+     */
+    public void initDefaultCommand() {
+	if (defaultCommand == null) {
+	    this.defaultCommand = new ArcadeDrive();
+	}
+	setDefaultCommand(defaultCommand);
     }
 
     /**
@@ -116,17 +133,15 @@ public class DriveSubsystem extends Subsystem {
      * @param inches
      *            Inches to move forward
      */
-    public void moveForward(double inches) {
-	double speed = 1.0;
-	double wheelCircumference = 18.8;
-
-	// This is the original algorithm pulled in from the PhoenixTankDrive project
-	// double ticksRequired = (inches * TICKS_PER_ROTATION) / (wheelCircumference *
-	// ENCODER_RATIO);
-
-	double ticksRequired = ((TICKS_PER_ROTATION * ENCODER_RATIO) / wheelCircumference) * inches;
+    public void moveForward(double xinch) {
+	OI.gyro.reset();
+	double cir = 18.85;
+	double encoderRatio = 2;
+	// double ticksRequired = ((xinch * 768) / (cir * encoderRatio));
+	double ticksRequired = ((256 * encoderRatio) / cir) * xinch;
 	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
-	    drive.tankDrive(speed, speed);
+	    // drive.arcadeDrive(.7, Constants.gyroCompensation * OI.gyro.getAngle());
+	    drive.arcadeDrive(.7, 0);
 	}
 	drive.tankDrive(0, 0); // stops driving forward
     }
