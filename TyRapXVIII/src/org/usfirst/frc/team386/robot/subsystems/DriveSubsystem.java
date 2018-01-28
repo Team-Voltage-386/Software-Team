@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
  * The DriveSubsystem is responsible for all drive logic. It is intended to be
- * used in both autonomous as well as teleoperated mode.
+ * used in both autonomous or teleoperated mode.
  */
 public class DriveSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward;
@@ -26,6 +26,11 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double WHEEL_CIRCUMFERENCE = 18.85;
     public static final double ENCODER_RATIO = 2;
+
+    public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
+    public static final double BOOST_SPEED_MULTIPLIER = 1.0;
+
+    double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
     WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
@@ -47,11 +52,6 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     Command defaultCommand;
-
-    public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
-    public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-
-    double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
     /**
      * Construct a new DriveSubsystem.
@@ -87,14 +87,28 @@ public class DriveSubsystem extends Subsystem {
 	drive.arcadeDrive(deadBand((-1 * speedMultiplier) * xSpeed, .1), deadBand(zRotation, .1));
     }
 
+    /**
+     * Drive using tank-style values: left speed, right speed.
+     * 
+     * @param ySpeed
+     *            The left motor speed
+     * @param y2Speed
+     *            The right motor speed
+     */
     public void driveTank(double ySpeed, double y2Speed) {
 	drive.tankDrive(deadBand((-1 * speedMultiplier) * ySpeed, .1), deadBand((-1 * speedMultiplier) * y2Speed, .1));
     }
 
+    /**
+     * Boost the forward speed.
+     */
     public void startBoost() {
 	speedMultiplier = BOOST_SPEED_MULTIPLIER;
     }
 
+    /**
+     * Stop boosting the forward speed.
+     */
     public void stopBoost() {
 	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
     }
@@ -107,6 +121,12 @@ public class DriveSubsystem extends Subsystem {
 	}
     }
 
+    /**
+     * Set the drive mode.
+     * 
+     * @param arcadeMode
+     *            If true, then use arcade mode, otherwise use tank mode.
+     */
     public void setDriveMode(boolean arcadeMode) {
 	if (arcadeMode) {
 	    setDefaultCommand(new ArcadeDrive());
