@@ -28,62 +28,63 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); 		/* device IDs here (1 of 2) */
-	WPI_TalonSRX frontRight = new WPI_TalonSRX(4);
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); /* device IDs here (1 of 2) */
+    WPI_TalonSRX frontRight = new WPI_TalonSRX(4);
 
-	/* extra talons for six motor drives */
-	WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
-	WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
-	
-	WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
-	WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
-	DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
-	Compressor compressor = new Compressor(0);
-	public static Joystick right = new Joystick(0);
-	public static Joystick left = new Joystick(1);
-	public static Joystick manipulator = new Joystick(2);
-	Encoder leftEncodee = new Encoder(0,1);
-	Encoder rightEncodee = new Encoder(2,3);
-	public GearShift gearShift = new GearShift();
-	SmartDashboard smarty = new SmartDashboard();
-	public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
-	//public Ultrasonic ultra2 = new Ultrasonic(0,1);
-	public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-	@Override
-	public void robotInit() {
-		rightEncodee.reset();
-		leftEncodee.reset();
-		System.out.println("Started");
-		leftSlave1.follow(frontLeft);
-		leftSlave2.follow(frontLeft);
-		rightSlave1.follow(frontRight);
-		rightSlave2.follow(frontRight);
-		frontRight.configContinuousCurrentLimit(20, 0);
-		frontLeft.configContinuousCurrentLimit(20, 0);
-		frontRight.enableCurrentLimit(true);
-		frontLeft.enableCurrentLimit(true);
-		frontRight.configOpenloopRamp(.1, 0);
-		frontLeft.configOpenloopRamp(.11, 0);
-		
-		compressor.start();
-		gearShift.start();
-		
-	}
-	@Override
-	public void teleopInit() {
-		rightEncodee.reset();
-		leftEncodee.reset();
-	}
-	public double deadBand(double in, double limit) {
-		if(Math.abs(in) < limit) {
-			return 0;
-		}
-		else {
-			return in;
-		}
-	}
+    /* extra talons for six motor drives */
+    WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
+    WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
 
+    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
+    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
+    DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
+    Compressor compressor = new Compressor(0);
+    public static Joystick right = new Joystick(0);
+    public static Joystick left = new Joystick(1);
+    public static Joystick manipulator = new Joystick(2);
+    Encoder leftEncodee = new Encoder(0, 1);
+    Encoder rightEncodee = new Encoder(2, 3);
+    public GearShift gearShift = new GearShift();
+    SmartDashboard smarty = new SmartDashboard();
+    public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
+    // public Ultrasonic ultra2 = new Ultrasonic(0,1);
+    public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+    @Override
+    public void robotInit() {
+	rightEncodee.reset();
+	leftEncodee.reset();
+	System.out.println("Started");
+	leftSlave1.follow(frontLeft);
+	leftSlave2.follow(frontLeft);
+	rightSlave1.follow(frontRight);
+	rightSlave2.follow(frontRight);
+	frontRight.configContinuousCurrentLimit(20, 0);
+	frontLeft.configContinuousCurrentLimit(20, 0);
+	frontRight.enableCurrentLimit(true);
+	frontLeft.enableCurrentLimit(true);
+	frontRight.configOpenloopRamp(.1, 0);
+	frontLeft.configOpenloopRamp(.11, 0);
+
+	compressor.start();
+	gearShift.start();
+
+    }
+
+    @Override
+    public void teleopInit() {
+	rightEncodee.reset();
+	leftEncodee.reset();
+    }
+
+    public double deadBand(double in, double limit) {
+	if (Math.abs(in) < limit) {
+	    return 0;
+	} else {
+	    return in;
+	}
+    }
 
     @Override
     public void teleopPeriodic() {
@@ -93,17 +94,18 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
 	SmartDashboard.putBoolean("mind control!!", isOperatorControl());
 	SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
-	// double leftY = left.getY();
-	// double rightY = right.getY();
-	// drive.tankDrive((-1*deadBand(rightY, .1)), (-1*deadBand(leftY, .1)));
-	drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1)); // on
-														  // newer
-														  // dark
-														  // blue
-														  // controller
-														  // axis
-														  // is
-														  // #4
+	double leftY = left.getY();
+	double rightY = right.getY();
+	drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
+	// drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1),
+	// deadBand(manipulator.getRawAxis(2), .1)); // on
+	// newer
+	// dark
+	// blue
+	// controller
+	// axis
+	// is
+	// #4
 	SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
 	SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
 	SmartDashboard.putNumber("Left Encoder", leftEncodee.get() * -1);
