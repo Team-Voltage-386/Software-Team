@@ -22,6 +22,8 @@ public class DriveSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
 
+    public static final double GYRO_COMPENSATION = -.25;
+
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
     WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
 
@@ -153,7 +155,7 @@ public class DriveSubsystem extends Subsystem {
 	// double ticksRequired = ((xinch * 768) / (cir * encoderRatio));
 	double ticksRequired = ((256 * encoderRatio) / cir) * xinch;
 	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
-	    // drive.arcadeDrive(.7, Constants.gyroCompensation * OI.gyro.getAngle());
+	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
 	    drive.arcadeDrive(.7, 0);
 	}
 	drive.tankDrive(0, 0); // stops driving forward
