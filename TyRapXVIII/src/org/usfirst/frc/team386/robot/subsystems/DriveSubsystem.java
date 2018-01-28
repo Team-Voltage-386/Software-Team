@@ -4,6 +4,8 @@ import org.usfirst.frc.team386.robot.commands.ArcadeDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -20,6 +22,8 @@ public class DriveSubsystem extends Subsystem {
     WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
     WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
+    Compressor compressor = new Compressor(0);
+    DoubleSolenoid solenoid = new DoubleSolenoid(0, 1);
 
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
@@ -33,12 +37,21 @@ public class DriveSubsystem extends Subsystem {
 
 	frontRight.configOpenloopRamp(.1, 0);
 	frontLeft.configOpenloopRamp(.11, 0);
+	compressor.start();
+	solenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void drive(double xSpeed, double zRotation) {
-	drive.arcadeDrive(xSpeed, zRotation);
-	// drive.arcadeDrive(deadBand(-1*manipulator.getRawAxis(1), .1),
-	// deadBand(manipulator.getRawAxis(4), .1));
+	// drive.arcadeDrive(xSpeed, zRotation);
+	drive.arcadeDrive(deadBand(-1 * xSpeed, .1), deadBand(zRotation, .1));
+    }
+
+    private double deadBand(double in, double limit) {
+	if (Math.abs(in) < limit) {
+	    return 0;
+	} else {
+	    return in;
+	}
     }
 
     // Put methods for controlling this subsystem
@@ -47,5 +60,17 @@ public class DriveSubsystem extends Subsystem {
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
 	setDefaultCommand(new ArcadeDrive());
+    }
+
+    public void shift() {
+	// boolean buttonPressed = /* Robot.right.getRawButton(1) */
+	// Robot.manipulator.getRawButton(5);
+
+	if (solenoid.get() == DoubleSolenoid.Value.kReverse) {
+	    solenoid.set(DoubleSolenoid.Value.kForward);
+	} else {
+	    solenoid.set(DoubleSolenoid.Value.kReverse);
+	}
+
     }
 }
