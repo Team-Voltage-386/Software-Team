@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.ArcadeDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -21,19 +22,24 @@ public class DriveSubsystem extends Subsystem {
     private static final double ENCODER_RATIO = 3.0;
     private static final double TICKS_PER_ROTATION = 256;
 
-    WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); /* device IDs here (1 of 2) */
-    WPI_TalonSRX frontRight = new WPI_TalonSRX(4);
+    WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
+    WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
 
     /* extra talons for six motor drives */
-    WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
-    WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
-    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
-    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
+    WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor);
+    WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor);
+    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
+    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
+
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
-    Compressor compressor = new Compressor(0);
-    DoubleSolenoid solenoid = new DoubleSolenoid(0, 1);
-    Encoder leftEncoder = new Encoder(0, 1);
-    Encoder rightEncoder = new Encoder(2, 3);
+
+    Compressor compressor = new Compressor(RobotMap.gearShiftCompressor);
+
+    DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
+	    RobotMap.gearShiftSolenoidReverseChannel);
+
+    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB);
+    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     /**
      * Construct a new DriveSubsystem.
