@@ -6,6 +6,8 @@ import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -28,8 +30,19 @@ public class Robot extends IterativeRobot {
     public static OI oi;
 
     Command autonomousCommand = new AutoMode1();
-
-    SendableChooser<Command> chooser = new SendableChooser<>();
+	SendableChooser<Command> chooser = new SendableChooser<>();
+	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	/**
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
+	 */
+	@Override
+	public void robotInit() {
+		oi = new OI();
+	//	chooser.addDefault("Default Auto", new ExampleCommand());
+		// chooser.addObject("My Auto", new MyAutoCommand());
+		SmartDashboard.putData("Auto mode", chooser);
+	}
 
     /**
      * This function is run when the robot is first started up and should be used

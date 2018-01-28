@@ -10,7 +10,7 @@ package org.usfirst.frc.team386.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C;  // Import the I2C Library
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,23 +22,25 @@ import edu.wpi.first.wpilibj.I2C;
 public class Robot extends IterativeRobot 
 {
 
-	public static I2C arduino;
+	public static I2C arduino;  //create initial I2C object, assign name.
+
 	
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
-	@Override
+	@Override //Keep all of these in place.
 	public void robotInit() 
 	{
-		arduino = new I2C(I2C.Port.kOnboard, 8);
-		
+		arduino = new I2C(I2C.Port.kOnboard, 8);  //when robot turns on, assign arduino to the onboard I2C bus, and assign it port #8.
+		//NOTE: All LED functions should only be passed once per action. Placing them in the init functions ensures this. 
 	}
-	@Override
+	
+	@Override  
 	public void disabledInit()
 	{
-		Robot.UpdateLEDs("DISABLED");
+		Robot.UpdateLEDs("DISABLED");  //Passing DISABLED string to UpdateLEDs
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousInit()
 	{
-		Robot.UpdateLEDs("AUTO");
+		Robot.UpdateLEDs("AUTO"); //Passing AUTO string to UpdateLEDs
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class Robot extends IterativeRobot
 	@Override
 	public void teleopInit() 
 	{
-		Robot.UpdateLEDs("TELEOP");
+		Robot.UpdateLEDs("TELEOP");  ////Passing TELEOP string to UpdateLEDs
 	}
 	@Override
 	public void teleopPeriodic() 
@@ -90,17 +92,19 @@ public class Robot extends IterativeRobot
 	{
 	}
 	
-	static void UpdateLEDs(String WriteString)
+	
+	//Here is the UpdateLEDs function.  This passes the string to the Ard/RIOduino.
+	static void UpdateLEDs(String WriteString) // Constructor, pass it a string argument.
 	{
-		char[] CharArray = WriteString.toCharArray();
-		byte[] RobotColor = new byte[CharArray.length];
-		for (int i = 0; i < CharArray.length; i++)
+		char[] CharArray = WriteString.toCharArray();  //Create an array of characters.  This breaks up the information into something that can be passed over the I2C bus.
+		byte[] RobotStatus = new byte[CharArray.length]; //Characters cannot be passed over I2C, thus we must convert them to bytes. This line creates the byte array.  
+		for (int i = 0; i < CharArray.length; i++)//Create a loop that fills the new  byte array. The new byte array is the same size as the character array. 
 		{
-			RobotColor[i] = (byte) CharArray[i];
+			RobotStatus[i] = (byte) CharArray[i];  //Pass information slot by slot. This also converts the characters into bytes.
 		}
 		
-		//arduino.transaction(RobotColor, RobotColor.length, null, 0);
-		arduino.writeBulk(RobotColor, RobotColor.length);
+		//arduino.transaction(RobotStatus, RobotStatus.length, null, 0);  //One type of sending info over the I2C bus.  This method asks for a response from the receiving unit. Caused null point exceptions. 
+		arduino.writeBulk(RobotStatus, RobotStatus.length); //This method sends info one way, without demanding a response from reader unit. 
 		
 		
 	}
