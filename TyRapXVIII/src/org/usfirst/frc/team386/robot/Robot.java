@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.AutoMode1;
+import org.usfirst.frc.team386.robot.commands.DriveForwardSomeDistance;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 
     public static OI oi;
 
-    Command autonomousCommand = new AutoMode1();
+    Command autonomousCommand = new DriveForwardSomeDistance();
     SendableChooser<Command> chooser = new SendableChooser<>();
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
-	chooser.addDefault("Default Auto", new AutoMode1());
+	chooser.addDefault("Default Auto", new DriveForwardSomeDistance());
 	// chooser.addObject("My Auto", new MyAutoCommand());
 	SmartDashboard.putData("Auto mode", chooser);
 	SmartDashboard.putBoolean(DRIVE_MODE_KEY, true);
