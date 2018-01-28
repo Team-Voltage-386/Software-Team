@@ -24,6 +24,9 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double GYRO_COMPENSATION = -.25;
 
+    public static final double WHEEL_CIRCUMFERENCE = 18.85;
+    public static final double ENCODER_RATIO = 2;
+
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
     WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
 
@@ -148,12 +151,13 @@ public class DriveSubsystem extends Subsystem {
      * @param inches
      *            Inches to move forward
      */
-    public void moveForward(double xinch) {
+    public void moveForward(double inches) {
 	OI.gyro.reset();
-	double cir = 18.85;
-	double encoderRatio = 2;
-	// double ticksRequired = ((xinch * 768) / (cir * encoderRatio));
-	double ticksRequired = ((256 * encoderRatio) / cir) * xinch;
+
+	// double ticksRequired = ((inches * 768) / (WHEEL_CIRCUMFERENCE *
+	// ENCODER_RATIO));
+
+	double ticksRequired = ((256 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
 	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
 	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
 	    drive.arcadeDrive(.7, 0);
