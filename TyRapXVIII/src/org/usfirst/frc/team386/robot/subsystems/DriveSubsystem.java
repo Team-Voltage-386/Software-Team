@@ -90,8 +90,7 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	drive.arcadeDrive(deadBand((-1 * speedMultiplier * xSpeed), DEAD_BAND_LIMIT),
-		deadBand(zRotation, DEAD_BAND_LIMIT));
+	drive.arcadeDrive(adjustSpeed(xSpeed), deadBand(zRotation, DEAD_BAND_LIMIT));
     }
 
     /**
@@ -103,8 +102,7 @@ public class DriveSubsystem extends Subsystem {
      *            The right motor speed
      */
     public void driveTank(double ySpeed, double y2Speed) {
-	drive.tankDrive(deadBand((-1 * speedMultiplier * ySpeed), DEAD_BAND_LIMIT),
-		deadBand((-1 * speedMultiplier * y2Speed), DEAD_BAND_LIMIT));
+	drive.tankDrive(adjustSpeed(ySpeed), adjustSpeed(y2Speed));
     }
 
     /**
@@ -119,14 +117,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void stopBoost() {
 	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
-    }
-
-    private double deadBand(double in, double limit) {
-	if (Math.abs(in) < limit) {
-	    return 0;
-	} else {
-	    return in;
-	}
     }
 
     /**
@@ -191,5 +181,37 @@ public class DriveSubsystem extends Subsystem {
 	    drive.arcadeDrive(.7, 0);
 	}
 	drive.tankDrive(0, 0); // stops driving forward
+    }
+
+    /**
+     * Return 0 if the given value is less than the specified limit.
+     * 
+     * This is used to make sure that the robot only moves forward when an input
+     * value passes a certain threshold.
+     * 
+     * @param in
+     *            The input value
+     * @param limit
+     *            The limit
+     * @return 0 or the speed if the input is greater than the limit
+     */
+    private double deadBand(double in, double limit) {
+	if (Math.abs(in) < limit) {
+	    return 0;
+	} else {
+	    return in;
+	}
+    }
+
+    /**
+     * Applies adjustments to the speed (such as inverting the direction for
+     * inverted motors, or applying a dead band.
+     * 
+     * @param speed
+     *            The input speed
+     * @return The adjusted speed
+     */
+    private double adjustSpeed(double speed) {
+	return deadBand((-1 * speedMultiplier * speed), DEAD_BAND_LIMIT);
     }
 }
