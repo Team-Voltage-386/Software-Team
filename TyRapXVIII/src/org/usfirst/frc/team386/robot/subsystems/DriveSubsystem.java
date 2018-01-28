@@ -27,6 +27,11 @@ public class DriveSubsystem extends Subsystem {
     public static final double WHEEL_CIRCUMFERENCE = 18.85;
     public static final double ENCODER_RATIO = 2;
 
+    public static final int MOTOR_CURRENT_LIMIT_AMPS = 20;
+    public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
+
+    public static final int NO_TIMEOUT = 0;
+
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
 
@@ -62,13 +67,13 @@ public class DriveSubsystem extends Subsystem {
 	rightSlave1.follow(frontRight);
 	rightSlave2.follow(frontRight);
 
-	frontRight.configContinuousCurrentLimit(20, 0);
-	frontLeft.configContinuousCurrentLimit(20, 0);
+	frontRight.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
+	frontLeft.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
 	frontRight.enableCurrentLimit(true);
 	frontLeft.enableCurrentLimit(true);
 
-	frontRight.configOpenloopRamp(.1, 0);
-	frontLeft.configOpenloopRamp(.1, 0);
+	frontRight.configOpenloopRamp(OPEN_LOOP_RAMP_SECONDS, NO_TIMEOUT);
+	frontLeft.configOpenloopRamp(OPEN_LOOP_RAMP_SECONDS, NO_TIMEOUT);
 
 	compressor.start();
 
