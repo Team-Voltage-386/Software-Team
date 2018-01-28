@@ -29,6 +29,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final int MOTOR_CURRENT_LIMIT_AMPS = 20;
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
+    public static final double DEAD_BAND_LIMIT = 0.1;
 
     public static final int NO_TIMEOUT = 0;
 
@@ -89,7 +90,8 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	drive.arcadeDrive(deadBand((-1 * speedMultiplier) * xSpeed, .1), deadBand(zRotation, .1));
+	drive.arcadeDrive(deadBand((-1 * speedMultiplier * xSpeed), DEAD_BAND_LIMIT),
+		deadBand(zRotation, DEAD_BAND_LIMIT));
     }
 
     /**
@@ -101,7 +103,8 @@ public class DriveSubsystem extends Subsystem {
      *            The right motor speed
      */
     public void driveTank(double ySpeed, double y2Speed) {
-	drive.tankDrive(deadBand((-1 * speedMultiplier) * ySpeed, .1), deadBand((-1 * speedMultiplier) * y2Speed, .1));
+	drive.tankDrive(deadBand((-1 * speedMultiplier * ySpeed), DEAD_BAND_LIMIT),
+		deadBand((-1 * speedMultiplier * y2Speed), DEAD_BAND_LIMIT));
     }
 
     /**
