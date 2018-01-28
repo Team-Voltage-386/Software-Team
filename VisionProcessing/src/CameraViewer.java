@@ -1,4 +1,6 @@
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 import org.opencv.videoio.VideoCapture;
 
 public class CameraViewer {
@@ -7,6 +9,8 @@ public class CameraViewer {
 	
 	public CameraViewer() {
 		capture.open(0);
+		capture.set(3, 480);//width
+		capture.set(4, 300);//height
 	}
 	public Mat grabFrame() {
 		//capture.grab();

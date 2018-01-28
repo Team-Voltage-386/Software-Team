@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class GearShift extends InstantCommand {
+public class AutoMode1 extends InstantCommand {
 
-    public GearShift() {
+    public AutoMode1() {
 	super();
 	// Use requires() here to declare subsystem dependencies
 	requires(Robot.driveSubsystem);
@@ -17,7 +17,7 @@ public class GearShift extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.shift();
+	Robot.driveSubsystem.moveForward(120);
     }
 
 }

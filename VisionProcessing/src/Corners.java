@@ -29,7 +29,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 import com.github.sarxos.webcam.Webcam;
 
-public class Main {
+public class Corners {
 	static Mat mat;
 	static Mat invMat;
 	static BufferedImage image;
@@ -51,6 +51,9 @@ public class Main {
 		
 	}
 	public static MatOfPoint2f approxCurve;
+	/**
+	 * @throws IOException
+	 */
 	public static void start() throws IOException {
 		//while(true) {
 			System.out.println("Im in");
@@ -86,65 +89,19 @@ public class Main {
 			Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));*/
 			
 			
-			Mat edges = new Mat();
-			Imgproc.Canny(grey, edges, 60, 230);
-			
-			//Imgproc.dilate(edges, edges, dilateElement);
-			//Imgproc.erode(edges, edges, erodeElement);
-
-			Mat colorEdges = new Mat();
-			Mat lines = new Mat(new Size(mat.width(), mat.height()), CvType.CV_8UC3);
-			//Mat vectors = new Mat();
-			List<MatOfPoint> contours = new ArrayList<>();
-			List<MatOfPoint> goodContours = new ArrayList<>();
-			Mat hierarchy = new Mat();
-			Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE,new Point(0,0) );
-			for (int i=0; i<contours.size(); i++)
-			    if ((true)) {   //has parent, inner (hole) contour of a closed edge (looks good)
-			    	Imgproc.drawContours(lines, contours, i, new Scalar(rng.nextInt(25)*10,rng.nextInt(25)*10,rng.nextInt(25)*10), 1);
-					goodContours.add(contours.get(i));
-			    }
-			    	//contours.remove(i);
-			ImageIO.write(matToBufferedImage(lines), "PNG", new File("lines.png"));
-			List<RotatedRect> rects = new ArrayList<>();
-
-			for (int i=0; i<goodContours.size(); i++)
-		    {
-				RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(goodContours.get(i).toArray()));
-				if(rect.size.height > 20 && rect.size.width > 20)
-					rects.add(rect);
+			Mat corners = new Mat();
+			Imgproc.cornerHarris(grey, corners, 9, 5, .1);
+			System.out.println(corners.cols() + ", " + corners.get(0, 0).length);
+			for( int j = 0; j < corners.rows() ; j++){
+		        for( int i = 0; i < corners.cols(); i++){
+		            if (corners.get(j,i)[0] > .1){
+		        		System.out.println(i + ", " + j + " : " + corners.get(j,i)[0]);
+		                Imgproc.circle(base, new Point(i,j), 5 , new Scalar(255, 255, 255), 2 ,8 , 0);
+		                j += 1;
+		            }
+		        }
 		    }
-			for(RotatedRect r : rects) {
-				Point[] vertices = new Point[4];
-			    r.points(vertices);
-			    MatOfPoint points = new MatOfPoint(vertices);
-			    Imgproc.drawContours(lines, Arrays.asList(points), -1, new Scalar(255, 255, 255), 9);
-				//Imgproc.rectangle(lines, new Point(r.x, r.y), new Point(r.x + r.width, r.y + r.height), new Scalar(255, 255, 255));
-			}
-			//Imgproc.HoughLinesP(edges, vectors, 1, Math.PI/180, 10);
-			//ImageIO.write(matToBufferedImage(lines), "PNG", new File("lines.png"));
-			/*for(int c = 0; c < lines.width(); c++) {
-				for(int r = 0; r < lines.height(); r++) {
-					System.out.println(r + ", " + c + ", " + lines.get(r, c));
-				}
-			}*/
-			/*for(int c = 0; c < vectors.width(); c++) {
-				for(int r = 0; r < vectors.height(); r++) {
-					System.out.println(r + ", " + c + ", " + vectors.get(r, c)[0]);
-					Imgproc.line(lines, new Point(vectors.get(r, c)[0], vectors.get(r, c)[1]),  new Point(vectors.get(r, c)[2], vectors.get(r, c)[3]), new Scalar(255));
-				}
-			}*/
-			ImageIO.write(matToBufferedImage(lines), "PNG", new File("rectangles.png"));
-			edges.copyTo(colorEdges);
-			Imgproc.cvtColor(colorEdges, colorEdges, Imgproc.COLOR_GRAY2BGRA);
-			//step 2
-			Scalar newColor= new Scalar(0,255,0);    //this will be green
-			colorEdges.setTo(newColor, edges);
-			//step 3
-			colorEdges.copyTo(mat, colorEdges);
-			ImageIO.write(matToBufferedImage(mat), "PNG", new File("corners.png"));
-			System.out.println("Done");
-		//}
+			ImageIO.write(matToBufferedImage(base), "PNG", new File("Circles.png")); //Imgproc.cornerHarris(7, dst, blockSize, ksize, k);
 	}
 	public static Mat bufferedImageToMat(BufferedImage bi) {
 		  Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC1);
