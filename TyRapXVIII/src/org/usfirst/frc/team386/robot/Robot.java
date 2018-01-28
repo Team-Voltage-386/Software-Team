@@ -30,19 +30,8 @@ public class Robot extends IterativeRobot {
     public static OI oi;
 
     Command autonomousCommand = new AutoMode1();
-	SendableChooser<Command> chooser = new SendableChooser<>();
-	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
-	@Override
-	public void robotInit() {
-		oi = new OI();
-	//	chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
-	}
+    SendableChooser<Command> chooser = new SendableChooser<>();
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
     /**
      * This function is run when the robot is first started up and should be used
