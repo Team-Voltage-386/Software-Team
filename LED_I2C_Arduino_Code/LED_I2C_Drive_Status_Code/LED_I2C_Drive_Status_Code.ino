@@ -22,8 +22,8 @@ void setup()  //Arduino Init loop.
 
 void loop()
 {
-  Wire.onReceive(dataReceived); //Looks for data send over I2C, begins when any is detected, no matter the size. 
-  RunLEDs(LEDmode); //If data is received, this function passes that information to the RunLEDs method.
+   Wire.onReceive(dataReceived); //Looks for data send over I2C, begins when any is detected, no matter the size. 
+   RunLEDs(LEDmode); //If data is received, this function passes that information to the RunLEDs method.
 }
 
 void dataReceived(int howMany)   //Method started by data on the bus.  
@@ -76,7 +76,7 @@ void RunLEDs(int mode) //This is passed the LEDmode object from the previous met
   }
   else if (mode == 0)
   {
-    doubleTheaterChase(strip.Color(255, 255, 0), strip.Color(0, 0, 255), 80); // Yellow and Blue and an 80ms delay are passed to the function.
+    doubleTheaterChase(strip.Color(255, 255, 0), strip.Color(0, 0, 255), 100); // Yellow and Blue and an 80ms delay are passed to the function.
   }
 }
 

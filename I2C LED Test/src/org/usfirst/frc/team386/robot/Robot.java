@@ -8,8 +8,6 @@
 package org.usfirst.frc.team386.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.I2C;  // Import the I2C Library
 
 /**
@@ -17,7 +15,7 @@ import edu.wpi.first.wpilibj.I2C;  // Import the I2C Library
  * functions corresponding to each mode, as described in the IterativeRobot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.properties file in the
- * project.
+ * project
  */
 public class Robot extends IterativeRobot 
 {
@@ -33,7 +31,7 @@ public class Robot extends IterativeRobot
 	@Override //Keep all of these in place.
 	public void robotInit() 
 	{
-		arduino = new I2C(I2C.Port.kOnboard, 8);  //when robot turns on, assign arduino to the onboard I2C bus, and assign it port #8.
+		arduino = new I2C(I2C.Port.kMXP, 8);  //when robot turns on, assign arduino to the onboard I2C bus, and assign it port #8.
 		//NOTE: All LED functions should only be passed once per action. Placing them in the init functions ensures this. 
 	}
 	
