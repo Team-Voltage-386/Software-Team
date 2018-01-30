@@ -23,6 +23,8 @@ public class OI {
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankBoostButton = new JoystickButton(rightJoy, 1);
 
+    // Make sure the gyro is physically present, otherwise do not try to load the
+    // gyro class.
     public static ADXRS450_Gyro gyro;
     static {
 	try {

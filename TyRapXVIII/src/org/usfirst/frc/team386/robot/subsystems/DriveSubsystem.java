@@ -25,7 +25,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double GYRO_COMPENSATION = -.25;
 
     public static final double WHEEL_CIRCUMFERENCE = /* 18.85 */ 6 * Math.PI;
-    public static final double ENCODER_RATIO = 2;
+    public static final double ENCODER_RATIO = 3;
 
     public static final int MOTOR_CURRENT_LIMIT_AMPS = 20;
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
@@ -54,8 +54,8 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB);
-    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB);
+    public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     Command defaultCommand;
 
@@ -161,6 +161,9 @@ public class DriveSubsystem extends Subsystem {
     public void resetEncoders() {
 	leftEncoder.reset();
 	rightEncoder.reset();
+	System.out.println("completed reset");
+	System.out.println("left encoder value: " + leftEncoder.getRaw());
+	System.out.println("right encoder value: " + rightEncoder.getRaw());
     }
 
     /**
@@ -175,7 +178,7 @@ public class DriveSubsystem extends Subsystem {
 	// double ticksRequired = ((inches * 768) / (WHEEL_CIRCUMFERENCE *
 	// ENCODER_RATIO));
 
-	double ticksRequired = ((256 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
+	double ticksRequired = ((360 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
 	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
 	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
 	    drive.arcadeDrive(.7, 0);
