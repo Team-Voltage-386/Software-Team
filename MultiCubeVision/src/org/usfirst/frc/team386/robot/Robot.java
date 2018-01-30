@@ -16,6 +16,7 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,13 +40,14 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		cubeVision.start();
+		SmartDashboard.putNumber("Rect Choice", 0);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		//System.out.println("Running");
-		List<RotatedRect> tempList = new ArrayList<>();
-		for(RotatedRect rect : tempList) {}
+		cubeVision.setRectangleChoice((int) SmartDashboard.getNumber("Rect Choice", 0));
+		SmartDashboard.putNumber("Error", cubeVision.getError());
 		//HSVOutputStream.putFrame(cubeVision.outHSV);
 		//rectOutputStream.putFrame(cubeVision.outRectMat);
 	}
