@@ -1,6 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
+import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.CubeManual;
 
 import edu.wpi.first.wpilibj.Spark;
@@ -11,12 +12,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 
 public class CubeSubsystem extends Subsystem {
-    Spark left = new Spark(9);
-    Spark right = new Spark(8);
+    Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
+    Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
     AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
     AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
