@@ -15,8 +15,9 @@ import utility.Subsystem;
 import utility.TeleopSubsystem;
 
 /**
- * TODO Change camera resolution back, change center gear to not use vision
- * 2017
+ * God I wish I din't stuff this all into one file
+ * TODO get someone to unstuff it?
+ * Also, this is a test commit
  * @author TeamVoltage
  *
  *         ---Old Battery-- Pressurized Bumper Colour Velcro Rope Guard Winch
