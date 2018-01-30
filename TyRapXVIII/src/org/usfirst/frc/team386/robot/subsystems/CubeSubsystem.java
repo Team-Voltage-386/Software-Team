@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
- *
+ * The CubeSubsystem is responsible cube intake and cube release.
  */
-
 public class CubeSubsystem extends Subsystem {
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
