@@ -17,6 +17,7 @@ public class OI {
     public Joystick xboxControl = new Joystick(2);
     public Joystick leftJoy = new Joystick(0);
     public Joystick rightJoy = new Joystick(1);
+    public Joystick manipulator = new Joystick(3);
 
     public Button gearShiftButton = new JoystickButton(xboxControl, 5);
     public Button boostButton = new JoystickButton(xboxControl, 8);
