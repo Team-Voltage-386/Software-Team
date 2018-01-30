@@ -28,13 +28,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.video.KalmanFilter;
 import org.opencv.videoio.VideoCapture;
-import com.github.sarxos.webcam.Webcam;
+//import com.github.sarxos.webcam.Webcam;
 
 public class Contours {
 	static Mat mat;
 	static Mat invMat;
 	static BufferedImage image;
-	public static Webcam webcam;
+	//public static Webcam webcam;
 	public static Mat hierarchy;
 	public static VideoCapture camera;
 	public static CameraViewer viewer;
