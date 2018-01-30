@@ -1,5 +1,7 @@
 package org.usfirst.frc.team386.robot;
 
+import java.util.HashSet;
+
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.StartBoost;
 import org.usfirst.frc.team386.robot.commands.StopBoost;
@@ -31,9 +33,11 @@ public class OI {
 	try {
 	    gyro = new ADXRS450_Gyro();
 	} catch (NoClassDefFoundError e) {
-	    throw e;
+	    alertOnce(e);
 	}
     }
+
+    private static HashSet<Throwable> alerts = new HashSet<Throwable>();
 
     public OI() {
 	gearShiftButton.whenPressed(new GearShift());
@@ -45,4 +49,29 @@ public class OI {
 	tankBoostButton.whenPressed(new StartBoost());
 	tankBoostButton.whenReleased(new StopBoost());
     }
+
+    /**
+     * Alert on the given exception one time.
+     * 
+     * @param e
+     *            The exception to alert on
+     */
+    public static void alertOnce(Throwable t) {
+	if (!alerts.contains(t)) {
+	    System.out.println("Exception occurred: " + t.getMessage());
+	    alerts.add(t);
+	}
+    }
+
+    /**
+     * Clear the alerting status for the given exception, allowing it to alert
+     * again.
+     * 
+     * @param e
+     *            The exception
+     */
+    public static void resetAlert(Exception e) {
+	alerts.remove(e);
+    }
+
 }
