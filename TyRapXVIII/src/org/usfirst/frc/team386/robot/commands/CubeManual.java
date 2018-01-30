@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ManualCubeControl extends Command {
+public class CubeManual extends Command {
 
-    public ManualCubeControl() {
+    public CubeManual() {
 	// Use requires() here to declare subsystem dependencies
 	requires(Robot.cubeSubsystem);
     }

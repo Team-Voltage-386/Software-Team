@@ -1,7 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
-import org.usfirst.frc.team386.robot.commands.ManualCubeControl;
+import org.usfirst.frc.team386.robot.commands.CubeManual;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,7 +20,7 @@ public class CubeSubsystem extends Subsystem {
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
-	setDefaultCommand(new ManualCubeControl());
+	setDefaultCommand(new CubeManual());
     }
 
     public void cubeIn(double speed) {
