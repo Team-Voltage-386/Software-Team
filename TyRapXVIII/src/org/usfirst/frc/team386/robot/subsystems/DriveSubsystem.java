@@ -195,7 +195,7 @@ public class DriveSubsystem extends Subsystem {
 	OI.gyro.reset();
 	resetEncoders();
 
-	double ticksRequired = ((360 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
+	double ticksRequired = 6 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
 	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
 	    drive.arcadeDrive(.7, 0);

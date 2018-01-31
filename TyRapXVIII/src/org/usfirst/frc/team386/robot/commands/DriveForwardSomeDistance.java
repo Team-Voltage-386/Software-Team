@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 public class DriveForwardSomeDistance extends InstantCommand {
 
     // The distance to drive forward in inches.
-    public static final int DISTANCE = 360;
+    public static final int DISTANCE = 60;
 
     public DriveForwardSomeDistance() {
 	super();
@@ -20,7 +20,7 @@ public class DriveForwardSomeDistance extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.moveForwardTicks(DISTANCE);
+	Robot.driveSubsystem.moveForward(DISTANCE);
     }
 
 }
