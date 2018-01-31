@@ -34,6 +34,8 @@ public class Robot extends IterativeRobot {
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
     public static final String DRIVE_MODE_KEY = "Arcade drive?";
+    public static final String LEFT_DRIVE_ENCODER = "Left encoder";
+    public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -46,6 +48,8 @@ public class Robot extends IterativeRobot {
 	// chooser.addObject("My Auto", new MyAutoCommand());
 	SmartDashboard.putData("Auto mode", chooser);
 	SmartDashboard.putBoolean(DRIVE_MODE_KEY, true);
+	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
+	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.OI;
+import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team386.robot.commands.TankDrive;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The DriveSubsystem is responsible for all drive logic. It is intended to be
@@ -54,7 +56,8 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB);
+    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB,
+	    true);
     public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     Command defaultCommand;
@@ -161,9 +164,25 @@ public class DriveSubsystem extends Subsystem {
     public void resetEncoders() {
 	leftEncoder.reset();
 	rightEncoder.reset();
-	System.out.println("completed reset");
-	System.out.println("left encoder value: " + leftEncoder.getRaw());
-	System.out.println("right encoder value: " + rightEncoder.getRaw());
+	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    }
+
+    /**
+     * Move forward the specific number of ticks.
+     * 
+     * @param ticks
+     *            Encoder ticks to move forward
+     */
+    public void moveForwardTicks(int ticks) {
+	while (Math.abs(rightEncoder.get()) < ticks) {
+	    drive.arcadeDrive(.7, 0);
+	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	}
+	drive.tankDrive(0, 0); // stops driving forward
+	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
     /**
@@ -174,42 +193,18 @@ public class DriveSubsystem extends Subsystem {
      */
     public void moveForward(double inches) {
 	OI.gyro.reset();
-
-	// double ticksRequired = ((inches * 768) / (WHEEL_CIRCUMFERENCE *
-	// ENCODER_RATIO));
+	resetEncoders();
 
 	double ticksRequired = ((360 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
-	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
+	while (Math.abs(leftEncoder.get()) < ticksRequired) {
 	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
 	    drive.arcadeDrive(.7, 0);
+	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
 	}
 	drive.tankDrive(0, 0); // stops driving forward
-    }
-
-    public void rotateLeft(double deg) {
-	deg = Math.abs(deg); // give a positive degree to move left
-	double radius = 15; // ####this needs to be changed to the radius of the robot itself
-	double inches = (radius * 2 * Math.PI * (deg / 360));
-	double ticksRequired = ((256 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
-	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
-	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
-	    // drive.arcadeDrive(.7, 0);
-	    drive.tankDrive(1, -1);
-	}
-	drive.tankDrive(0, 0); // stops driving forward
-    }
-
-    public void rotateRight(double deg) {
-	deg = Math.abs(deg); // give a positive degree to move left
-	double radius = 15; // ####this needs to be changed to the radius of the robot itself
-	double inches = (radius * 2 * Math.PI * (deg / 360));
-	double ticksRequired = ((256 * ENCODER_RATIO) / WHEEL_CIRCUMFERENCE) * inches;
-	while (Math.abs(leftEncoder.getRaw()) < ticksRequired) {
-	    // drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
-	    // drive.arcadeDrive(.7, 0);
-	    drive.tankDrive(-1, 1);
-	}
-	drive.tankDrive(0, 0); // stops driving forward
+	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
     /**
