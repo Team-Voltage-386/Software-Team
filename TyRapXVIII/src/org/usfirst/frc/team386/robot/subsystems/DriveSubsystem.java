@@ -38,6 +38,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
+    public static final double AUTO_MODE_SPEED = 0.7;
 
     double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
@@ -177,11 +178,11 @@ public class DriveSubsystem extends Subsystem {
      */
     public void moveForwardTicks(int ticks) {
 	while (Math.abs(rightEncoder.get()) < ticks) {
-	    drive.arcadeDrive(.7, 0);
+	    arcadeDriveStraight(AUTO_MODE_SPEED);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
 	}
-	drive.tankDrive(0, 0); // stops driving forward
+	stop();
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
@@ -198,12 +199,11 @@ public class DriveSubsystem extends Subsystem {
 
 	double ticksRequired = 6 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
-	    drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle()); // drives straight with help from gyro
-	    // drive.arcadeDrive(.7, 0);
+	    arcadeDriveStraight(AUTO_MODE_SPEED);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
 	}
-	drive.tankDrive(0, 0); // stops driving forward
+	stop();
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
@@ -219,7 +219,7 @@ public class DriveSubsystem extends Subsystem {
 	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
 	    drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
 	}
-	drive.tankDrive(0, 0);
+	stop();
     }
 
     /**
@@ -233,7 +233,24 @@ public class DriveSubsystem extends Subsystem {
 	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
 	    drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
 	}
+	stop();
+    }
+
+    /**
+     * Stop the robot from moving.
+     */
+    public void stop() {
 	drive.tankDrive(0, 0);
+    }
+
+    /**
+     * Drives straight with help from gyro.
+     * 
+     * @param speed
+     *            The speed to drive straight.
+     */
+    private void arcadeDriveStraight(double speed) {
+	drive.arcadeDrive(speed, GYRO_COMPENSATION * OI.gyro.getAngle());
     }
 
     /**
