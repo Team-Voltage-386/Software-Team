@@ -198,7 +198,7 @@ public class DriveSubsystem extends Subsystem {
 
 	double ticksRequired = 6 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
-	    drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle()); //drives straight with help from gyro
+	    drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle()); // drives straight with help from gyro
 	    // drive.arcadeDrive(.7, 0);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
@@ -207,21 +207,35 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
-    
+
+    /**
+     * Turn left the given angle.
+     * 
+     * @param angle
+     *            Turning angle
+     */
     public void turnLeft(double angle) {
-    	OI.gyro.reset();
-    	while ((int)Math.abs(OI.gyro.getAngle()) < angle) { // turning left
-    			drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
-    		    }
-    	drive.tankDrive(0,0);
+	OI.gyro.reset();
+	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
+	    drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
+	}
+	drive.tankDrive(0, 0);
     }
+
+    /**
+     * Turn right the given angle.
+     * 
+     * @param angle
+     *            Turning angle
+     */
     public void turnRight(double angle) {
-    	OI.gyro.reset();
-    	while((int) Math.abs(OI.gyro.getAngle()) < angle) { //turning right
-    		drive.tankDrive(GYRO_TURNING_SPEED,-GYRO_TURNING_SPEED);
-    	}
-    	drive.tankDrive(0,0);
+	OI.gyro.reset();
+	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
+	    drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
+	}
+	drive.tankDrive(0, 0);
     }
+
     /**
      * Return 0 if the given value is less than the specified limit.
      * 
