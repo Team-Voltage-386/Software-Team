@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.DriveForwardSomeDistance;
+import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -35,9 +36,10 @@ public class Robot extends IterativeRobot {
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
-    public static final String DRIVE_MODE_KEY = "Arcade drive?";
+    public static final String DRIVE_MODE_LABEL = "Arcade drive?";
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
+    public static final String DRIVE_FORWARD_SOME_DISTANCE_LABEL = "Drive forward some distance";
     public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
 
     /**
@@ -47,14 +49,14 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
-	chooser.addDefault(DEFAULT_AUTO_LABEL, new DriveForwardSomeDistance());
+	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
 	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 
 	SmartDashboard.putData("Auto mode", chooser);
-	SmartDashboard.putBoolean(DRIVE_MODE_KEY, true);
+	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
-
+	SmartDashboard.putData(DRIVE_FORWARD_SOME_DISTANCE_LABEL, new DriveForwardSomeDistance());
 	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
     }
 
@@ -111,7 +113,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_KEY, true));
+	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
 
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
