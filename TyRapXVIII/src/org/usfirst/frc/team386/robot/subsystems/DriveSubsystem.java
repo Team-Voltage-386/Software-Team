@@ -25,6 +25,7 @@ public class DriveSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
 
     public static final double GYRO_COMPENSATION = -0.07;
+    public static final double GYRO_TURNING_SPEED = .6;
 
     public static final double WHEEL_CIRCUMFERENCE = /* 18.85 */ 6 * Math.PI;
     public static final double ENCODER_RATIO = 3;
@@ -197,7 +198,7 @@ public class DriveSubsystem extends Subsystem {
 
 	double ticksRequired = 6 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
-	    drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle());
+	    drive.arcadeDrive(.7, GYRO_COMPENSATION * OI.gyro.getAngle()); //drives straight with help from gyro
 	    // drive.arcadeDrive(.7, 0);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
@@ -206,7 +207,21 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
-
+    
+    public void turnLeft(double angle) {
+    	OI.gyro.reset();
+    	while ((int)Math.abs(OI.gyro.getAngle()) < angle) { // turning left
+    			drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
+    		    }
+    	drive.tankDrive(0,0);
+    }
+    public void turnRight(double angle) {
+    	OI.gyro.reset();
+    	while((int) Math.abs(OI.gyro.getAngle()) < angle) { //turning right
+    		drive.tankDrive(GYRO_TURNING_SPEED,-GYRO_TURNING_SPEED);
+    	}
+    	drive.tankDrive(0,0);
+    }
     /**
      * Return 0 if the given value is less than the specified limit.
      * 
