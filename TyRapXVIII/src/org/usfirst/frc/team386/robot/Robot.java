@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team386.robot;
 
+import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.DriveForwardSomeDistance;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -33,9 +34,11 @@ public class Robot extends IterativeRobot {
     SendableChooser<Command> chooser = new SendableChooser<>();
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
+    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
     public static final String DRIVE_MODE_KEY = "Arcade drive?";
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
+    public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -44,12 +47,15 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
-	chooser.addDefault("Default Auto", new DriveForwardSomeDistance());
-	// chooser.addObject("My Auto", new MyAutoCommand());
+	chooser.addDefault(DEFAULT_AUTO_LABEL, new DriveForwardSomeDistance());
+	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
+
 	SmartDashboard.putData("Auto mode", chooser);
 	SmartDashboard.putBoolean(DRIVE_MODE_KEY, true);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
+
+	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
     }
 
     /**
