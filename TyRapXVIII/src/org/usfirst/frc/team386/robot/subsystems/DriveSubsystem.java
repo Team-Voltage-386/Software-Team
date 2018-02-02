@@ -64,10 +64,8 @@ public class DriveSubsystem extends Subsystem {
     public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-    
+
     Command defaultCommand;
-    
-    
 
     /**
      * Construct a new DriveSubsystem.
@@ -182,14 +180,27 @@ public class DriveSubsystem extends Subsystem {
      *            Encoder ticks to move forward
      */
     public void moveForwardTicks(int ticks) {
-    	while (Math.abs(rightEncoder.get()) < ticks) {
-    		arcadeDriveStraight(AUTO_MODE_SPEED);
-    		SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-    		SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
-    	}
-    	stop();
-    	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-    	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	while (Math.abs(rightEncoder.get()) < ticks) {
+	    arcadeDriveStraight(AUTO_MODE_SPEED);
+	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	}
+	stop();
+	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    }
+
+    /**
+     * Drive forward until the line sensor detects a line.
+     * 
+     * WARNING! If no line is sensed calling this method will drive forward
+     * indefinitely.
+     */
+    public void driveForwardTillLine() {
+	while (!linesensor.get()) {
+	    arcadeDriveStraight(AUTO_MODE_SPEED);
+	}
+	stop();
     }
 
     /**
@@ -198,12 +209,6 @@ public class DriveSubsystem extends Subsystem {
      * @param inches
      *            Inches to move forward
      */
-    public void driveForwardTillLine() {
-    	while (linesensor.get()==false) {
-    		arcadeDriveStraight(AUTO_MODE_SPEED);
-    	}
-    	stop();
-    }
     public void moveForward(double inches) {
 	OI.gyro.reset();
 	resetEncoders();
