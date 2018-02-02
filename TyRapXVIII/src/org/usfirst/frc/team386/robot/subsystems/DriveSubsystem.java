@@ -9,6 +9,7 @@ import org.usfirst.frc.team386.robot.commands.TankDrive;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Command;
@@ -62,7 +63,11 @@ public class DriveSubsystem extends Subsystem {
 	    true);
     public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
+    public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+    
     Command defaultCommand;
+    
+    
 
     /**
      * Construct a new DriveSubsystem.
@@ -185,6 +190,14 @@ public class DriveSubsystem extends Subsystem {
 	stop();
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    	while (Math.abs(rightEncoder.get()) < ticks) {
+    		arcadeDriveStraight(AUTO_MODE_SPEED);
+    		SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+    		SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    	}
+    	stop();
+    	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
+    	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
     /**
@@ -193,6 +206,12 @@ public class DriveSubsystem extends Subsystem {
      * @param inches
      *            Inches to move forward
      */
+    public void driveForwardTillLine() {
+    	while (linesensor.get()==false) {
+    		arcadeDriveStraight(AUTO_MODE_SPEED);
+    	}
+    	stop();
+    }
     public void moveForward(double inches) {
 	OI.gyro.reset();
 	resetEncoders();
@@ -230,10 +249,13 @@ public class DriveSubsystem extends Subsystem {
      */
     public void turnRight(double angle) {
 	OI.gyro.reset();
+	SmartDashboard.putNumber("Gyro Value before", OI.gyro.getAngle());
 	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
 	    drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
+	    SmartDashboard.putNumber("Gyro Value during", OI.gyro.getAngle());
 	}
 	stop();
+	SmartDashboard.putNumber("Gyro Value", OI.gyro.getAngle());
     }
 
     /**

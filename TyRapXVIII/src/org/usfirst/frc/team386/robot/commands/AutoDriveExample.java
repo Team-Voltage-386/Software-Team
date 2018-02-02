@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoDriveExample extends CommandGroup {
 
     public AutoDriveExample() {
-	int inchesToSwitch = 168;
-	int halfRobotSize = 19;
-	addSequential(new DriveForward(inchesToSwitch - halfRobotSize));
+	int inchesToSwitch = 288;
+	//int halfRobotSize = 19;
+	addSequential(new DriveForward(inchesToSwitch/* - halfRobotSize*/));
 	addSequential(new TurnRight(90));
-	addSequential(new DriveForward(12));
+	//addSequential(new DriveForward(12));
     }
 }
