@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.DriveForwardSomeDistance;
+import org.usfirst.frc.team386.robot.commands.DriveTillLine;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -25,117 +26,121 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-    public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
-    public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
-    public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+	public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
+	public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
+	public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
-    public static OI oi;
+	public static OI oi;
 
-    Command autonomousCommand = new DriveForwardSomeDistance();
-    SendableChooser<Command> chooser = new SendableChooser<>();
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+	Command autonomousCommand = new DriveForwardSomeDistance();
+	SendableChooser<Command> chooser = new SendableChooser<>();
+	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
-    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
-    public static final String DRIVE_MODE_LABEL = "Arcade drive?";
-    public static final String LEFT_DRIVE_ENCODER = "Left encoder";
-    public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
-    public static final String DRIVE_FORWARD_SOME_DISTANCE_LABEL = "Drive forward some distance";
-    public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
+	public static final String DEFAULT_AUTO_LABEL = "Default Auto";
+	public static final String DRIVE_MODE_LABEL = "Arcade drive?";
+	public static final String LEFT_DRIVE_ENCODER = "Left encoder";
+	public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
+	public static final String DRIVE_FORWARD_SOME_DISTANCE_LABEL = "Drive forward some distance";
+	public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
 
-    /**
-     * This function is run when the robot is first started up and should be used
-     * for any initialization code.
-     */
-    @Override
-    public void robotInit() {
-	oi = new OI();
-	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
-	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
-
-	SmartDashboard.putData("Auto mode", chooser);
-	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
-	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
-	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
-	SmartDashboard.putData(DRIVE_FORWARD_SOME_DISTANCE_LABEL, new DriveForwardSomeDistance());
-	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
-    }
-
-    /**
-     * This function is called once each time the robot enters Disabled mode. You
-     * can use it to reset any subsystem information you want to clear when the
-     * robot is disabled.
-     */
-    @Override
-    public void disabledInit() {
-
-    }
-
-    @Override
-    public void disabledPeriodic() {
-	Scheduler.getInstance().run();
-    }
-
-    /**
-     * This autonomous (along with the chooser code above) shows how to select
-     * between different autonomous modes using the dashboard. The sendable chooser
-     * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-     * remove all of the chooser code and uncomment the getString code to get the
-     * auto name from the text box below the Gyro
-     *
-     * You can add additional auto modes by adding additional commands to the
-     * chooser code above (like the commented example) or additional comparisons to
-     * the switch structure below with additional strings & commands.
-     */
-    @Override
-    public void autonomousInit() {
-	autonomousCommand = chooser.getSelected();
-	driveSubsystem.resetEncoders();
-
-	/*
-	 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-	 * switch(autoSelected) { case "My Auto": autonomousCommand = new
-	 * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
-	 * ExampleCommand(); break; }
+	/**
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
+	@Override
+	public void robotInit() {
+		oi = new OI();
+		chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
+		chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 
-	// schedule the autonomous command (example)
-	if (autonomousCommand != null)
-	    autonomousCommand.start();
-    }
+		SmartDashboard.putData("Auto mode", chooser);
+		SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
+		SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
+		SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
+		SmartDashboard.putData(DRIVE_FORWARD_SOME_DISTANCE_LABEL, new DriveForwardSomeDistance());
+		SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
+		SmartDashboard.putData("Drive to line", new DriveTillLine());
+	}
 
-    /**
-     * This function is called periodically during autonomous
-     */
-    @Override
-    public void autonomousPeriodic() {
-	Scheduler.getInstance().run();
-    }
+	/**
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
+	 */
+	@Override
+	public void disabledInit() {
 
-    @Override
-    public void teleopInit() {
-	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
+	}
 
-	// This makes sure that the autonomous stops running when
-	// teleop starts running. If you want the autonomous to
-	// continue until interrupted by another command, remove
-	// this line or comment it out.
-	if (autonomousCommand != null)
-	    autonomousCommand.cancel();
-    }
+	@Override
+	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
+	}
 
-    /**
-     * This function is called periodically during operator control
-     */
-    @Override
-    public void teleopPeriodic() {
-	Scheduler.getInstance().run();
-    }
+	/**
+	 * This autonomous (along with the chooser code above) shows how to select
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString code to get the
+	 * auto name from the text box below the Gyro
+	 *
+	 * You can add additional auto modes by adding additional commands to the
+	 * chooser code above (like the commented example) or additional comparisons to
+	 * the switch structure below with additional strings & commands.
+	 */
+	@Override
+	public void autonomousInit() {
+		autonomousCommand = chooser.getSelected();
+		driveSubsystem.resetEncoders();
 
-    /**
-     * This function is called periodically during test mode
-     */
-    @Override
-    public void testPeriodic() {
+		/*
+		 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
+		 * switch(autoSelected) { case "My Auto": autonomousCommand = new
+		 * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
+		 * ExampleCommand(); break; }
+		 */
 
-    }
+		// schedule the autonomous command (example)
+		if (autonomousCommand != null) {
+			autonomousCommand.start();
+		}
+	}
+
+	/**
+	 * This function is called periodically during autonomous
+	 */
+	@Override
+	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	
+	@Override
+	public void teleopInit() {
+		Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
+
+		// This makes sure that the autonomous stops running when
+		// teleop starts running. If you want the autonomous to
+		// continue until interrupted by another command, remove
+		// this line or comment it out.
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
+	}
+
+	/**
+	 * This function is called periodically during operator control
+	 */
+	@Override
+	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	/**
+	 * This function is called periodically during test mode
+	 */
+	@Override
+	public void testPeriodic() {
+		
+	}
 }
