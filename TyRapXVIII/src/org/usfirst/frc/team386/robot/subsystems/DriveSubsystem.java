@@ -182,14 +182,6 @@ public class DriveSubsystem extends Subsystem {
      *            Encoder ticks to move forward
      */
     public void moveForwardTicks(int ticks) {
-	while (Math.abs(rightEncoder.get()) < ticks) {
-	    arcadeDriveStraight(AUTO_MODE_SPEED);
-	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
-	}
-	stop();
-	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     	while (Math.abs(rightEncoder.get()) < ticks) {
     		arcadeDriveStraight(AUTO_MODE_SPEED);
     		SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
@@ -216,7 +208,7 @@ public class DriveSubsystem extends Subsystem {
 	OI.gyro.reset();
 	resetEncoders();
 
-	double ticksRequired = 6 * inches;
+	double ticksRequired = 6.36 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
 	    arcadeDriveStraight(AUTO_MODE_SPEED);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
