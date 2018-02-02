@@ -191,19 +191,6 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Drive forward until the line sensor detects a line.
-     * 
-     * WARNING! If no line is sensed calling this method will drive forward
-     * indefinitely.
-     */
-    public void driveForwardTillLine() {
-	while (!linesensor.get()) {
-	    arcadeDriveStraight(AUTO_MODE_SPEED);
-	}
-	stop();
-    }
-
-    /**
      * Move forward the specific number of inches.
      * 
      * @param inches
@@ -222,6 +209,19 @@ public class DriveSubsystem extends Subsystem {
 	stop();
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    }
+
+    /**
+     * Drive forward until the line sensor detects a line.
+     * 
+     * WARNING! If no line is sensed calling this method will drive forward
+     * indefinitely.
+     */
+    public void driveForwardToLine() {
+	while (!linesensor.get()) {
+	    arcadeDriveStraight(AUTO_MODE_SPEED);
+	}
+	stop();
     }
 
     /**

@@ -2,7 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
-import org.usfirst.frc.team386.robot.commands.DriveTillLine;
+import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -53,14 +53,14 @@ public class Robot extends IterativeRobot {
 
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
 	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
-	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveTillLine());
+	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
-	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveTillLine());
+	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
     }
 
     /**
