@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
     public static final String LINE_SENSOR = "Line sensor";
+    public static final String GAME_DATA = "Game data";
 
     // Labels for commands to execute by pressing a button on the dashboard
     public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
@@ -92,6 +93,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
+	SmartDashboard.putString(GAME_DATA, "");
 	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
@@ -130,7 +132,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
 	OI.gamedata = DriverStation.getInstance().getGameSpecificMessage();
-	System.out.print(OI.gamedata);
+	SmartDashboard.putString(GAME_DATA, OI.gamedata);
 	autonomousCommand = chooser.getSelected();
 	driveSubsystem.resetEncoders();
 
