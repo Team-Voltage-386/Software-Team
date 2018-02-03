@@ -10,6 +10,7 @@ import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoLeft;
 import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoRight;
 import org.usfirst.frc.team386.robot.commands.RightScaleAutoLeft;
 import org.usfirst.frc.team386.robot.commands.RightScaleAutoRight;
+import org.usfirst.frc.team386.robot.commands.RightSwitchAutoLeft;
 import org.usfirst.frc.team386.robot.commands.RightSwitchAutoRight;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -73,6 +74,7 @@ public class Robot extends IterativeRobot {
     public static final String STOP_LABEL = "Stop the Robit";
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
+    public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -93,6 +95,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(RIGHT_START_SCALE_LEFT, new RightScaleAutoLeft());
 	chooser.addObject(STOP_LABEL, new Stop());
 	chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
+	chooser.addObject(RIGHT_START_SWITCH_LEFT, new RightSwitchAutoLeft());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
