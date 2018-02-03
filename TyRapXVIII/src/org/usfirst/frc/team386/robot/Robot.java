@@ -133,6 +133,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
+	SmartDashboard.putBoolean("Line sensor get: ", driveSubsystem.linesensor.get());
 	Scheduler.getInstance().run();
     }
 
