@@ -42,6 +42,9 @@ public class DriveSubsystem extends Subsystem {
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
     public static final double AUTO_MODE_SPEED = 0.7;
 
+    public static final int LEFT = -1;
+    public static final int RIGHT = 1;
+
     double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
@@ -231,18 +234,20 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Turn left the given angle.
+     * Turn the given angle and direction with a PID feedback loop.
      * 
      * @param angle
-     *            Turning angle
+     *            The angle to turn
+     * @param direction
+     *            -1 (LEFT), 1 (RIGHT)
      */
-    public void turnLeft(double angle) {
+    void turnWithPid(double angle, int direction) {
 	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
 	double tolerance = 0;
 	OI.gyro.reset();
-	while (Math.abs(-1 * OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
+	while (Math.abs(direction * OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
 	    double time = timer.get();
-	    double error = ((int) OI.gyro.getAngle() + angle);
+	    double error = ((int) OI.gyro.getAngle() - (direction * angle));
 	    derivative = (error - previousError) / (time - previousTime);
 	    integral = integral + error * (time - previousTime);
 	    frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
@@ -255,10 +260,24 @@ public class DriveSubsystem extends Subsystem {
 	    previousTime = time;
 	    previousError = error;
 	}
+    }
 
-	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
-	// drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
-	// }
+    void turnWithoutPid(double angle, int direction) {
+	while ((int) Math.abs(OI.gyro.getAngle()) < angle) {
+	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
+	}
+    }
+
+    /**
+     * Turn left the given angle.
+     * 
+     * @param angle
+     *            Turning angle
+     */
+    public void turnLeft(double angle) {
+	turnWithPid(angle, LEFT);
+
+	// turnWithoutPid(angle, LEFT);
 	// stop();
     }
 
@@ -269,28 +288,9 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
-	double tolerance = 0;
-	OI.gyro.reset();
-	while (Math.abs(OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
-	    double time = timer.get();
-	    double error = ((int) OI.gyro.getAngle() - angle);
-	    derivative = (error - previousError) / (time - previousTime);
-	    integral = integral + error * (time - previousTime);
-	    frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
-	    frontRight.set(-.03 * error + -.02 * integral + -.015 * derivative);
-	    SmartDashboard.putNumber("Error", error);
-	    SmartDashboard.putNumber("proportional", -.03 * error);
-	    SmartDashboard.putNumber("integral", -.02 * integral);
-	    SmartDashboard.putNumber("derivative", -.015 * derivative);
-	    SmartDashboard.putNumber("Gyro", (int) OI.gyro.getAngle());
-	    previousTime = time;
-	    previousError = error;
-	}
+	turnWithPid(angle, RIGHT);
 
-	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
-	// drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
-	// }
+	// turnWithoutPid(angle, RIGHT);
 	// stop();
     }
 
