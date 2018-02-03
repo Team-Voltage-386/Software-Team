@@ -72,6 +72,7 @@ public class DriveSubsystem extends Subsystem {
      * Construct a new DriveSubsystem.
      */
     Timer timer = new Timer();
+
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
 	leftSlave2.follow(frontLeft);
@@ -236,27 +237,27 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnLeft(double angle) {
-    	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
-    	OI.gyro.reset();
-    	while(Math.abs(-1*OI.gyro.getAngle()-angle) > 0 || Math.abs(derivative) > .01){
-    		double time = timer.get();
-    		double error = ((int)OI.gyro.getAngle() + angle);
-    		derivative = (error-previousError)/(time-previousTime);
-    		integral = integral + error * (time-previousTime);
-    		frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
-    		frontRight.set(-.03 * error + -.02 * integral + -.015 * derivative);
-    		SmartDashboard.putNumber("Error", error);
-    		SmartDashboard.putNumber("proportional", -.03 * error);
-    		SmartDashboard.putNumber("integral", -.02 * integral);
-    		SmartDashboard.putNumber("derivative", -.015 * derivative);
-    		SmartDashboard.putNumber("Gyro", (int)OI.gyro.getAngle());
-    		previousTime = time;
-    		previousError = error;
-    	}
-//	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
-//	    drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
-//	}
-//	stop();
+	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	OI.gyro.reset();
+	while (Math.abs(-1 * OI.gyro.getAngle() - angle) > 0 || Math.abs(derivative) > .01) {
+	    double time = timer.get();
+	    double error = ((int) OI.gyro.getAngle() + angle);
+	    derivative = (error - previousError) / (time - previousTime);
+	    integral = integral + error * (time - previousTime);
+	    frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
+	    frontRight.set(-.03 * error + -.02 * integral + -.015 * derivative);
+	    SmartDashboard.putNumber("Error", error);
+	    SmartDashboard.putNumber("proportional", -.03 * error);
+	    SmartDashboard.putNumber("integral", -.02 * integral);
+	    SmartDashboard.putNumber("derivative", -.015 * derivative);
+	    SmartDashboard.putNumber("Gyro", (int) OI.gyro.getAngle());
+	    previousTime = time;
+	    previousError = error;
+	}
+	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
+	// drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
+	// }
+	// stop();
     }
 
     /**
@@ -266,31 +267,31 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-    	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
-    	OI.gyro.reset();
-    	while(Math.abs(OI.gyro.getAngle()-angle) > 0 || Math.abs(derivative) > .01){
-    		double time = timer.get();
-    		double error = ((int)OI.gyro.getAngle() - angle);
-    		derivative = (error-previousError)/(time-previousTime);
-    		integral = integral + error * (time-previousTime);
-    		frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
-    		frontRight.set(-.03 * error + -.02 * integral + -.015 * derivative);
-    		SmartDashboard.putNumber("Error", error);
-    		SmartDashboard.putNumber("proportional", -.03 * error);
-    		SmartDashboard.putNumber("integral", -.02 * integral);
-    		SmartDashboard.putNumber("derivative", -.015 * derivative);
-    		SmartDashboard.putNumber("Gyro", (int)OI.gyro.getAngle());
-    		previousTime = time;
-    		previousError = error;
-    	}
-//	OI.gyro.reset();
-//	SmartDashboard.putNumber("Gyro Value before", OI.gyro.getAngle());
-//	while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
-//	    drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
-//	    SmartDashboard.putNumber("Gyro Value during", OI.gyro.getAngle());
-//	}
-//	stop();
-//	SmartDashboard.putNumber("Gyro Value", OI.gyro.getAngle());
+	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	OI.gyro.reset();
+	while (Math.abs(OI.gyro.getAngle() - angle) > 0 || Math.abs(derivative) > .01) {
+	    double time = timer.get();
+	    double error = ((int) OI.gyro.getAngle() - angle);
+	    derivative = (error - previousError) / (time - previousTime);
+	    integral = integral + error * (time - previousTime);
+	    frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
+	    frontRight.set(-.03 * error + -.02 * integral + -.015 * derivative);
+	    SmartDashboard.putNumber("Error", error);
+	    SmartDashboard.putNumber("proportional", -.03 * error);
+	    SmartDashboard.putNumber("integral", -.02 * integral);
+	    SmartDashboard.putNumber("derivative", -.015 * derivative);
+	    SmartDashboard.putNumber("Gyro", (int) OI.gyro.getAngle());
+	    previousTime = time;
+	    previousError = error;
+	}
+	// OI.gyro.reset();
+	// SmartDashboard.putNumber("Gyro Value before", OI.gyro.getAngle());
+	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
+	// drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
+	// SmartDashboard.putNumber("Gyro Value during", OI.gyro.getAngle());
+	// }
+	// stop();
+	// SmartDashboard.putNumber("Gyro Value", OI.gyro.getAngle());
     }
 
     /**
