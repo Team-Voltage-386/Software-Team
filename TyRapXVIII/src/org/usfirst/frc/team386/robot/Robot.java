@@ -9,6 +9,8 @@ import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
 import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.Stop;
+import org.usfirst.frc.team386.robot.commands.TurnLeft;
+import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -53,6 +55,8 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE = "Left scale";
     public static final String RIGHT_START_SCALE = "Right scale";
     public static final String STOP_LABEL = "Stop the Robit";
+    public static final String TURN_LEFT_LABEL = "turn left";
+    public static final String TURN_RIGHT_LABEL = "turn right";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -70,6 +74,8 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
 	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
 	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
+	chooser.addObject(TURN_LEFT_LABEL, new TurnLeft(90));
+	chooser.addObject(TURN_RIGHT_LABEL, new TurnRight(90));
 	chooser.addObject(STOP_LABEL, new Stop());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
@@ -78,6 +84,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
+	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
+	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
     }
 
