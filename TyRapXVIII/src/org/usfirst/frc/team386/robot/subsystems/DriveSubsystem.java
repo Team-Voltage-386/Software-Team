@@ -238,8 +238,9 @@ public class DriveSubsystem extends Subsystem {
      */
     public void turnLeft(double angle) {
 	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	double tolerance = 0;
 	OI.gyro.reset();
-	while (Math.abs(-1 * OI.gyro.getAngle() - angle) > 0 || Math.abs(derivative) > .01) {
+	while (Math.abs(-1 * OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
 	    double time = timer.get();
 	    double error = ((int) OI.gyro.getAngle() + angle);
 	    derivative = (error - previousError) / (time - previousTime);
@@ -269,8 +270,9 @@ public class DriveSubsystem extends Subsystem {
      */
     public void turnRight(double angle) {
 	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	double tolerance = 0;
 	OI.gyro.reset();
-	while (Math.abs(OI.gyro.getAngle() - angle) > 0 || Math.abs(derivative) > .01) {
+	while (Math.abs(OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
 	    double time = timer.get();
 	    double error = ((int) OI.gyro.getAngle() - angle);
 	    derivative = (error - previousError) / (time - previousTime);
