@@ -254,6 +254,7 @@ public class DriveSubsystem extends Subsystem {
 	    previousTime = time;
 	    previousError = error;
 	}
+
 	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning left
 	// drive.tankDrive(-GYRO_TURNING_SPEED, GYRO_TURNING_SPEED);
 	// }
@@ -284,14 +285,11 @@ public class DriveSubsystem extends Subsystem {
 	    previousTime = time;
 	    previousError = error;
 	}
-	// OI.gyro.reset();
-	// SmartDashboard.putNumber("Gyro Value before", OI.gyro.getAngle());
+
 	// while ((int) Math.abs(OI.gyro.getAngle()) < angle) { // turning right
 	// drive.tankDrive(GYRO_TURNING_SPEED, -GYRO_TURNING_SPEED);
-	// SmartDashboard.putNumber("Gyro Value during", OI.gyro.getAngle());
 	// }
 	// stop();
-	// SmartDashboard.putNumber("Gyro Value", OI.gyro.getAngle());
     }
 
     /**
