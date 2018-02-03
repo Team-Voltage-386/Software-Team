@@ -52,6 +52,7 @@ public class Robot extends IterativeRobot {
     public static final String RIGHT_START_SWITCH = "Right switch";
     public static final String LEFT_START_SCALE = "Left scale";
     public static final String RIGHT_START_SCALE = "Right scale";
+    public static final String STOP_LABEL = "Stop the Robit";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -69,6 +70,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
 	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
 	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
+	chooser.addObject(STOP_LABEL, new Stop());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
@@ -76,6 +78,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
+	SmartDashboard.putData(STOP_LABEL, new Stop());
     }
 
     /**
