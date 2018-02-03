@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
+import org.usfirst.frc.team386.robot.commands.LeftScaleAutoRight;
 import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
 import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
@@ -65,6 +66,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE = "Left scale";
     public static final String RIGHT_START_SCALE = "Right scale";
     public static final String STOP_LABEL = "Stop the Robit";
+    public static final String LEFT_START_SCALE_RIGHT = "right scale starting left";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -83,6 +85,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
 	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
+	chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);

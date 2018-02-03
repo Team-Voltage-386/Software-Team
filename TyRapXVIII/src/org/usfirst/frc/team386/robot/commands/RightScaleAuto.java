@@ -9,6 +9,10 @@ public class RightScaleAuto extends CommandGroup {
     // auto mode for scale starting on right side
 
     public RightScaleAuto() {
+	addSequential(new DriveForward(290));
+	addSequential(new TurnLeft(90));
+	addSequential(new ElevatorRaise());
+	addSequential(new CubeRelease());
 	// Add Commands here:
 	// e.g. addSequential(new Command1());
 	// addSequential(new Command2());

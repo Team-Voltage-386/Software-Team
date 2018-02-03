@@ -202,14 +202,16 @@ public class DriveSubsystem extends Subsystem {
      * 
      * @param inches
      *            Inches to move forward
+     * @param speed
+     *            A value between 0 and 1
      */
-    public void moveForward(double inches) {
+    public void moveForward(double inches, double speed) {
 	OI.gyro.reset();
 	resetEncoders();
 
 	double ticksRequired = 6.36 * inches;
 	while (Math.abs(leftEncoder.get()) < ticksRequired) {
-	    arcadeDriveStraight(AUTO_MODE_SPEED);
+	    arcadeDriveStraight(speed);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
 	}

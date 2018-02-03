@@ -5,15 +5,17 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class LeftSwitchAuto extends CommandGroup {
-    // auto for switch starting from left side
+public class LeftScaleAutoRight extends CommandGroup {
 
-    public LeftSwitchAuto() {
-	addSequential(new DriveForward(140));
-	// insert decision
+    public LeftScaleAutoRight() {
+	addSequential(new DriveForward(208, 1));
 	addSequential(new TurnRight(90));
-	addSequential(new DriveForward(12, 0.3));
+	addSequential(new DriveForward(216, 1));
+	addSequential(new TurnLeft(90));
+	addSequential(new DriveForward(30, .7));
+	addSequential(new TurnLeft(90));
 	addSequential(new ElevatorRaise());
+
 	addSequential(new CubeRelease());
 	// Add Commands here:
 	// e.g. addSequential(new Command1());

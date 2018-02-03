@@ -1,6 +1,7 @@
 package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 public class DriveForward extends InstantCommand {
 
     private int distance;
+    private double speed;
 
     /**
      * Construct the drive forward command with the given distance.
@@ -21,11 +23,19 @@ public class DriveForward extends InstantCommand {
 	super();
 	requires(Robot.driveSubsystem);
 	this.distance = distance;
+	this.speed = DriveSubsystem.AUTO_MODE_SPEED;
+    }
+
+    public DriveForward(int distance, double speed) {
+	super();
+	requires(Robot.driveSubsystem);
+	this.distance = distance;
+	this.speed = speed;
     }
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.moveForward(distance);
+	Robot.driveSubsystem.moveForward(distance, speed);
     }
 
 }
