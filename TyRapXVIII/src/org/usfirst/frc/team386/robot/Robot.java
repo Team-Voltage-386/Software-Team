@@ -4,14 +4,10 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.LeftScaleAutoLeft;
-import org.usfirst.frc.team386.robot.commands.LeftScaleAutoRight;
-import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoLeft;
-import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoRight;
-import org.usfirst.frc.team386.robot.commands.RightScaleAutoLeft;
-import org.usfirst.frc.team386.robot.commands.RightScaleAutoRight;
-import org.usfirst.frc.team386.robot.commands.RightSwitchAutoLeft;
-import org.usfirst.frc.team386.robot.commands.RightSwitchAutoRight;
+import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
+import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
+import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -66,6 +62,11 @@ public class Robot extends IterativeRobot {
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
     // Autonomous commands
     public static final String CENTER_START_SWITCH = "Center switch";
+    public static final String LEFT_SWITCH_AUTO = "Starting on left, going for switch";
+    public static final String RIGHT_SWITCH_AUTO = "Starting on right, going for switch";
+    public static final String LEFT_SCALE_AUTO = "Starting on left, going for scale";
+    public static final String RIGHT_SCALE_AUTO = "Starting on right. going for scale";
+
     public static final String LEFT_START_SWITCH_RIGHT = "Left start, Right switch";
     public static final String LEFT_START_SWITCH_LEFT = "Left start, Left switch";
     public static final String RIGHT_START_SWITCH_RIGHT = "Right start, Right switch";
@@ -75,6 +76,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -87,15 +89,22 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
-	chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
-	chooser.addObject(LEFT_START_SWITCH_LEFT, new LeftSwitchAutoLeft());
-	chooser.addObject(RIGHT_START_SWITCH_RIGHT, new RightSwitchAutoRight());
-	chooser.addObject(LEFT_START_SCALE_LEFT, new LeftScaleAutoLeft());
-	chooser.addObject(RIGHT_START_SCALE_RIGHT, new RightScaleAutoRight());
-	chooser.addObject(RIGHT_START_SCALE_LEFT, new RightScaleAutoLeft());
+	chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
+	chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
+	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
+	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
-	chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
-	chooser.addObject(RIGHT_START_SWITCH_LEFT, new RightSwitchAutoLeft());
+
+	/*
+	 * chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
+	 * chooser.addObject(LEFT_START_SWITCH_LEFT, new LeftSwitchAutoLeft());
+	 * chooser.addObject(RIGHT_START_SWITCH_RIGHT, new RightSwitchAutoRight());
+	 * chooser.addObject(LEFT_START_SCALE_LEFT, new LeftScaleAutoLeft());
+	 * chooser.addObject(RIGHT_START_SCALE_RIGHT, new RightScaleAutoRight());
+	 * chooser.addObject(RIGHT_START_SCALE_LEFT, new RightScaleAutoLeft());
+	 * chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
+	 * chooser.addObject(RIGHT_START_SWITCH_LEFT, new RightSwitchAutoLeft());
+	 */
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);

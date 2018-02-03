@@ -40,7 +40,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-    public static final double AUTO_MODE_SPEED = 0.7;
+    public static final double AUTO_MODE_SPEED = 1;
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;

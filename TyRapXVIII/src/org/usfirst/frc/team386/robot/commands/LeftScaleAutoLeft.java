@@ -7,15 +7,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class LeftScaleAutoLeft extends CommandGroup {
     // auto mode for scale from left starting configuration
-    //assumes scale is on left
+    // assumes scale is on left
 
     public LeftScaleAutoLeft() {
-    //	addSequential(new LowerIntake());
-    	addSequential(new DriveForward(292));
-    	addSequential(new TurnRight(90)); //check ultrasonic to make sure our value is right
-    //	addSequential(new ElevatorRaise());
-    	addSequential(new CubeRelease());
-    	
+	// addSequential(new LowerIntake());
+	addSequential(new DriveForward(292));
+	addSequential(new TurnRight(90)); // check ultrasonic to make sure our value is right
+	// addSequential(new ElevatorRaise());
+	addSequential(new CubeRelease());
+
 	// Add Commands here:
 	// e.g. addSequential(new Command1());
 	// addSequential(new Command2());
