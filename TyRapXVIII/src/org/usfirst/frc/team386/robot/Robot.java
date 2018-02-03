@@ -6,9 +6,11 @@ import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.LeftScaleAutoLeft;
 import org.usfirst.frc.team386.robot.commands.LeftScaleAutoRight;
+import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoLeft;
 import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoRight;
-import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
-import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.RightScaleAutoLeft;
+import org.usfirst.frc.team386.robot.commands.RightScaleAutoRight;
+import org.usfirst.frc.team386.robot.commands.RightSwitchAutoRight;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -62,13 +64,14 @@ public class Robot extends IterativeRobot {
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
     // Autonomous commands
     public static final String CENTER_START_SWITCH = "Center switch";
-    public static final String LEFT_START_SWITCH_RIGHT = "Right switch starting left";
-    public static final String RIGHT_START_SWITCH = "Right switch";
-    public static final String LEFT_START_SCALE_LEFT = "Left scale starting left configuration";
-    public static final String RIGHT_START_SCALE = "Right scale";
+    public static final String LEFT_START_SWITCH_RIGHT = "Left start, Right switch";
+    public static final String LEFT_START_SWITCH_LEFT = "Left start, Left switch";
+    public static final String RIGHT_START_SWITCH_RIGHT = "Right start, Right switch";
+    public static final String LEFT_START_SCALE_LEFT = "Left start, Left scale";
+    public static final String RIGHT_START_SCALE_LEFT = "Right start, Left scale";
     public static final String STOP_LABEL = "Stop the Robit";
-    public static final String LEFT_START_SCALE_RIGHT = "right scale starting left";
-
+    public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
+    public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -82,9 +85,11 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
 	chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
-	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
+	chooser.addObject(LEFT_START_SWITCH_LEFT, new LeftSwitchAutoLeft());
+	chooser.addObject(RIGHT_START_SWITCH_RIGHT, new RightSwitchAutoRight());
 	chooser.addObject(LEFT_START_SCALE_LEFT, new LeftScaleAutoLeft());
-	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
+	chooser.addObject(RIGHT_START_SCALE_RIGHT, new RightScaleAutoRight());
+	chooser.addObject(RIGHT_START_SCALE_LEFT, new RightScaleAutoLeft());
 	chooser.addObject(STOP_LABEL, new Stop());
 	chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);

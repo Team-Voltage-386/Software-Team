@@ -5,10 +5,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class RightSwitchAuto extends CommandGroup {
-    // auto switch when starting on the right
+public class RightScaleAutoLeft extends CommandGroup {
+    // auto mode for left scale starting on right side
 
-    public RightSwitchAuto() {
+    public RightScaleAutoLeft() {
+	addSequential(new DriveForward(208));
+	addSequential(new TurnLeft(90));
+	addSequential(new DriveForward(216));
+	addSequential(new TurnRight(90));
+	addSequential(new DriveForward(30));
+	addSequential(new TurnRight(90));
 	// Add Commands here:
 	// e.g. addSequential(new Command1());
 	// addSequential(new Command2());

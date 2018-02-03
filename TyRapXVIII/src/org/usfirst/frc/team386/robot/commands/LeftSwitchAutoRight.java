@@ -16,6 +16,7 @@ public class LeftSwitchAutoRight extends CommandGroup {
 	addSequential(new DriveForward(195));
 	addSequential(new TurnRight(90));
 	addSequential(new DriveForward(10));
+	addSequential(new CubeRelease());
 	// Add Commands here:
 	// e.g. addSequential(new Command1());
 	// addSequential(new Command2());
