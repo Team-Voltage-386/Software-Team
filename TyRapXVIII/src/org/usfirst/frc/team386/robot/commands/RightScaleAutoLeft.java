@@ -13,7 +13,7 @@ public class RightScaleAutoLeft extends CommandGroup {
 	addSequential(new TurnLeft(90));
 	addSequential(new DriveForward(216));
 	addSequential(new TurnRight(90));
-	addSequential(new DriveForward(30));
+	addSequential(new DriveForward(50));
 	addSequential(new TurnRight(90));
 	// Add Commands here:
 	// e.g. addSequential(new Command1());

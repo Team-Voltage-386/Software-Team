@@ -12,7 +12,7 @@ public class LeftScaleAutoRight extends CommandGroup {
 	addSequential(new TurnRight(90));
 	addSequential(new DriveForward(216, 1));
 	addSequential(new TurnLeft(90));
-	addSequential(new DriveForward(30, .7));
+	addSequential(new DriveForward(50, .7));
 	addSequential(new TurnLeft(90));
 	addSequential(new ElevatorRaise());
 
