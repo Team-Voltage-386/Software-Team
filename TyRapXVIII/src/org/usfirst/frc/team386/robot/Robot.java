@@ -2,7 +2,12 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
+import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
+import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
+import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
+import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -42,6 +47,11 @@ public class Robot extends IterativeRobot {
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
     public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
+    public static final String CENTER_START_SWITCH = "Center switch";
+    public static final String LEFT_START_SWITCH = "Left switch";
+    public static final String RIGHT_START_SWITCH = "Right switch";
+    public static final String LEFT_START_SCALE = "Left scale";
+    public static final String RIGHT_START_SCALE = "Right scale";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -54,6 +64,11 @@ public class Robot extends IterativeRobot {
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
 	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
+	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
+	chooser.addObject(LEFT_START_SWITCH, new LeftSwitchAuto());
+	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
+	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
+	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
