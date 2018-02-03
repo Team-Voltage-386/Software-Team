@@ -106,7 +106,9 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
-
+	if (autonomousCommand != null) {
+	    autonomousCommand.cancel();
+	}
     }
 
     @Override
