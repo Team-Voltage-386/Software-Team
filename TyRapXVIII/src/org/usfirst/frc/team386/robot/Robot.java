@@ -4,8 +4,8 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
-import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.LeftScaleAutoLeft;
+import org.usfirst.frc.team386.robot.commands.LeftSwitchAutoRight;
 import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
 import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.Stop;
@@ -17,6 +17,7 @@ import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -60,9 +61,9 @@ public class Robot extends IterativeRobot {
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
     // Autonomous commands
     public static final String CENTER_START_SWITCH = "Center switch";
-    public static final String LEFT_START_SWITCH = "Left switch";
+    public static final String LEFT_START_SWITCH_RIGHT = "Right switch starting left";
     public static final String RIGHT_START_SWITCH = "Right switch";
-    public static final String LEFT_START_SCALE = "Left scale";
+    public static final String LEFT_START_SCALE_LEFT = "Left scale starting left configuration";
     public static final String RIGHT_START_SCALE = "Right scale";
     public static final String STOP_LABEL = "Stop the Robit";
 
@@ -74,13 +75,13 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 
-	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop());
+	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); //martian rock
 	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
-	chooser.addObject(LEFT_START_SWITCH, new LeftSwitchAuto());
+	chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
 	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
-	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
+	chooser.addObject(LEFT_START_SCALE_LEFT, new LeftScaleAutoLeft());
 	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
@@ -123,6 +124,8 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
+	OI.gamedata = DriverStation.getInstance().getGameSpecificMessage();
+	System.out.print(OI.gamedata);
 	autonomousCommand = chooser.getSelected();
 	driveSubsystem.resetEncoders();
 

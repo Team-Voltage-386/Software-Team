@@ -1,29 +1,30 @@
 package org.usfirst.frc.team386.robot.commands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import org.usfirst.frc.team386.robot.OI;
+
+import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  *
  */
-public class CenterSwitchAuto extends CommandGroup {
-    // auto mode for switch starting from center
+public class CenterSwitchAuto extends InstantCommand {
+    //gamedata = DriverStation.getInstance().getGameSpecificMessage();
+    // (LLL), (LRL), (RRR), (RLR)
+    //The logic is working but it wont run the actual motors
 
     public CenterSwitchAuto() {
-	// Add Commands here:
-	// e.g. addSequential(new Command1());
-	// addSequential(new Command2());
-	// these will run in order.
+        super();
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    }
 
-	// To run multiple commands at the same time,
-	// use addParallel()
-	// e.g. addParallel(new Command1());
-	// addSequential(new Command2());
-	// Command1 and Command2 will run in parallel.
-
-	// A command group will require all of the subsystems that each member
-	// would require.
-	// e.g. if Command1 requires chassis, and Command2 requires arm,
-	// a CommandGroup containing them would require both the chassis and the
-	// arm.
+    // Called once when the command executes
+    protected void initialize() {
+	if(OI.gamedata.equals("LLL") || OI.gamedata.equals("LRL")) {
+	    new CenterSwitchAutoLeft().start();
+	}
+	else {
+	    new CenterSwitchAutoRight().start();
+	}
     }
 }

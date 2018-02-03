@@ -23,6 +23,7 @@ public class OI {
     public Button boostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankBoostButton = new JoystickButton(rightJoy, 1);
+    public static String gamedata;
 
     // Make sure the gyro is physically present, otherwise do not try to load the
     // gyro class.
