@@ -271,6 +271,7 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithoutPid(double angle, int direction) {
+	OI.gyro.reset();
 	while ((int) Math.abs(OI.gyro.getAngle()) < angle) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
 	}
@@ -283,10 +284,10 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnLeft(double angle) {
-	turnWithPid(angle, LEFT);
+	// turnWithPid(angle, LEFT);
 
-	// turnWithoutPid(angle, LEFT);
-	// stop();
+	turnWithoutPid(angle, LEFT);
+	stop();
     }
 
     /**
@@ -296,10 +297,10 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-	turnWithPid(angle, RIGHT);
+	// turnWithPid(angle, RIGHT);
 
-	// turnWithoutPid(angle, RIGHT);
-	// stop();
+	turnWithoutPid(angle, RIGHT);
+	stop();
     }
 
     /**
