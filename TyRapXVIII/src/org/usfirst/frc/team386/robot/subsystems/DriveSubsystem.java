@@ -71,11 +71,11 @@ public class DriveSubsystem extends Subsystem {
 
     Command defaultCommand;
 
+    Timer timer = new Timer();
+
     /**
      * Construct a new DriveSubsystem.
      */
-    Timer timer = new Timer();
-
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
 	leftSlave2.follow(frontLeft);
