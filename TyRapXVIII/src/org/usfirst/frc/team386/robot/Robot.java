@@ -42,21 +42,29 @@ public class Robot extends IterativeRobot {
     SendableChooser<Command> chooser = new SendableChooser<>();
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
-    public static final String AUTO_MODE_LABEL = "Auto mode";
-    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
+    // Settings
     public static final String DRIVE_MODE_LABEL = "Arcade drive?";
+
+    // Encoder and sensor labels
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
+    public static final String LINE_SENSOR = "Line sensor";
+
+    // Labels for commands to execute by pressing a button on the dashboard
     public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
+    public static final String TURN_LEFT_LABEL = "turn left";
+    public static final String TURN_RIGHT_LABEL = "turn right";
+
+    public static final String AUTO_MODE_LABEL = "Auto mode";
+    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
+    // Autonomous commands
     public static final String CENTER_START_SWITCH = "Center switch";
     public static final String LEFT_START_SWITCH = "Left switch";
     public static final String RIGHT_START_SWITCH = "Right switch";
     public static final String LEFT_START_SCALE = "Left scale";
     public static final String RIGHT_START_SCALE = "Right scale";
     public static final String STOP_LABEL = "Stop the Robit";
-    public static final String TURN_LEFT_LABEL = "turn left";
-    public static final String TURN_RIGHT_LABEL = "turn right";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -74,8 +82,6 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(RIGHT_START_SWITCH, new RightSwitchAuto());
 	chooser.addObject(LEFT_START_SCALE, new LeftScaleAuto());
 	chooser.addObject(RIGHT_START_SCALE, new RightScaleAuto());
-	chooser.addObject(TURN_LEFT_LABEL, new TurnLeft(90));
-	chooser.addObject(TURN_RIGHT_LABEL, new TurnRight(90));
 	chooser.addObject(STOP_LABEL, new Stop());
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 

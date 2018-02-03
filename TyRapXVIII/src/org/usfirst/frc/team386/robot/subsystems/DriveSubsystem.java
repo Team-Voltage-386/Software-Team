@@ -222,11 +222,11 @@ public class DriveSubsystem extends Subsystem {
      * indefinitely.
      */
     public void driveForwardToLine() {
-	SmartDashboard.putBoolean("Line sensor get: ", linesensor.get());
 	while (linesensor.get()) {
 	    arcadeDriveStraight(AUTO_MODE_SPEED);
-	    SmartDashboard.putBoolean("Line sensor current", linesensor.get());
+	    SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	}
+	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	stop();
     }
 
