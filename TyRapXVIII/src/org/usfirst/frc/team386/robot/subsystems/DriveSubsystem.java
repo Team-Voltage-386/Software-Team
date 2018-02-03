@@ -262,6 +262,14 @@ public class DriveSubsystem extends Subsystem {
 	}
     }
 
+    /**
+     * Turn the given angle and direction with no PID feedback loop.
+     * 
+     * @param angle
+     *            The angle to turn
+     * @param direction
+     *            -1 (LEFT), 1 (RIGHT)
+     */
     void turnWithoutPid(double angle, int direction) {
 	while ((int) Math.abs(OI.gyro.getAngle()) < angle) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
