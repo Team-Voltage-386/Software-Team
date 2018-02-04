@@ -7,19 +7,17 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class ReverseTillSensed extends InstantCommand {
+public class DriveReverseToWall extends InstantCommand {
 
-    public ReverseTillSensed() {
+    public DriveReverseToWall() {
 	super();
 	requires(Robot.driveSubsystem);
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	double dist = 12;
-	// Robot.driveSubsystem.reverseTillSensedDistance(dist);
+	// double distanceFromWall = 12;
+	// Robot.driveSubsystem.reverseTillSensedDistance(distanceFromWall);
     }
 
 }
