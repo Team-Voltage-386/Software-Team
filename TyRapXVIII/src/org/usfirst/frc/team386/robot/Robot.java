@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
 
     // Settings
     public static final String DRIVE_MODE_LABEL = "Arcade drive?";
+    public static final String TURN_WITH_PID_LABEL = "Turn with PID?";
 
     // Encoder and sensor labels
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
@@ -114,6 +115,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
+	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putString(GAME_DATA, "");

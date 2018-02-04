@@ -278,6 +278,7 @@ public class DriveSubsystem extends Subsystem {
 	while ((int) Math.abs(gyro.getAngle()) < angle) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
 	}
+	stop();
     }
 
     /**
@@ -287,10 +288,11 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnLeft(double angle) {
-	// turnWithPid(angle, LEFT);
-
-	turnWithoutPid(angle, LEFT);
-	stop();
+	if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
+	    turnWithPid(angle, LEFT);
+	} else {
+	    turnWithoutPid(angle, LEFT);
+	}
     }
 
     /**
@@ -300,10 +302,11 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-	// turnWithPid(angle, RIGHT);
-
-	turnWithoutPid(angle, RIGHT);
-	stop();
+	if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
+	    turnWithPid(angle, RIGHT);
+	} else {
+	    turnWithoutPid(angle, RIGHT);
+	}
     }
 
     /**
