@@ -1,15 +1,15 @@
 
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
-import org.usfirst.frc.team386.robot.commands.LeftSwitchAuto;
-import org.usfirst.frc.team386.robot.commands.RightScaleAuto;
-import org.usfirst.frc.team386.robot.commands.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
+import org.usfirst.frc.team386.robot.commands.auto.CenterSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.auto.LeftScaleAuto;
+import org.usfirst.frc.team386.robot.commands.auto.LeftSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.auto.RightScaleAuto;
+import org.usfirst.frc.team386.robot.commands.auto.RightSwitchAuto;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;

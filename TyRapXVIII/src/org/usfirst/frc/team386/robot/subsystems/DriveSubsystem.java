@@ -3,8 +3,8 @@ package org.usfirst.frc.team386.robot.subsystems;
 import org.usfirst.frc.team386.robot.OI;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team386.robot.commands.TankDrive;
+import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
+import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 

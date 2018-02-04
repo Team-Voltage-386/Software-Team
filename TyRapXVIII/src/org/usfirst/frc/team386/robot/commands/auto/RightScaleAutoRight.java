@@ -1,4 +1,9 @@
-package org.usfirst.frc.team386.robot.commands;
+package org.usfirst.frc.team386.robot.commands.auto;
+
+import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.DriveForward;
+import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
+import org.usfirst.frc.team386.robot.commands.TurnLeft;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
