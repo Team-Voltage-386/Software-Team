@@ -2,6 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
+import org.usfirst.frc.team386.robot.commands.ReverseTillSensed;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -82,6 +83,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
+    public static final String REVERSE_TO_SENSOR = "Reversing to Distance";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -107,6 +109,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
 	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
+	chooser.addObject(REVERSE_TO_SENSOR, new ReverseTillSensed());
 
 	/*
 	 * chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
@@ -129,6 +132,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
+	SmartDashboard.putData(REVERSE_TO_SENSOR, new ReverseTillSensed());
     }
 
     /**
@@ -177,10 +181,11 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().run();
     }
 
+    int timesSeenWhiteLine = 0;
+
     @Override
     public void teleopInit() {
 	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
-
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
@@ -188,15 +193,37 @@ public class Robot extends IterativeRobot {
 	if (autonomousCommand != null) {
 	    autonomousCommand.cancel();
 	}
+	timesSeenWhiteLine = 0;
+	SmartDashboard.putNumber("Times Robot has seen White Line", timesSeenWhiteLine);
     }
 
     /**
      * This function is called periodically during operator control
      */
+    public static final double cubeSpeed = 0.5;
+
     @Override
     public void teleopPeriodic() {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
 	Scheduler.getInstance().run();
+	SmartDashboard.putNumber("POV number", Robot.oi.xboxControl.getPOV());
+	if (Robot.oi.xboxControl.getPOV() == 0.0) {
+	    cubeSubsystem.cubeOut(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Cube Out");
+	} else if (Robot.oi.xboxControl.getPOV() == 90.0) {
+	    cubeSubsystem.twistRight(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Twist Right");
+	} else if (Robot.oi.xboxControl.getPOV() == 180.0) {
+	    cubeSubsystem.cubeIn(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Cube In");
+	} else if (Robot.oi.xboxControl.getPOV() == 270.0) {
+	    cubeSubsystem.twistLeft(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Twist Left");
+	}
+	if (!Robot.driveSubsystem.linesensor.get()) {
+	    timesSeenWhiteLine = timesSeenWhiteLine + 1;
+	    SmartDashboard.putNumber("Times Robot has seen White Line", timesSeenWhiteLine);
+	}
     }
 
     /**
