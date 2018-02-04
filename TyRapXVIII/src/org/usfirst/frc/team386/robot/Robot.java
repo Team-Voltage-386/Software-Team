@@ -92,6 +92,13 @@ public class Robot extends IterativeRobot {
 	oi = new OI();
 	gameData = new GameData();
 
+	initializeDashboard();
+    }
+
+    /**
+     * Initialize the dashboard.
+     */
+    private void initializeDashboard() {
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
