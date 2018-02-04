@@ -108,7 +108,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
 	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
-	// chooser.addObject(REVERSE_TO_SENSOR, new ReverseTillSensed());
+	// chooser.addObject(REVERSE_TO_WALL, new DriveReverseToWall(12));
 
 	/*
 	 * chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	// SmartDashboard.putData(REVERSE_TO_SENSOR, new ReverseTillSensed());
+	// SmartDashboard.putData(REVERSE_TO_WALL, new DriveReverseToWall(12));
     }
 
     /**
@@ -192,6 +192,8 @@ public class Robot extends IterativeRobot {
 	if (autonomousCommand != null) {
 	    autonomousCommand.cancel();
 	}
+
+	// TODO: create an event system for listening to line events
 	timesSeenWhiteLine = 0;
 	SmartDashboard.putNumber("Times Robot has seen White Line", timesSeenWhiteLine);
     }
@@ -199,26 +201,11 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public static final double cubeSpeed = 0.5;
-
     @Override
     public void teleopPeriodic() {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
 	Scheduler.getInstance().run();
-	SmartDashboard.putNumber("POV number", Robot.oi.xboxControl.getPOV());
-	if (Robot.oi.xboxControl.getPOV() == 0.0) {
-	    cubeSubsystem.cubeOut(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Cube Out");
-	} else if (Robot.oi.xboxControl.getPOV() == 90.0) {
-	    cubeSubsystem.twistRight(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Twist Right");
-	} else if (Robot.oi.xboxControl.getPOV() == 180.0) {
-	    cubeSubsystem.cubeIn(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Cube In");
-	} else if (Robot.oi.xboxControl.getPOV() == 270.0) {
-	    cubeSubsystem.twistLeft(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Twist Left");
-	}
+
 	if (!Robot.driveSubsystem.linesensor.get()) {
 	    timesSeenWhiteLine = timesSeenWhiteLine + 1;
 	    SmartDashboard.putNumber("Times Robot has seen White Line", timesSeenWhiteLine);

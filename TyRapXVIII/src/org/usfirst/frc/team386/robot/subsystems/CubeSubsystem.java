@@ -1,11 +1,13 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
+import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The CubeSubsystem is responsible cube intake and cube release.
@@ -51,5 +53,23 @@ public class CubeSubsystem extends Subsystem {
 	left.set(leftSpeed);
 	right.set(rightSpeed);
 
+    }
+
+    public void runWithPOV(int pov) {
+	double cubeSpeed = 0.5;
+	SmartDashboard.putNumber("POV number", pov);
+	if (Robot.oi.xboxControl.getPOV() == 0) {
+	    cubeOut(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Cube Out");
+	} else if (Robot.oi.xboxControl.getPOV() == 90) {
+	    twistRight(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Twist Right");
+	} else if (Robot.oi.xboxControl.getPOV() == 180) {
+	    cubeIn(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Cube In");
+	} else if (Robot.oi.xboxControl.getPOV() == 270) {
+	    twistLeft(cubeSpeed);
+	    SmartDashboard.putString("Cube Control", "Twist Left");
+	}
     }
 }
