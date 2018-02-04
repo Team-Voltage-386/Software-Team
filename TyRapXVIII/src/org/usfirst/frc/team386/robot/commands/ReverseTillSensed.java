@@ -19,7 +19,7 @@ public class ReverseTillSensed extends InstantCommand {
     // Called once when the command executes
     protected void initialize() {
 	double dist = 12;
-	Robot.driveSubsystem.reverseTillSensedDistance(dist);
+	// Robot.driveSubsystem.reverseTillSensedDistance(dist);
     }
 
 }

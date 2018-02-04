@@ -2,7 +2,6 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.ReverseTillSensed;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -83,7 +82,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
-    public static final String REVERSE_TO_SENSOR = "Reversing to Distance";
+    // public static final String REVERSE_TO_SENSOR = "Reversing to Distance";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -109,7 +108,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
 	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
-	chooser.addObject(REVERSE_TO_SENSOR, new ReverseTillSensed());
+	// chooser.addObject(REVERSE_TO_SENSOR, new ReverseTillSensed());
 
 	/*
 	 * chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
@@ -132,7 +131,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	SmartDashboard.putData(REVERSE_TO_SENSOR, new ReverseTillSensed());
+	// SmartDashboard.putData(REVERSE_TO_SENSOR, new ReverseTillSensed());
     }
 
     /**
