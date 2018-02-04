@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RightSwitchAutoLeft extends CommandGroup {
 
     public RightSwitchAutoLeft() {
-	// addSequential(new LowerIntake());
+//	 addSequential(new LowerIntake());
 	addSequential(new DriveForward(215));
 	addSequential(new TurnLeft(90));
 	addSequential(new DriveForward(183));

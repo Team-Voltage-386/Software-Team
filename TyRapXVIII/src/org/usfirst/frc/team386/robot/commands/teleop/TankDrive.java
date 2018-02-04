@@ -14,7 +14,15 @@ public class TankDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.driveSubsystem.driveTank(Robot.oi.leftJoy.getY(), Robot.oi.rightJoy.getY());
+	Robot.driveSubsystem.driveTank(squareKeepSign(Robot.oi.leftJoy.getY()), squareKeepSign(Robot.oi.rightJoy.getY()));
+    }
+    protected double squareKeepSign(double in) {
+    	if(in < 0) {
+    		return in * in * -1;
+    	}
+    	else {
+    		return in * in;
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
