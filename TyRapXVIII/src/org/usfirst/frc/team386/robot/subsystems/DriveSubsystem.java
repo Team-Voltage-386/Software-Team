@@ -259,10 +259,11 @@ public class DriveSubsystem extends Subsystem {
 	    SmartDashboard.putNumber("proportional", -.03 * error);
 	    SmartDashboard.putNumber("integral", -.02 * integral);
 	    SmartDashboard.putNumber("derivative", -.015 * derivative);
-	    SmartDashboard.putNumber("Gyro", (int) gyro.getAngle());
+	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	    previousTime = time;
 	    previousError = error;
 	}
+	SmartDashboard.putNumber("Gyro", gyro.getAngle());
     }
 
     /**
