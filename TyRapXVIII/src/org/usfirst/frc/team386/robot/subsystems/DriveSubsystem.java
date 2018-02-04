@@ -63,9 +63,8 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB,
-	    true);
-    public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB, true);
+    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
 

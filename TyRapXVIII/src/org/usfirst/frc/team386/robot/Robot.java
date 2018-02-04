@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team386.robot;
 
+import org.usfirst.frc.team386.robot.commands.DisableRobot;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -128,9 +129,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
-	if (autonomousCommand != null) {
-	    autonomousCommand.cancel();
-	}
+	new DisableRobot().start();
     }
 
     @Override
