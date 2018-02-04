@@ -67,6 +67,8 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+    // AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 20);
+    // AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 20);
 
     Command defaultCommand;
 
@@ -197,6 +199,12 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
+
+    /*
+     * public void reverseTillSensedDistance(double inches) { while
+     * ((ultra1.getInches() + ultra2.getInches()) / 2 > inches) { driveTank(-1, -1);
+     * } driveTank(0, 0); }
+     */
 
     /**
      * Move forward the specific number of inches.

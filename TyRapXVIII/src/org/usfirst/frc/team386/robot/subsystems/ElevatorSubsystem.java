@@ -15,4 +15,18 @@ public class ElevatorSubsystem extends Subsystem {
 	// Set the default command for a subsystem here.
 	// setDefaultCommand(new MySpecialCommand());
     }
+
+    public void raiseElevatorTo(double percent) {
+	System.out.println("Work In Progress");
+	// plan is to make it a percentage on how much we can raise it in general.
+	// 0 - lowest it can go
+	// 100 - highest it can go
+    }
+
+    public void lowerElevatorTo(double percent) {
+	System.out.println("Work In Progress");
+	// plan is to make it a percentage on how much we can raise it in general.
+	// 0 - lowest it can go
+	// 100 - highest it can go
+    }
 }

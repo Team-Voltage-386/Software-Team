@@ -32,6 +32,16 @@ public class CubeSubsystem extends Subsystem {
 
     }
 
+    public void twistLeft(double speed) {
+	left.set(-speed);
+	right.set(speed);
+    }
+
+    public void twistRight(double speed) {
+	left.set(speed);
+	right.set(-speed);
+    }
+
     public void stop() {
 	left.set(0);
 	right.set(0);
