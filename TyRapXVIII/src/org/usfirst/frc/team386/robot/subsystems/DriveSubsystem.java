@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
@@ -67,6 +68,8 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+    AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
+    AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
 
     Command defaultCommand;
 
@@ -196,6 +199,13 @@ public class DriveSubsystem extends Subsystem {
 	stop();
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+    }
+
+    public void reverseTillSensedDistance(double inches) {
+	while ((ultra1.getInches() + ultra2.getInches()) / 2 > inches) {
+	    driveTank(-1, -1);
+	}
+	driveTank(0, 0);
     }
 
     /**
