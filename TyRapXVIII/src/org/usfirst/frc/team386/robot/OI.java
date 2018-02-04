@@ -1,8 +1,8 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.GearShift;
-import org.usfirst.frc.team386.robot.commands.StartBoost;
-import org.usfirst.frc.team386.robot.commands.StopBoost;
+import org.usfirst.frc.team386.robot.commands.BoostStart;
+import org.usfirst.frc.team386.robot.commands.BoostStop;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,10 +40,10 @@ public class OI {
 	gearShiftButton.whenPressed(new GearShift());
 	tankDriveShiftButton.whenPressed(new GearShift());
 
-	boostButton.whenPressed(new StartBoost());
-	boostButton.whenReleased(new StopBoost());
+	boostButton.whenPressed(new BoostStart());
+	boostButton.whenReleased(new BoostStop());
 
-	tankBoostButton.whenPressed(new StartBoost());
-	tankBoostButton.whenReleased(new StopBoost());
+	tankBoostButton.whenPressed(new BoostStart());
+	tankBoostButton.whenReleased(new BoostStop());
     }
 }

@@ -5,11 +5,11 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Start the speed boost.
  */
-public class StartBoost extends InstantCommand {
+public class BoostStart extends InstantCommand {
 
-    public StartBoost() {
+    public BoostStart() {
 	super();
 	requires(Robot.driveSubsystem);
     }

@@ -5,11 +5,11 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Stop the speed boost.
  */
-public class StopBoost extends InstantCommand {
+public class BoostStop extends InstantCommand {
 
-    public StopBoost() {
+    public BoostStop() {
 	super();
 	// Use requires() here to declare subsystem dependencies
 	requires(Robot.driveSubsystem);
