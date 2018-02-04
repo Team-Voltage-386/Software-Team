@@ -18,7 +18,7 @@ public class RightSwitchAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.gamedata.isSwitchLeft()) {
+	if (Robot.gameData.isSwitchLeft()) {
 	    new RightSwitchAutoLeft().start();
 	} else {
 	    new RightSwitchAutoRight().start();

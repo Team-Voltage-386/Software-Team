@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
     public static OI oi;
-    public static GameData gamedata;
+    public static GameData gameData;
 
     Command autonomousCommand = new Stop();
     SendableChooser<Command> chooser = new SendableChooser<>();
@@ -91,7 +91,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
-	gamedata = new GameData();
+	gameData = new GameData();
 
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
@@ -153,7 +153,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
-	gamedata.readGameData();
+	gameData.readGameData();
 	autonomousCommand = chooser.getSelected();
 	driveSubsystem.resetEncoders();
 

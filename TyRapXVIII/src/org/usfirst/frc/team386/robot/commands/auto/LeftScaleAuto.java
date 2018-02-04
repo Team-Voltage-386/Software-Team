@@ -18,7 +18,7 @@ public class LeftScaleAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.gamedata.isScaleLeft()) {
+	if (Robot.gameData.isScaleLeft()) {
 	    new LeftScaleAutoLeft().start();
 	} else {
 	    new LeftScaleAutoRight().start();

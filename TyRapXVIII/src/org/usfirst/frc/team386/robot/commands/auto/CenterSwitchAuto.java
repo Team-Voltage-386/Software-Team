@@ -25,7 +25,7 @@ public class CenterSwitchAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.gamedata.isSwitchLeft()) {
+	if (Robot.gameData.isSwitchLeft()) {
 	    new CenterSwitchAutoLeft().start();
 	} else {
 	    new CenterSwitchAutoRight().start();

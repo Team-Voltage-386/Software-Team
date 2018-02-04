@@ -18,7 +18,7 @@ public class RightScaleAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.gamedata.isScaleRight()) {
+	if (Robot.gameData.isScaleRight()) {
 	    new RightScaleAutoRight().start();
 	} else {
 	    new RightScaleAutoLeft().start();
