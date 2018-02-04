@@ -1,16 +1,23 @@
 package org.usfirst.frc.team386.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+/**
+ * Provide a nice API for reading and querying game data.
+ */
 public class GameData {
 
-    public static String gamedata;
+    private String gameData;
 
     /**
-     * Return true if the alliance switch is on the left.
+     * Read game data from the driver station and save it for later use.
      * 
-     * @return True if the switch is left.
+     * Will also put the game data string into the dashboard for debugging purposes.
      */
-    public static boolean isSwitchLeft() {
-	return gamedata.equals(Robot.LLL) || gamedata.equals(Robot.LRL);
+    public void readGameData() {
+	gameData = DriverStation.getInstance().getGameSpecificMessage();
+	SmartDashboard.putString(Robot.GAME_DATA, gameData);
     }
 
     /**
@@ -18,8 +25,17 @@ public class GameData {
      * 
      * @return True if the switch is left.
      */
-    public static boolean isSwitchRight() {
-	return gamedata.equals(Robot.RRR) || gamedata.equals(Robot.RLR);
+    public boolean isSwitchLeft() {
+	return gameData.equals(Robot.LLL) || gameData.equals(Robot.LRL);
+    }
+
+    /**
+     * Return true if the alliance switch is on the left.
+     * 
+     * @return True if the switch is left.
+     */
+    public boolean isSwitchRight() {
+	return gameData.equals(Robot.RRR) || gameData.equals(Robot.RLR);
     }
 
     /**
@@ -27,8 +43,8 @@ public class GameData {
      * 
      * @return True if the scale is left
      */
-    public static boolean isScaleLeft() {
-	return gamedata.equals(Robot.LLL) || gamedata.equals(Robot.RLR);
+    public boolean isScaleLeft() {
+	return gameData.equals(Robot.LLL) || gameData.equals(Robot.RLR);
     }
 
     /**
@@ -36,7 +52,7 @@ public class GameData {
      * 
      * @return True if the scale is right
      */
-    public static boolean isScaleRight() {
-	return gamedata.equals(Robot.RRR) || gamedata.equals(Robot.LRL);
+    public boolean isScaleRight() {
+	return gameData.equals(Robot.RRR) || gameData.equals(Robot.LRL);
     }
 }

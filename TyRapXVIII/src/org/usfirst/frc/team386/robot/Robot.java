@@ -17,7 +17,6 @@ import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -38,6 +37,7 @@ public class Robot extends IterativeRobot {
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
     public static OI oi;
+    public static GameData gamedata;
 
     Command autonomousCommand = new Stop();
     SendableChooser<Command> chooser = new SendableChooser<>();
@@ -90,6 +90,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 	oi = new OI();
+	gamedata = new GameData();
 
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
@@ -150,21 +151,11 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
-	GameData.gamedata = DriverStation.getInstance().getGameSpecificMessage();
-	SmartDashboard.putString(GAME_DATA, GameData.gamedata);
-
+	gamedata.readGameData();
 	autonomousCommand = chooser.getSelected();
-
 	driveSubsystem.resetEncoders();
 
-	/*
-	 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-	 * switch(autoSelected) { case "My Auto": autonomousCommand = new
-	 * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
-	 * ExampleCommand(); break; }
-	 */
-
-	// schedule the autonomous command (example)
+	// schedule the autonomous command
 	if (autonomousCommand != null) {
 	    autonomousCommand.start();
 	}
