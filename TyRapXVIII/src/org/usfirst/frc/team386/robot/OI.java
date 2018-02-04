@@ -4,7 +4,6 @@ import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -23,17 +22,6 @@ public class OI {
     public Button boostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankBoostButton = new JoystickButton(rightJoy, 1);
-
-    // Make sure the gyro is physically present, otherwise do not try to load the
-    // gyro class.
-    public static ADXRS450_Gyro gyro;
-    static {
-	try {
-	    gyro = new ADXRS450_Gyro();
-	} catch (NoClassDefFoundError e) {
-	    throw e;
-	}
-    }
 
     public OI() {
 	gearShiftButton.whenPressed(new GearShift());

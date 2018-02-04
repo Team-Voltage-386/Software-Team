@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.OI;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
@@ -8,9 +7,11 @@ import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -72,6 +73,8 @@ public class DriveSubsystem extends Subsystem {
 
     Timer timer = new Timer();
 
+    ADXRS450_Gyro gyro;
+
     /**
      * Construct a new DriveSubsystem.
      */
@@ -93,6 +96,14 @@ public class DriveSubsystem extends Subsystem {
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
+
+	// Make sure the gyro is physically present, otherwise do not try to load the
+	// gyro class.
+	try {
+	    gyro = new ADXRS450_Gyro();
+	} catch (NoClassDefFoundError e) {
+	    DriverStation.reportError(e.getMessage(), e.getStackTrace());
+	}
     }
 
     /**
@@ -205,7 +216,7 @@ public class DriveSubsystem extends Subsystem {
      *            A value between 0 and 1
      */
     public void moveForward(double inches, double speed) {
-	OI.gyro.reset();
+	gyro.reset();
 	resetEncoders();
 
 	double ticksRequired = 6.36 * inches;
@@ -245,10 +256,10 @@ public class DriveSubsystem extends Subsystem {
     void turnWithPid(double angle, int direction) {
 	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
 	double tolerance = 0;
-	OI.gyro.reset();
-	while (Math.abs(direction * OI.gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
+	gyro.reset();
+	while (Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(derivative) > .01) {
 	    double time = timer.get();
-	    double error = ((int) OI.gyro.getAngle() - (direction * angle));
+	    double error = ((int) gyro.getAngle() - (direction * angle));
 	    derivative = (error - previousError) / (time - previousTime);
 	    integral = integral + error * (time - previousTime);
 	    frontLeft.set(-.03 * error + -.02 * integral + -.015 * derivative);
@@ -257,7 +268,7 @@ public class DriveSubsystem extends Subsystem {
 	    SmartDashboard.putNumber("proportional", -.03 * error);
 	    SmartDashboard.putNumber("integral", -.02 * integral);
 	    SmartDashboard.putNumber("derivative", -.015 * derivative);
-	    SmartDashboard.putNumber("Gyro", (int) OI.gyro.getAngle());
+	    SmartDashboard.putNumber("Gyro", (int) gyro.getAngle());
 	    previousTime = time;
 	    previousError = error;
 	}
@@ -272,8 +283,8 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithoutPid(double angle, int direction) {
-	OI.gyro.reset();
-	while ((int) Math.abs(OI.gyro.getAngle()) < angle) {
+	gyro.reset();
+	while ((int) Math.abs(gyro.getAngle()) < angle) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
 	}
     }
@@ -318,7 +329,7 @@ public class DriveSubsystem extends Subsystem {
      *            The speed to drive straight.
      */
     private void arcadeDriveStraight(double speed) {
-	drive.arcadeDrive(speed, GYRO_COMPENSATION * OI.gyro.getAngle());
+	drive.arcadeDrive(speed, GYRO_COMPENSATION * gyro.getAngle());
     }
 
     /**
