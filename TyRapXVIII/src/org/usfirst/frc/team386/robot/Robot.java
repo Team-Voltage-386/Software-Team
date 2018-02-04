@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.AutoDriveExample;
 import org.usfirst.frc.team386.robot.commands.CenterSwitchAuto;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.LeftScaleAuto;
@@ -43,6 +42,12 @@ public class Robot extends IterativeRobot {
     SendableChooser<Command> chooser = new SendableChooser<>();
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
+    // Game data configurations
+    public static final String LLL = "LLL";
+    public static final String LRL = "LRL";
+    public static final String RRR = "RRR";
+    public static final String RLR = "RLR";
+
     // Settings
     public static final String DRIVE_MODE_LABEL = "Arcade drive?";
 
@@ -53,20 +58,20 @@ public class Robot extends IterativeRobot {
     public static final String GAME_DATA = "Game data";
 
     // Labels for commands to execute by pressing a button on the dashboard
-    public static final String AUTO_DRIVE_EXAMPLE_LABEL = "Auto drive example";
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
     public static final String TURN_LEFT_LABEL = "turn left";
     public static final String TURN_RIGHT_LABEL = "turn right";
 
     public static final String AUTO_MODE_LABEL = "Auto mode";
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
-    // Autonomous commands
+    // Strategic autonomous commands
     public static final String CENTER_START_SWITCH = "Center switch";
     public static final String LEFT_SWITCH_AUTO = "Starting on left, going for switch";
     public static final String RIGHT_SWITCH_AUTO = "Starting on right, going for switch";
     public static final String LEFT_SCALE_AUTO = "Starting on left, going for scale";
     public static final String RIGHT_SCALE_AUTO = "Starting on right. going for scale";
 
+    // Tactical autonomous commands
     public static final String LEFT_START_SWITCH_RIGHT = "Left start, Right switch";
     public static final String LEFT_START_SWITCH_LEFT = "Left start, Left switch";
     public static final String RIGHT_START_SWITCH_RIGHT = "Right start, Right switch";
@@ -86,7 +91,6 @@ public class Robot extends IterativeRobot {
 	oi = new OI();
 
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
-	chooser.addObject(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
 	chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
@@ -111,7 +115,6 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putString(GAME_DATA, "");
-	SmartDashboard.putData(AUTO_DRIVE_EXAMPLE_LABEL, new AutoDriveExample());
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));

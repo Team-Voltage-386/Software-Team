@@ -3,33 +3,20 @@ package org.usfirst.frc.team386.robot.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- *
+ * Auto mode for left scale starting on the right side.
  */
 public class RightScaleAutoLeft extends CommandGroup {
-    // auto mode for left scale starting on right side
 
     public RightScaleAutoLeft() {
+	// addSequential(new LowerIntake());
 	addSequential(new DriveForward(208));
 	addSequential(new TurnLeft(90));
 	addSequential(new DriveForward(216));
 	addSequential(new TurnRight(90));
 	addSequential(new DriveForward(50));
 	addSequential(new TurnRight(90));
-	// Add Commands here:
-	// e.g. addSequential(new Command1());
-	// addSequential(new Command2());
-	// these will run in order.
-
-	// To run multiple commands at the same time,
-	// use addParallel()
-	// e.g. addParallel(new Command1());
-	// addSequential(new Command2());
-	// Command1 and Command2 will run in parallel.
-
-	// A command group will require all of the subsystems that each member
-	// would require.
-	// e.g. if Command1 requires chassis, and Command2 requires arm,
-	// a CommandGroup containing them would require both the chassis and the
-	// arm.
+	// TODO: check ultrasonic and adjust distance to scale by moving fwd or rev
+	addSequential(new ElevatorRaise());
+	addSequential(new CubeRelease());
     }
 }
