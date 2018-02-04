@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -73,7 +72,7 @@ public class DriveSubsystem extends Subsystem {
 
     Timer timer = new Timer();
 
-    ADXRS450_Gyro gyro;
+    ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     /**
      * Construct a new DriveSubsystem.
@@ -96,14 +95,6 @@ public class DriveSubsystem extends Subsystem {
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
-
-	// Make sure the gyro is physically present, otherwise do not try to load the
-	// gyro class.
-	try {
-	    gyro = new ADXRS450_Gyro();
-	} catch (NoClassDefFoundError e) {
-	    DriverStation.reportError(e.getMessage(), e.getStackTrace());
-	}
     }
 
     /**
