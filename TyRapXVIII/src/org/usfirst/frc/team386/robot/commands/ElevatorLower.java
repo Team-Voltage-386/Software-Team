@@ -14,7 +14,10 @@ public class ElevatorLower extends InstantCommand {
 	requires(Robot.elevatorSubsystem);
     }
 
+    double percentage = 0;
+
     // Called just before this Command runs the first time
     protected void initialize() {
+	Robot.elevatorSubsystem.lowerElevatorTo(percentage);
     }
 }
