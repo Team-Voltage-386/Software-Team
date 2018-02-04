@@ -200,11 +200,19 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
-    /*
-     * public void reverseTillSensedDistance(double inches) { while
-     * ((ultra1.getInches() + ultra2.getInches()) / 2 > inches) { driveTank(-1, -1);
-     * } driveTank(0, 0); }
+    /**
+     * Reverse the robot until it is the specified distance from the wall.
+     * 
+     * Distance from wall is determined using an ultrasonic sensor.
+     * 
+     * TODO: implement
      */
+    public void reverseToWall(double distanceFromWall) {
+	// while ((ultra1.getInches() + ultra2.getInches()) / 2 > inches) {
+	// driveTank(-1, -1);
+	// }
+	stop();
+    }
 
     /**
      * Move forward the specific number of inches.
@@ -253,29 +261,29 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-    	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
-    	double tolerance = 1;
-    	gyro.reset();
-    	while (Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(.015 *derivative) > .01) {
-    		double time = timer.get();
-    		double error = ((int) gyro.getAngle() - (direction * angle));
-    		derivative = (error - previousError) / (time - previousTime);
-    		integral = integral + error * (time - previousTime);
-    		frontLeft.set(-.03 * error + .0 * integral + -.015 * derivative);
-    		frontRight.set(-.03 * error + .0 * integral + -.015 * derivative);
-    		SmartDashboard.putNumber("Error", error);
-    		SmartDashboard.putNumber("proportional", -.03 * error);
-    		SmartDashboard.putNumber("integral", -0 * integral);
-    		SmartDashboard.putNumber("derivative", -.015 * derivative);
-    		SmartDashboard.putNumber("Gyro", gyro.getAngle());
-    		previousTime = time;
-    		previousError = error;
-    	}
-    	frontLeft.set(0);
-		frontRight.set(0);
-    	System.out.println("Ran");
-    	SmartDashboard.putNumber("derivative", -.015 * derivative);
-    	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	double tolerance = 1;
+	gyro.reset();
+	while (Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(.015 * derivative) > .01) {
+	    double time = timer.get();
+	    double error = ((int) gyro.getAngle() - (direction * angle));
+	    derivative = (error - previousError) / (time - previousTime);
+	    integral = integral + error * (time - previousTime);
+	    frontLeft.set(-.03 * error + .0 * integral + -.015 * derivative);
+	    frontRight.set(-.03 * error + .0 * integral + -.015 * derivative);
+	    SmartDashboard.putNumber("Error", error);
+	    SmartDashboard.putNumber("proportional", -.03 * error);
+	    SmartDashboard.putNumber("integral", -0 * integral);
+	    SmartDashboard.putNumber("derivative", -.015 * derivative);
+	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	    previousTime = time;
+	    previousError = error;
+	}
+	frontLeft.set(0);
+	frontRight.set(0);
+	System.out.println("Ran");
+	SmartDashboard.putNumber("derivative", -.015 * derivative);
+	SmartDashboard.putNumber("Gyro", gyro.getAngle());
     }
 
     /**
