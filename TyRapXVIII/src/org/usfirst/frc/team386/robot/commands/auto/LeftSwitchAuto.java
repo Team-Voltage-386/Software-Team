@@ -1,7 +1,6 @@
 package org.usfirst.frc.team386.robot.commands.auto;
 
-import org.usfirst.frc.team386.robot.OI;
-import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.GameData;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -19,7 +18,7 @@ public class LeftSwitchAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (OI.gamedata.equals(Robot.LLL) || OI.gamedata.equals(Robot.LRL)) {
+	if (GameData.isSwitchLeft()) {
 	    new LeftSwitchAutoLeft().start();
 	} else {
 	    new LeftSwitchAutoRight().start();

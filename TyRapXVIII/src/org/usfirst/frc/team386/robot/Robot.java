@@ -150,9 +150,11 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousInit() {
-	OI.gamedata = DriverStation.getInstance().getGameSpecificMessage();
-	SmartDashboard.putString(GAME_DATA, OI.gamedata);
+	GameData.gamedata = DriverStation.getInstance().getGameSpecificMessage();
+	SmartDashboard.putString(GAME_DATA, GameData.gamedata);
+
 	autonomousCommand = chooser.getSelected();
+
 	driveSubsystem.resetEncoders();
 
 	/*
