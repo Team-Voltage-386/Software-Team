@@ -120,7 +120,7 @@ public class DriveSubsystem extends Subsystem {
      *            The right motor speed
      */
     public void driveTank(double ySpeed, double y2Speed) {
-	drive.tankDrive(adjustSpeed(ySpeed), adjustSpeed(y2Speed));
+	drive.tankDrive(adjustSpeed(squareKeepSign(ySpeed)), adjustSpeed(squareKeepSign(y2Speed)));
     }
 
     /**
@@ -369,7 +369,7 @@ public class DriveSubsystem extends Subsystem {
 
     /**
      * Applies adjustments to the speed (such as inverting the direction for
-     * inverted motors, or applying a dead band.
+     * inverted motors, or applying a dead band).
      * 
      * @param speed
      *            The input speed
@@ -377,5 +377,20 @@ public class DriveSubsystem extends Subsystem {
      */
     private double adjustSpeed(double speed) {
 	return deadBand((-1 * speedMultiplier * speed), DEAD_BAND_LIMIT);
+    }
+
+    /**
+     * Reduce the sensitivity of the joystick input to make tank driving easier.
+     * 
+     * @param in
+     *            The speed.
+     * @return The altered speed.
+     */
+    private double squareKeepSign(double in) {
+	if (in < 0) {
+	    return in * in * -1;
+	} else {
+	    return in * in;
+	}
     }
 }
