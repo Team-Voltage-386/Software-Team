@@ -5,7 +5,8 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Use the left and right xBox joystick controls to manipulate the cube
+ * subsystem.
  */
 public class CubeManual extends Command {
 

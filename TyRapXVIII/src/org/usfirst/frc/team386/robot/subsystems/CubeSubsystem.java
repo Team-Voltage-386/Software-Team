@@ -1,9 +1,9 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
-import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
+import org.usfirst.frc.team386.robot.commands.teleop.CubeManualWithPad;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The CubeSubsystem is responsible cube intake and cube release.
  */
 public class CubeSubsystem extends Subsystem {
+    public static final String POV_NUMBER_LABEL = "POV value";
+    public static final String CUBE_CONTROL_LABEL = "Cube Control";
+
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
     AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
@@ -52,24 +55,44 @@ public class CubeSubsystem extends Subsystem {
     public void run(double leftSpeed, double rightSpeed) {
 	left.set(leftSpeed);
 	right.set(rightSpeed);
-
     }
 
+    /**
+     * Use the POV pad value to determine what action to take on the cube control.
+     * 
+     * @param pov
+     *            The current POV (pad) value
+     */
     public void runWithPOV(int pov) {
 	double cubeSpeed = 0.5;
-	SmartDashboard.putNumber("POV number", pov);
-	if (Robot.oi.xboxControl.getPOV() == 0) {
+	SmartDashboard.putNumber(POV_NUMBER_LABEL, pov);
+	if (pov == 0) {
 	    cubeOut(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Cube Out");
-	} else if (Robot.oi.xboxControl.getPOV() == 90) {
+	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Cube Out");
+	} else if (pov == 90) {
 	    twistRight(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Twist Right");
-	} else if (Robot.oi.xboxControl.getPOV() == 180) {
+	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Twist Right");
+	} else if (pov == 180) {
 	    cubeIn(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Cube In");
-	} else if (Robot.oi.xboxControl.getPOV() == 270) {
+	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Cube In");
+	} else if (pov == 270) {
 	    twistLeft(cubeSpeed);
-	    SmartDashboard.putString("Cube Control", "Twist Left");
+	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Twist Left");
+	}
+    }
+
+    /**
+     * Set to true to use the xbox joysticks to control the cube intake, false to
+     * use the pad.
+     * 
+     * @param useJoystick
+     *            True to use the xbox joysticks, false for the pad
+     */
+    public void setCubeControlMode(boolean useJoystick) {
+	if (useJoystick) {
+	    setDefaultCommand(new CubeManual());
+	} else {
+	    setDefaultCommand(new CubeManualWithPad());
 	}
     }
 }

@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
     // Settings
     public static final String DRIVE_MODE_LABEL = "Arcade drive?";
     public static final String TURN_WITH_PID_LABEL = "Turn with PID?";
+    public static final String CUBE_CONTROL_LABEL = "Joystick cube control?";
 
     // Encoder and sensor labels
     public static final String LEFT_DRIVE_ENCODER = "Left encoder";
@@ -82,7 +83,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
-    // public static final String REVERSE_TO_SENSOR = "Reversing to Distance";
+    // public static final String REVERSE_TO_WALL = "Reverse towards wall";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -124,6 +125,7 @@ public class Robot extends IterativeRobot {
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
+	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putString(GAME_DATA, "");
@@ -185,6 +187,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
 	Robot.driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
+	Robot.cubeSubsystem.setCubeControlMode(SmartDashboard.getBoolean(CUBE_CONTROL_LABEL, true));
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
