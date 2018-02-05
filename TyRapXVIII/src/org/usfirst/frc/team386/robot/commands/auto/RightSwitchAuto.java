@@ -1,7 +1,12 @@
 package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.DriveForward;
+import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
+import org.usfirst.frc.team386.robot.commands.TurnLeft;
 
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
@@ -23,6 +28,38 @@ public class RightSwitchAuto extends InstantCommand {
 	} else {
 	    new RightSwitchAutoRight().start();
 	}
-
     }
+
+    /**
+     * Auto mode for left switch starting on the right side.
+     */
+    class RightSwitchAutoLeft extends CommandGroup {
+
+	public RightSwitchAutoLeft() {
+	    // addSequential(new LowerIntake());
+	    addSequential(new DriveForward(215));
+	    addSequential(new TurnLeft(90));
+	    addSequential(new DriveForward(183));
+	    addSequential(new TurnLeft(90));
+	    addSequential(new DriveForward(42));
+	    addSequential(new ElevatorRaise());
+	    addSequential(new CubeRelease());
+	}
+    }
+
+    /**
+     * Auto mode for right switch starting on the right side.
+     */
+    class RightSwitchAutoRight extends CommandGroup {
+
+	public RightSwitchAutoRight() {
+	    // addSequential(new LowerIntake());
+	    addSequential(new DriveForward(140));
+	    addSequential(new TurnLeft(90));
+	    addSequential(new DriveForward(10));
+	    addSequential(new ElevatorRaise());
+	    addSequential(new CubeRelease());
+	}
+    }
+
 }
