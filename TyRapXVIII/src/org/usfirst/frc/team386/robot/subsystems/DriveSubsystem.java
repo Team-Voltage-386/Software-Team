@@ -168,9 +168,9 @@ public class DriveSubsystem extends Subsystem {
      */
     public void shift() {
 	if (solenoid.get() == HIGH_GEAR) {
-	    solenoid.set(LOW_GEAR);
+	    shift(LOW_GEAR);
 	} else {
-	    solenoid.set(HIGH_GEAR);
+	    shift(HIGH_GEAR);
 	}
     }
 
