@@ -109,18 +109,7 @@ public class Robot extends IterativeRobot {
 	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
 	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
 	chooser.addObject(STOP_LABEL, new Stop());
-	// chooser.addObject(REVERSE_TO_WALL, new DriveReverseToWall(12));
 
-	/*
-	 * chooser.addObject(LEFT_START_SWITCH_RIGHT, new LeftSwitchAutoRight());
-	 * chooser.addObject(LEFT_START_SWITCH_LEFT, new LeftSwitchAutoLeft());
-	 * chooser.addObject(RIGHT_START_SWITCH_RIGHT, new RightSwitchAutoRight());
-	 * chooser.addObject(LEFT_START_SCALE_LEFT, new LeftScaleAutoLeft());
-	 * chooser.addObject(RIGHT_START_SCALE_RIGHT, new RightScaleAutoRight());
-	 * chooser.addObject(RIGHT_START_SCALE_LEFT, new RightScaleAutoLeft());
-	 * chooser.addObject(LEFT_START_SCALE_RIGHT, new LeftScaleAutoRight());
-	 * chooser.addObject(RIGHT_START_SWITCH_LEFT, new RightSwitchAutoLeft());
-	 */
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
