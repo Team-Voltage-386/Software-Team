@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -174,6 +175,16 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
+     * Sift the solenoid specifically to either low or high gear.
+     * 
+     * @param gear
+     *            LOW_GEAR or HIGH_GEAR
+     */
+    public void shift(Value gear) {
+	solenoid.set(gear);
+    }
+
+    /**
      * Zero all drive encoders.
      */
     public void resetEncoders() {
@@ -281,7 +292,6 @@ public class DriveSubsystem extends Subsystem {
 	}
 	frontLeft.set(0);
 	frontRight.set(0);
-	System.out.println("Ran");
 	SmartDashboard.putNumber("derivative", -.015 * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
     }
