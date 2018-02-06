@@ -18,19 +18,19 @@ public class OI {
     public Joystick rightJoy = new Joystick(1);
     public Joystick manipulator = new Joystick(3);
 
-    public Button gearShiftButton = new JoystickButton(xboxControl, 5);
-    public Button boostButton = new JoystickButton(xboxControl, 8);
+    public Button arcadeDriveShiftButton = new JoystickButton(xboxControl, 5);
+    public Button arcadeDriveBoostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
-    public Button tankBoostButton = new JoystickButton(rightJoy, 1);
+    public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
 
     public OI() {
-	gearShiftButton.whenPressed(new GearShift());
+	arcadeDriveShiftButton.whenPressed(new GearShift());
 	tankDriveShiftButton.whenPressed(new GearShift());
 
-	boostButton.whenPressed(new BoostStart());
-	boostButton.whenReleased(new BoostStop());
+	arcadeDriveBoostButton.whenPressed(new BoostStart());
+	arcadeDriveBoostButton.whenReleased(new BoostStop());
 
-	tankBoostButton.whenPressed(new BoostStart());
-	tankBoostButton.whenReleased(new BoostStop());
+	tankDriveBoostButton.whenPressed(new BoostStart());
+	tankDriveBoostButton.whenReleased(new BoostStop());
     }
 }
