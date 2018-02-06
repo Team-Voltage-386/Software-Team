@@ -2,6 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
+import org.usfirst.frc.team386.robot.commands.DriveReverseToWall;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -17,6 +18,7 @@ import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -84,6 +86,7 @@ public class Robot extends IterativeRobot {
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
     // public static final String REVERSE_TO_WALL = "Reverse towards wall";
+    public static Ultrasonic ultrasonic = new Ultrasonic(RobotMap.ultraOut, RobotMap.ultraIn);
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -122,7 +125,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	// SmartDashboard.putData(REVERSE_TO_WALL, new DriveReverseToWall(12));
+	SmartDashboard.putData("Reverse to wall", new DriveReverseToWall(1000));
     }
 
     /**
@@ -151,8 +154,10 @@ public class Robot extends IterativeRobot {
      * chooser code above (like the commented example) or additional comparisons to
      * the switch structure below with additional strings & commands.
      */
+
     @Override
     public void autonomousInit() {
+	ultrasonic.setAutomaticMode(true);
 	gameData.readGameData();
 	autonomousCommand = chooser.getSelected();
 	driveSubsystem.resetEncoders();
@@ -168,6 +173,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
+	SmartDashboard.putNumber("Ultra", ultrasonic.getRangeMM());
 	Scheduler.getInstance().run();
     }
 

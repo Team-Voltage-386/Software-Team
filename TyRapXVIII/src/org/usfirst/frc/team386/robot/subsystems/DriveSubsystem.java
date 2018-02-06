@@ -71,6 +71,7 @@ public class DriveSubsystem extends Subsystem {
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
     // AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 20);
     // AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 20);
+    // Ultrasonic ultrasonic = new Ultrasonic(RobotMap.ultraOut, RobotMap.ultraIn);
 
     Command defaultCommand;
 
@@ -220,9 +221,9 @@ public class DriveSubsystem extends Subsystem {
      * TODO: implement
      */
     public void reverseToWall(double distanceFromWall) {
-	// while ((ultra1.getInches() + ultra2.getInches()) / 2 > inches) {
-	// driveTank(-1, -1);
-	// }
+	while ((Robot.ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
+	    arcadeDriveStraight(-.5);
+	}
 	stop();
     }
 
@@ -420,4 +421,5 @@ public class DriveSubsystem extends Subsystem {
 	    return in * in;
 	}
     }
+
 }

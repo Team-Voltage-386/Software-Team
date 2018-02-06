@@ -28,6 +28,9 @@ public class RobotMap {
     public static int leftCubeIntakeMotor = 9;
     public static int rightCubeIntakeMotor = 8;
     public static int lineSensorChannel = 4;
+
+    public static int ultraIn = 6;
+    public static int ultraOut = 5;
     // For example to map the left and right motors, you could define the
     // following variables to use with your drivetrain subsystem.
     // public static int leftMotor = 1;
