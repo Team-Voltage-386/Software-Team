@@ -18,7 +18,6 @@ import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -60,6 +59,7 @@ public class Robot extends IterativeRobot {
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
     public static final String LINE_SENSOR = "Line sensor";
     public static final String GAME_DATA = "Game data";
+    public static final String ULTRASONIC = "Ultra";
 
     // Labels for commands to execute by pressing a button on the dashboard
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
@@ -85,8 +85,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
-    // public static final String REVERSE_TO_WALL = "Reverse towards wall";
-    public static Ultrasonic ultrasonic = new Ultrasonic(RobotMap.ultraOut, RobotMap.ultraIn);
+    public static final String REVERSE_TO_WALL = "Reverse to wall";
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -125,7 +124,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	SmartDashboard.putData("Reverse to wall", new DriveReverseToWall(1000));
+	SmartDashboard.putData(REVERSE_TO_WALL, new DriveReverseToWall(1000));
     }
 
     /**
@@ -157,7 +156,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-	ultrasonic.setAutomaticMode(true);
 	gameData.readGameData();
 	autonomousCommand = chooser.getSelected();
 	driveSubsystem.resetEncoders();
@@ -173,7 +171,8 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	SmartDashboard.putNumber("Ultra", ultrasonic.getRangeMM());
+	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
+	SmartDashboard.putNumber(ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
 	Scheduler.getInstance().run();
     }
 

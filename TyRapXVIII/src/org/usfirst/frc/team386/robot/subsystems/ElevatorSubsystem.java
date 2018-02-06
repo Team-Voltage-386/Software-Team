@@ -17,14 +17,14 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void raiseElevatorTo(double percent) {
-	System.out.println("Work In Progress");
+	// TODO: implement
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
     }
 
     public void lowerElevatorTo(double percent) {
-	System.out.println("Work In Progress");
+	// TODO: implement
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
