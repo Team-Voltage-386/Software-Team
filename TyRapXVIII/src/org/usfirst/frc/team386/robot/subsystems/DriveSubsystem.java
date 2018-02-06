@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -272,24 +273,39 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0;
+	shift(HIGH_GEAR);
+	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
 	double tolerance = 1;
 	gyro.reset();
-	while (Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(.015 * derivative) > .01) {
+	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
+		&& RobotState.isEnabled()) {
 	    double time = timer.get();
-	    double error = ((int) gyro.getAngle() - (direction * angle));
-	    derivative = (error - previousError) / (time - previousTime);
+	    double error = (gyro.getAngle() - (direction * angle));
+	    derivative = gyro.getRate();
 	    integral = integral + error * (time - previousTime);
-	    frontLeft.set(-.03 * error + .0 * integral + -.015 * derivative);
-	    frontRight.set(-.03 * error + .0 * integral + -.015 * derivative);
+	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
+		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
+		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
+	    } else {
+		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
+		    frontLeft.set(.3);
+		    frontRight.set(.3);
+		} else {
+		    frontLeft.set(-.3);
+		    frontRight.set(-.3);
+		}
+	    }
 	    SmartDashboard.putNumber("Error", error);
-	    SmartDashboard.putNumber("proportional", -.03 * error);
+	    SmartDashboard.putNumber("Previous value:", gyro.getRate());
+	    SmartDashboard.putNumber("proportional", -.05 * error);
 	    SmartDashboard.putNumber("integral", -0 * integral);
-	    SmartDashboard.putNumber("derivative", -.015 * derivative);
+	    SmartDashboard.putNumber("derivative", -.005 * derivative);
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	    previousTime = time;
 	    previousError = error;
+	    previousDerivative = derivative;
 	}
+	SmartDashboard.putString("Using pid", "true");
 	frontLeft.set(0);
 	frontRight.set(0);
 	SmartDashboard.putNumber("derivative", -.015 * derivative);
@@ -309,6 +325,7 @@ public class DriveSubsystem extends Subsystem {
 	while ((int) Math.abs(gyro.getAngle()) < angle) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
 	}
+	SmartDashboard.putString("Using pid", "false");
 	stop();
     }
 
@@ -319,11 +336,11 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnLeft(double angle) {
-	if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
-	    turnWithPid(angle, LEFT);
-	} else {
-	    turnWithoutPid(angle, LEFT);
-	}
+	// if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
+	turnWithPid(angle, LEFT);
+	// } else {
+	// turnWithoutPid(angle, LEFT);
+	// }
     }
 
     /**
@@ -333,11 +350,11 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-	if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
-	    turnWithPid(angle, RIGHT);
-	} else {
-	    turnWithoutPid(angle, RIGHT);
-	}
+	// if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
+	turnWithPid(angle, RIGHT);
+	// } else {
+	// turnWithoutPid(angle, RIGHT);
+	// }
     }
 
     /**

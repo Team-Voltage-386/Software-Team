@@ -38,11 +38,11 @@ public class LeftScaleAuto extends InstantCommand {
 
 	public LeftScaleAutoLeft() {
 	    // addSequential(new LowerIntake());
-	    addSequential(new DriveForward(292));
+	    // addSequential(new DriveForward(292));
 	    addSequential(new TurnRight(90));
 	    // TODO: check ultrasonic and adjust distance to scale by moving fwd or rev
-	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease());
+	    // addSequential(new ElevatorRaise());
+	    // addSequential(new CubeRelease());
 	}
     }
 
