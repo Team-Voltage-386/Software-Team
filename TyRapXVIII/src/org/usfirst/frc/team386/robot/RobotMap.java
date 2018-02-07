@@ -32,4 +32,6 @@ public class RobotMap {
 
     public static int pingChannel = 5;
     public static int echoChannel = 6;
+    public static int frontPingChannel = 7;
+    public static int frontEchoChannel = 8;
 }

@@ -71,6 +71,7 @@ public class DriveSubsystem extends Subsystem {
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
     public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
+    public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
 
     Command defaultCommand;
 

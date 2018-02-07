@@ -60,7 +60,8 @@ public class Robot extends IterativeRobot {
     public static final String RIGHT_DRIVE_ENCODER = "Right encoder";
     public static final String LINE_SENSOR = "Line sensor";
     public static final String GAME_DATA = "Game data";
-    public static final String ULTRASONIC = "Ultra";
+    public static final String ULTRASONIC = "Rear ultra";
+    public static final String FRONT_ULTRASONIC = "Front ultra";
 
     // Labels for commands to execute by pressing a button on the dashboard
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
@@ -176,6 +177,7 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
 	SmartDashboard.putNumber(ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
+	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
 	Scheduler.getInstance().run();
     }
 
@@ -204,6 +206,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
+	SmartDashboard.putNumber(ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
+	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
 	Scheduler.getInstance().run();
 
 	if (!Robot.driveSubsystem.linesensor.get()) {
