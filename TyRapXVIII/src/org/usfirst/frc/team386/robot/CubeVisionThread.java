@@ -37,30 +37,40 @@ public class CubeVisionThread extends Thread {
 
     @Override
     public void run() {
+	int resolutionWidth = 160;
+	int resolutionHeight = 120;
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-	camera.setResolution(160, 120);
+	camera.setResolution(resolutionWidth, 120);
 	CvSink cvSink = CameraServer.getInstance().getVideo();
-	HSVOutputStream = CameraServer.getInstance().putVideo("Colors", 160, 120);
-	rectOutputStream = CameraServer.getInstance().putVideo("Rectangles", 160, 120);
+	HSVOutputStream = CameraServer.getInstance().putVideo("Colors", resolutionWidth, resolutionHeight);
+	rectOutputStream = CameraServer.getInstance().putVideo("Rectangles", resolutionWidth, resolutionHeight);
 	cvSink.grabFrame(mat);
 	Mat base = new Mat();
 	Mat mat = new Mat();
 	Mat grey = new Mat();
 	Mat edges = new Mat();
+
+	Size blurSize = new Size(9, 9);
+	Scalar colorStart = new Scalar(20, 80, 80);
+	Scalar colorEnd = new Scalar(50, 255, 255);
+	Size erodeSize = new Size(10, 10);
+	Size dilateSize = new Size(10, 10);
+	Size edgeDilateSize = new Size(3, 3);
+
 	while (!Thread.interrupted()) {
 
 	    cvSink.grabFrame(base);
 
 	    SmartDashboard.putString("image", image.toString());
 
-	    Imgproc.blur(base, mat, new Size(9, 9));
+	    Imgproc.blur(base, mat, blurSize);
 	    // Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
 	    // Size(20, 20));
 	    // Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
 	    // Size(20, 20));
 
 	    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-	    Core.inRange(mat, new Scalar(20, 80, 80), new Scalar(50, 255, 255), mat);
+	    Core.inRange(mat, colorStart, colorEnd, mat);
 	    // Imgproc.dilate(mat, mat, dilateElement);
 	    // Imgproc.erode(mat, mat, erodeElement);
 
@@ -71,20 +81,19 @@ public class CubeVisionThread extends Thread {
 	    // }
 	    // }
 	    // }
-	    Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(10, 10)));
-	    Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(10, 10)));
+	    Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, erodeSize));
+	    Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
 
 	    Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
 
 	    Imgproc.Canny(grey, edges, 120, 200);
-	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
+	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
 	    // Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT,
 	    // new Size(20, 20)));
 
 	    Core.bitwise_not(edges, edges);
 	    Core.bitwise_and(mat, edges, mat);
 	    HSVOutputStream.putFrame(mat);
-	    // HSVOutputStream.putFrame(mat);
 	    finalContours.clear();
 	    Imgproc.findContours(mat, finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 	    rects.clear();
@@ -113,15 +122,13 @@ public class CubeVisionThread extends Thread {
 		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
 	    }
 	    rectOutputStream.putFrame(base);
+
+	    // TODO: Thread may need to yield here
 	}
     }
 
     public void setRectangleChoice(int rectIn) {
-	// try {
 	rectChoice = rectIn;
-	// }
-	// catch(IndexOutOfBoundsException e) {
-	// }
     }
 
     public RotatedRect getRectChoice() {

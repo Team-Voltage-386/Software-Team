@@ -16,8 +16,6 @@ import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -42,7 +40,7 @@ public class Robot extends IterativeRobot {
 
     Command autonomousCommand = new Stop();
     SendableChooser<Command> chooser = new SendableChooser<>();
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 
     // Game data configurations
     public static final String LLL = "LLL";
