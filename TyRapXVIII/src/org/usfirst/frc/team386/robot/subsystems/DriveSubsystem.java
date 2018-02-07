@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -69,9 +70,7 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-    // AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 20);
-    // AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 20);
-    // Ultrasonic ultrasonic = new Ultrasonic(RobotMap.ultraOut, RobotMap.ultraIn);
+    public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
 
     Command defaultCommand;
 
@@ -97,6 +96,8 @@ public class DriveSubsystem extends Subsystem {
 	frontLeft.configOpenloopRamp(OPEN_LOOP_RAMP_SECONDS, NO_TIMEOUT);
 
 	compressor.start();
+
+	ultrasonic.setAutomaticMode(true);
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
@@ -203,7 +204,7 @@ public class DriveSubsystem extends Subsystem {
      *            Encoder ticks to move forward
      */
     public void moveForwardTicks(int ticks) {
-	while (Math.abs(rightEncoder.get()) < ticks) {
+	while (Math.abs(rightEncoder.get()) < ticks && RobotState.isEnabled()) {
 	    arcadeDriveStraight(AUTO_MODE_SPEED);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
@@ -214,16 +215,20 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Reverse the robot until it is the specified distance from the wall.
+     * Reverse the robot until it is the specified distance, in millimeters, from
+     * the wall.
      * 
      * Distance from wall is determined using an ultrasonic sensor.
      * 
-     * TODO: implement
+     * @param distanceFromWall
+     *            The distance from the wall is in millimeters.
      */
     public void reverseToWall(double distanceFromWall) {
-	while ((Robot.ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
+	while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
 	    arcadeDriveStraight(-.5);
+	    SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
 	}
+	SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
 	stop();
     }
 
@@ -240,7 +245,7 @@ public class DriveSubsystem extends Subsystem {
 	resetEncoders();
 
 	double ticksRequired = 6.36 * inches;
-	while (Math.abs(leftEncoder.get()) < ticksRequired) {
+	while (Math.abs(leftEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
@@ -257,7 +262,7 @@ public class DriveSubsystem extends Subsystem {
      * indefinitely.
      */
     public void driveForwardToLine() {
-	while (linesensor.get()) {
+	while (linesensor.get() && RobotState.isEnabled()) {
 	    arcadeDriveStraight(AUTO_MODE_SPEED);
 	    SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	}
@@ -274,43 +279,58 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	shift(HIGH_GEAR);
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
-	double tolerance = 1;
+	// Initialization
+	double integral = 0;
+	double previousTime = timer.get();
+	double derivative = 0;
 	gyro.reset();
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
+
+	// Tuning
+	double tolerance = 1;
+	int gyroRateMinimum = 10;
+	double deadbandValue = .3;
+
+	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > gyroRateMinimum)
 		&& RobotState.isEnabled()) {
 	    double time = timer.get();
 	    double error = (gyro.getAngle() - (direction * angle));
 	    derivative = gyro.getRate();
 	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
-		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
-		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
+
+	    if (Math.abs(calculatePID(integral, derivative, error)) > deadbandValue) {
+		frontLeft.set(calculatePID(integral, derivative, error));
+		frontRight.set(calculatePID(integral, derivative, error));
 	    } else {
-		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
+		if (calculatePID(integral, derivative, error) > 0) {
+		    frontLeft.set(deadbandValue);
+		    frontRight.set(deadbandValue);
 		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
+		    frontLeft.set(-deadbandValue);
+		    frontRight.set(-deadbandValue);
 		}
 	    }
+
+	    previousTime = time;
+
 	    SmartDashboard.putNumber("Error", error);
 	    SmartDashboard.putNumber("Previous value:", gyro.getRate());
-	    SmartDashboard.putNumber("proportional", -.05 * error);
-	    SmartDashboard.putNumber("integral", -0 * integral);
-	    SmartDashboard.putNumber("derivative", -.005 * derivative);
+
+	    // SmartDashboard.putNumber("proportional", -.05 * error);
+	    // SmartDashboard.putNumber("integral", -0 * integral);
+	    // SmartDashboard.putNumber("derivative", -.005 * derivative);
+
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
-	    previousTime = time;
-	    previousError = error;
-	    previousDerivative = derivative;
 	}
-	SmartDashboard.putString("Using pid", "true");
-	frontLeft.set(0);
-	frontRight.set(0);
-	SmartDashboard.putNumber("derivative", -.015 * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+
+	stop();
+    }
+
+    private double calculatePID(double integral, double derivative, double error) {
+	double errorTuning = -0.05;
+	double integralTuning = 0.0;
+	double derivativeTuning = -0.005;
+	return errorTuning * error + integralTuning * integral + derivativeTuning * derivative;
     }
 
     /**
@@ -323,10 +343,9 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithoutPid(double angle, int direction) {
 	gyro.reset();
-	while ((int) Math.abs(gyro.getAngle()) < angle) {
+	while ((int) Math.abs(gyro.getAngle()) < angle && RobotState.isEnabled()) {
 	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
 	}
-	SmartDashboard.putString("Using pid", "false");
 	stop();
     }
 
@@ -337,11 +356,7 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnLeft(double angle) {
-	// if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
 	turnWithPid(angle, LEFT);
-	// } else {
-	// turnWithoutPid(angle, LEFT);
-	// }
     }
 
     /**
@@ -351,18 +366,15 @@ public class DriveSubsystem extends Subsystem {
      *            Turning angle
      */
     public void turnRight(double angle) {
-	// if (SmartDashboard.getBoolean(Robot.TURN_WITH_PID_LABEL, false)) {
 	turnWithPid(angle, RIGHT);
-	// } else {
-	// turnWithoutPid(angle, RIGHT);
-	// }
     }
 
     /**
      * Stop the robot from moving.
      */
     public void stop() {
-	drive.tankDrive(0, 0);
+	frontLeft.set(0);
+	frontRight.set(0);
     }
 
     /**
