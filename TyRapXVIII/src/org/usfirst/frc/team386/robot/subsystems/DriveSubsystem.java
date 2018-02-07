@@ -214,6 +214,14 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
+    public void driveToCube() {
+	while (RobotState.isEnabled()) {
+	    double error = Robot.cubeVision.getError();
+	    SmartDashboard.putNumber("vision error", error * .005);
+	    drive.arcadeDrive(.5, error * .005);
+	}
+    }
+
     /**
      * Reverse the robot until it is the specified distance, in millimeters, from
      * the wall.
