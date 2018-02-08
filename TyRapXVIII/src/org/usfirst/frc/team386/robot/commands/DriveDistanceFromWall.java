@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class DriveReverseToWall extends InstantCommand {
+public class DriveDistanceFromWall extends InstantCommand {
 
     private double distanceFromWall;
 
-    public DriveReverseToWall(double distanceFromWall) {
+    public DriveDistanceFromWall(double distanceFromWall) {
 	super();
 	requires(Robot.driveSubsystem);
 	this.distanceFromWall = distanceFromWall;
@@ -19,7 +19,7 @@ public class DriveReverseToWall extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.reverseToWall(distanceFromWall);
+	Robot.driveSubsystem.moveDistanceFromWall(distanceFromWall);
     }
 
 }

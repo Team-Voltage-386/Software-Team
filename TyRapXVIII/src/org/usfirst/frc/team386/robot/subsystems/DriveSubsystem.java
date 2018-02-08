@@ -232,10 +232,17 @@ public class DriveSubsystem extends Subsystem {
      * @param distanceFromWall
      *            The distance from the wall is in millimeters.
      */
-    public void reverseToWall(double distanceFromWall) {
-	while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
-	    arcadeDriveStraight(-.5);
-	    SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
+    public void moveDistanceFromWall(double distanceFromWall) {
+	if (ultrasonic.getRangeMM() > distanceFromWall) {
+	    while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
+		arcadeDriveStraight(-.5);
+		SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
+	    }
+	} else {
+	    while ((ultrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
+		arcadeDriveStraight(.5);
+		SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
+	    }
 	}
 	SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
 	stop();

@@ -2,7 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.DriveReverseToWall;
+import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
-    public static final String REVERSE_TO_WALL = "Reverse to wall";
+    public static final String MOVE_FROM_WALL = "Move to wall";
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
 
     /**
@@ -125,7 +125,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	SmartDashboard.putData(REVERSE_TO_WALL, new DriveReverseToWall(1000));
+	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(1000));
 	SmartDashboard.putData("Drive to cube", new DriveToCube());
     }
 
