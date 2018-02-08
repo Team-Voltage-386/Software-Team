@@ -233,6 +233,9 @@ public class DriveSubsystem extends Subsystem {
      *            The distance from the wall is in millimeters.
      */
     public void moveDistanceFromWall(double distanceFromWall) {
+	gyro.reset();
+	resetEncoders();
+
 	if (ultrasonic.getRangeMM() > distanceFromWall) {
 	    while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
 		arcadeDriveStraight(-.5);
