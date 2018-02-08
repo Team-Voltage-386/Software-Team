@@ -1,8 +1,8 @@
 
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
+import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -125,7 +125,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
-	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(1000));
+	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData("Drive to cube", new DriveToCube());
     }
 
