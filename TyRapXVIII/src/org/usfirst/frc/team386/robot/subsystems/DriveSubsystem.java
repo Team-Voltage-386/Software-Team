@@ -288,58 +288,43 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	// Initialization
-	double integral = 0;
-	double previousTime = timer.get();
-	double derivative = 0;
-	gyro.reset();
-
-	// Tuning
+	shift(HIGH_GEAR);
+	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
 	double tolerance = 1;
-	int gyroRateMinimum = 10;
-	double deadbandValue = .3;
-
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > gyroRateMinimum)
+	gyro.reset();
+	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
 		&& RobotState.isEnabled()) {
 	    double time = timer.get();
 	    double error = (gyro.getAngle() - (direction * angle));
 	    derivative = gyro.getRate();
 	    integral = integral + error * (time - previousTime);
-
-	    if (Math.abs(calculatePID(integral, derivative, error)) > deadbandValue) {
-		frontLeft.set(calculatePID(integral, derivative, error));
-		frontRight.set(calculatePID(integral, derivative, error));
+	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
+		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
+		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
 	    } else {
-		if (calculatePID(integral, derivative, error) > 0) {
-		    frontLeft.set(deadbandValue);
-		    frontRight.set(deadbandValue);
+		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
+		    frontLeft.set(.3);
+		    frontRight.set(.3);
 		} else {
-		    frontLeft.set(-deadbandValue);
-		    frontRight.set(-deadbandValue);
+		    frontLeft.set(-.3);
+		    frontRight.set(-.3);
 		}
 	    }
-
-	    previousTime = time;
-
 	    SmartDashboard.putNumber("Error", error);
 	    SmartDashboard.putNumber("Previous value:", gyro.getRate());
-
-	    // SmartDashboard.putNumber("proportional", -.05 * error);
-	    // SmartDashboard.putNumber("integral", -0 * integral);
-	    // SmartDashboard.putNumber("derivative", -.005 * derivative);
-
+	    SmartDashboard.putNumber("proportional", -.05 * error);
+	    SmartDashboard.putNumber("integral", -0 * integral);
+	    SmartDashboard.putNumber("derivative", -.005 * derivative);
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	    previousTime = time;
+	    previousError = error;
+	    previousDerivative = derivative;
 	}
+	SmartDashboard.putString("Using pid", "true");
+	frontLeft.set(0);
+	frontRight.set(0);
+	SmartDashboard.putNumber("derivative", -.015 * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
-
-	stop();
-    }
-
-    private double calculatePID(double integral, double derivative, double error) {
-	double errorTuning = -0.05;
-	double integralTuning = 0.0;
-	double derivativeTuning = -0.005;
-	return errorTuning * error + integralTuning * integral + derivativeTuning * derivative;
     }
 
     /**
