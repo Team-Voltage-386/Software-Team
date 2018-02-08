@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -299,42 +301,36 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithPid(double angle, int direction) {
 	shift(HIGH_GEAR);
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
-	double tolerance = 1;
 	gyro.reset();
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
-		&& RobotState.isEnabled()) {
-	    double time = timer.get();
-	    double error = (gyro.getAngle() - (direction * angle));
-	    derivative = gyro.getRate();
-	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
-		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
-		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
-	    } else {
-		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
-		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
-		}
-	    }
-	    SmartDashboard.putNumber("Error", error);
-	    SmartDashboard.putNumber("Previous value:", gyro.getRate());
-	    SmartDashboard.putNumber("proportional", -.05 * error);
-	    SmartDashboard.putNumber("integral", -0 * integral);
-	    SmartDashboard.putNumber("derivative", -.005 * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
-	    previousTime = time;
-	    previousError = error;
-	    previousDerivative = derivative;
+
+	double Kp = SmartDashboard.getNumber("Kp", 0);
+	double Ki = SmartDashboard.getNumber("Ki", 0);
+	double Kd = SmartDashboard.getNumber("Kd", 0);
+
+	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
+	pidController.setContinuous();
+	pidController.setOutputRange(-1.0, 1.0);
+	pidController.setSetpoint(angle);
+	pidController.setAbsoluteTolerance(5);
+	pidController.enable();
+	while (!pidController.onTarget() && RobotState.isEnabled()) {
+	    SmartDashboard.putNumber("PID Error", pidController.get());
+	    pidController.setP(SmartDashboard.getNumber("Kp", 0));
+	    pidController.setI(SmartDashboard.getNumber("Ki", 0));
+	    pidController.setD(SmartDashboard.getNumber("Kd", 0));
 	}
-	SmartDashboard.putString("Using pid", "true");
+
+	SmartDashboard.putNumber("PID Error", pidController.get());
+
 	frontLeft.set(0);
 	frontRight.set(0);
-	SmartDashboard.putNumber("derivative", -.015 * derivative);
-	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+    }
+
+    class RotationOutput implements PIDOutput {
+	public void pidWrite(double output) {
+	    frontLeft.set(output);
+	    frontRight.set(output);
+	}
     }
 
     /**
