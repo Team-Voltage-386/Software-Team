@@ -301,50 +301,41 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	// shift(HIGH_GEAR);
+	angle = angle * direction;
+
+	shift(HIGH_GEAR);
 	gyro.reset();
 
 	SmartDashboard.putNumber("Angle", angle);
-	SmartDashboard.putBoolean("Done with PID turn", false);
-	double Kp = SmartDashboard.getNumber("Kp", 0.3);
-	double Ki = SmartDashboard.getNumber("Ki", 0);
-	double Kd = SmartDashboard.getNumber("Kd", 0);
+	double Kp = 0.008;
+	double Ki = 0.0;
+	double Kd = 0.0;
 
-	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput(direction));
+	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
 
 	pidController.setSetpoint(angle);
 	pidController.setInputRange(-180.0, 180.0);
 	pidController.setOutputRange(-1.0, 1.0);
-	pidController.setPercentTolerance(5.0);
+	pidController.setPercentTolerance(2.0);
 	pidController.setContinuous(true);
 	pidController.enable();
 	while (!pidController.onTarget() && RobotState.isEnabled()) {
-	    SmartDashboard.putNumber("PID Error", pidController.get());
-	    pidController.setP(SmartDashboard.getNumber("Kp", 0));
-	    pidController.setI(SmartDashboard.getNumber("Ki", 0));
-	    pidController.setD(SmartDashboard.getNumber("Kd", 0));
-	}
-	pidController.disable();
+	    SmartDashboard.putNumber("PID Error", pidController.getError());
 
-	SmartDashboard.putBoolean("Done with PID turn", true);
-	SmartDashboard.putNumber("PID Error", pidController.get());
+	}
+	SmartDashboard.putNumber("PID Error", pidController.getError());
+	pidController.disable();
 
 	frontLeft.set(0);
 	frontRight.set(0);
     }
 
     class RotationOutput implements PIDOutput {
-	private int direction;
-
-	RotationOutput(int direction) {
-	    this.direction = direction;
-	}
-
 	@Override
 	public void pidWrite(double output) {
 	    SmartDashboard.putNumber("PID write output", output);
-	    frontLeft.set(direction * output);
-	    frontRight.set(direction * output);
+	    frontLeft.set(output);
+	    frontRight.set(output);
 	}
     }
 
