@@ -300,18 +300,22 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	shift(HIGH_GEAR);
+	// shift(HIGH_GEAR);
 	gyro.reset();
 
-	double Kp = SmartDashboard.getNumber("Kp", 0);
+	SmartDashboard.putNumber("Angle", angle);
+	SmartDashboard.putBoolean("Done with PID turn", false);
+	double Kp = SmartDashboard.getNumber("Kp", 0.3);
 	double Ki = SmartDashboard.getNumber("Ki", 0);
 	double Kd = SmartDashboard.getNumber("Kd", 0);
 
-	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
-	pidController.setContinuous();
-	pidController.setOutputRange(-1.0, 1.0);
+	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput(direction));
+
 	pidController.setSetpoint(angle);
-	pidController.setAbsoluteTolerance(5);
+	pidController.setInputRange(-180.0, 180.0);
+	pidController.setOutputRange(-1.0, 1.0);
+	pidController.setPercentTolerance(5.0);
+	pidController.setContinuous(true);
 	pidController.enable();
 	while (!pidController.onTarget() && RobotState.isEnabled()) {
 	    SmartDashboard.putNumber("PID Error", pidController.get());
@@ -319,7 +323,9 @@ public class DriveSubsystem extends Subsystem {
 	    pidController.setI(SmartDashboard.getNumber("Ki", 0));
 	    pidController.setD(SmartDashboard.getNumber("Kd", 0));
 	}
+	pidController.disable();
 
+	SmartDashboard.putBoolean("Done with PID turn", true);
 	SmartDashboard.putNumber("PID Error", pidController.get());
 
 	frontLeft.set(0);
@@ -327,9 +333,17 @@ public class DriveSubsystem extends Subsystem {
     }
 
     class RotationOutput implements PIDOutput {
+	private int direction;
+
+	RotationOutput(int direction) {
+	    this.direction = direction;
+	}
+
+	@Override
 	public void pidWrite(double output) {
-	    frontLeft.set(output);
-	    frontRight.set(output);
+	    SmartDashboard.putNumber("PID write output", output);
+	    frontLeft.set(direction * output);
+	    frontRight.set(direction * output);
 	}
     }
 
