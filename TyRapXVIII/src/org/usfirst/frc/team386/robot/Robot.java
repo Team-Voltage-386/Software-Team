@@ -130,6 +130,11 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(STOP_LABEL, new Stop());
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData("Drive to cube", new DriveToCube());
+
+	SmartDashboard.putNumber("PID Error", 0);
+	SmartDashboard.putNumber("Kp", 0.3);
+	SmartDashboard.putNumber("Ki", 0);
+	SmartDashboard.putNumber("Kd", 0);
     }
 
     /**

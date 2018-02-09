@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -79,6 +81,8 @@ public class DriveSubsystem extends Subsystem {
 
     ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
+    PIDController pidController;
+
     /**
      * Construct a new DriveSubsystem.
      */
@@ -102,6 +106,15 @@ public class DriveSubsystem extends Subsystem {
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
+
+	double Kp = 0.011; // p = output / error -> 1/90
+	double Ki = 0.0;
+	double Kd = 0.0;
+	pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
+	pidController.setInputRange(-180.0, 180.0);
+	pidController.setOutputRange(-1.0, 1.0);
+	pidController.setPercentTolerance(2.0);
+	pidController.setContinuous(true);
     }
 
     /**
@@ -299,43 +312,33 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
+	angle = angle * direction;
+
 	shift(HIGH_GEAR);
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
-	double tolerance = 1;
 	gyro.reset();
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
-		&& RobotState.isEnabled()) {
-	    double time = timer.get();
-	    double error = (gyro.getAngle() - (direction * angle));
-	    derivative = gyro.getRate();
-	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
-		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
-		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
-	    } else {
-		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
-		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
-		}
-	    }
-	    SmartDashboard.putNumber("Error", error);
-	    SmartDashboard.putNumber("Previous value:", gyro.getRate());
-	    SmartDashboard.putNumber("proportional", -.05 * error);
-	    SmartDashboard.putNumber("integral", -0 * integral);
-	    SmartDashboard.putNumber("derivative", -.005 * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
-	    previousTime = time;
-	    previousError = error;
-	    previousDerivative = derivative;
+
+	SmartDashboard.putNumber("Angle", angle);
+
+	pidController.setSetpoint(angle);
+	pidController.enable();
+	while (!pidController.onTarget() && RobotState.isEnabled()) {
+	    SmartDashboard.putNumber("PID Error", pidController.getError());
+
 	}
-	SmartDashboard.putString("Using pid", "true");
+	SmartDashboard.putNumber("PID Error", pidController.getError());
+	pidController.disable();
+
 	frontLeft.set(0);
 	frontRight.set(0);
-	SmartDashboard.putNumber("derivative", -.015 * derivative);
-	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+    }
+
+    class RotationOutput implements PIDOutput {
+	@Override
+	public void pidWrite(double output) {
+	    SmartDashboard.putNumber("PID write output", output);
+	    frontLeft.set(output);
+	    frontRight.set(output);
+	}
     }
 
     /**
