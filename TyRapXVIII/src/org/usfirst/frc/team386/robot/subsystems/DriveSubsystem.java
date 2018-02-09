@@ -194,6 +194,7 @@ public class DriveSubsystem extends Subsystem {
     public void resetEncoders() {
 	leftEncoder.reset();
 	rightEncoder.reset();
+	frontLeft.setSelectedSensorPosition(0, 0, 10);
 	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
@@ -263,8 +264,8 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
 	resetEncoders();
 
-	double ticksRequired = 6.36 * inches;
-	while (Math.abs(leftEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
+	double ticksRequired = 6.36 * inches * 4;
+	while (Math.abs(frontLeft.getSelectedSensorPosition(0)) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
