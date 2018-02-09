@@ -264,7 +264,7 @@ public class DriveSubsystem extends Subsystem {
 	resetEncoders();
 
 	double ticksRequired = 6.36 * inches;
-	while (Math.abs(leftEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
+	while (Math.abs(rightEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
