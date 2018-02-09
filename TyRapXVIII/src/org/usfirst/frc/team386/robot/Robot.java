@@ -2,6 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
+import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
@@ -65,6 +66,7 @@ public class Robot extends IterativeRobot {
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
     public static final String TURN_LEFT_LABEL = "turn left";
     public static final String TURN_RIGHT_LABEL = "turn right";
+    public static final String DRIVE_FORWARD_FIVE_FEET_LABEL = "drive forward 5 feet";
 
     public static final String AUTO_MODE_LABEL = "Auto mode";
     public static final String DEFAULT_AUTO_LABEL = "Default Auto";
@@ -121,6 +123,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber(LEFT_DRIVE_ENCODER, 0);
 	SmartDashboard.putNumber(RIGHT_DRIVE_ENCODER, 0);
 	SmartDashboard.putString(GAME_DATA, "");
+	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.5));
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
