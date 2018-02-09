@@ -8,6 +8,7 @@
 package org.usfirst.frc.team863.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import Utility.AnalogUltrasonic;
 import edu.wpi.cscore.UsbCamera;
@@ -50,7 +51,8 @@ public class Robot extends IterativeRobot {
     public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
     // public Ultrasonic ultra2 = new Ultrasonic(0,1);
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-
+    double pigeonYPR [] = new double[3];
+    PigeonIMU pigeon = new PigeonIMU(0);
     @Override
     public void robotInit() {
 	rightEncodee.reset();
@@ -69,13 +71,15 @@ public class Robot extends IterativeRobot {
 
 	compressor.start();
 	gearShift.start();
-
+	
+	pigeon.getYawPitchRoll(pigeonYPR);
     }
 
     @Override
     public void teleopInit() {
 	rightEncodee.reset();
 	leftEncodee.reset();
+	//SmartDashboard.putNumber("pitch", pigeonYPR[1]);
     }
 
     public double deadBand(double in, double limit) {
@@ -112,7 +116,10 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
 	// System.out.println("Right Encoder:"+rightEncodee.get());
 	// System.out.println("Left Encoder:"+leftEncodee.get());
-
+	pigeon.getYawPitchRoll(pigeonYPR);
+	SmartDashboard.putNumber("pitch", pigeonYPR[1]);
+	//SmartDashboard.putNumber("compass", pigeon.getAbsoluteCompassHeading());
+	SmartDashboard.putNumber("yaw", pigeonYPR[0]);
     }
 
     public void moveForward(double xinch) {

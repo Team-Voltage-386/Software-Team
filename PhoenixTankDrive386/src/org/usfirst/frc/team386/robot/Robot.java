@@ -66,6 +66,8 @@ public class Robot extends IterativeRobot {
 	frontLeft.enableCurrentLimit(true);
 	frontRight.configOpenloopRamp(.1, 0);
 	frontLeft.configOpenloopRamp(.11, 0);
+	
+//	frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ,);
 
 	compressor.start();
 	gearShift.start();
@@ -94,11 +96,11 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
 	SmartDashboard.putBoolean("mind control!!", isOperatorControl());
 	SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
+	SmartDashboard.putNumber("encoder", frontLeft.getSelectedSensorPosition(0));
 	double leftY = left.getY();
 	double rightY = right.getY();
-	drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
-	// drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1),
-	// deadBand(manipulator.getRawAxis(2), .1));
+	//drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
+        drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
 
 	// dark
 	// blue
@@ -150,14 +152,18 @@ public class Robot extends IterativeRobot {
      * 
      * }
      */
+    double encoderValue = frontLeft.getSelectedSensorPosition(0);
     public void autonomousInit() {
 	leftEncodee.reset();
 	rightEncodee.reset();
+
+
 	// hello world
     }
 
     public void autonomousPeriodic() {
-	while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
+	
+	/*while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
 									    // thursday
 	{
 	    drive.tankDrive(.5, .5);
@@ -167,6 +173,6 @@ public class Robot extends IterativeRobot {
 	while (!isOperatorControl() && Math.abs(gyro.getAngle()) < 80) {
 	    drive.tankDrive(-.5, .5);
 	}
-	drive.tankDrive(0, 0);
+	drive.tankDrive(0, 0);*/
     }
 }
