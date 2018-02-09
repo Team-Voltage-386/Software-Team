@@ -81,6 +81,8 @@ public class DriveSubsystem extends Subsystem {
 
     ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
+    PIDController pidController;
+
     /**
      * Construct a new DriveSubsystem.
      */
@@ -104,6 +106,15 @@ public class DriveSubsystem extends Subsystem {
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
+
+	double Kp = 0.011; // p = output / error -> 1/90
+	double Ki = 0.0;
+	double Kd = 0.0;
+	pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
+	pidController.setInputRange(-180.0, 180.0);
+	pidController.setOutputRange(-1.0, 1.0);
+	pidController.setPercentTolerance(2.0);
+	pidController.setContinuous(true);
     }
 
     /**
@@ -307,17 +318,8 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
 
 	SmartDashboard.putNumber("Angle", angle);
-	double Kp = 0.008;
-	double Ki = 0.0;
-	double Kd = 0.0;
-
-	PIDController pidController = new PIDController(Kp, Ki, Kd, gyro, new RotationOutput());
 
 	pidController.setSetpoint(angle);
-	pidController.setInputRange(-180.0, 180.0);
-	pidController.setOutputRange(-1.0, 1.0);
-	pidController.setPercentTolerance(2.0);
-	pidController.setContinuous(true);
 	pidController.enable();
 	while (!pidController.onTarget() && RobotState.isEnabled()) {
 	    SmartDashboard.putNumber("PID Error", pidController.getError());
