@@ -43,7 +43,8 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-    public static final double AUTO_MODE_SPEED = 0.9;
+    public static final double FAST_AUTO_MODE_SPEED = 0.9;
+    public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -196,8 +197,6 @@ public class DriveSubsystem extends Subsystem {
 	leftEncoder.reset();
 	rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
-	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
     /**
@@ -208,20 +207,14 @@ public class DriveSubsystem extends Subsystem {
      */
     public void moveForwardTicks(int ticks) {
 	while (Math.abs(rightEncoder.get()) < ticks && RobotState.isEnabled()) {
-	    arcadeDriveStraight(AUTO_MODE_SPEED);
-	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
 	}
 	stop();
-	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
     }
 
     public void driveToCube() {
 	while (RobotState.isEnabled()) {
-	    double error = Robot.cubeVision.getError();
-	    SmartDashboard.putNumber("vision error", error * .005);
-	    drive.arcadeDrive(.5, error * .005);
+	    drive.arcadeDrive(SLOW_AUTO_MODE_SPEED, Robot.cubeVision.getError() * .005);
 	}
     }
 
@@ -240,16 +233,13 @@ public class DriveSubsystem extends Subsystem {
 
 	if (ultrasonic.getRangeMM() > distanceFromWall) {
 	    while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
-		arcadeDriveStraight(-.5);
-		SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
+		arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
 	    }
 	} else {
 	    while ((ultrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
-		arcadeDriveStraight(.5);
-		SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
+		arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
 	    }
 	}
-	SmartDashboard.putNumber(Robot.ULTRASONIC, ultrasonic.getRangeMM());
 	stop();
     }
 
@@ -271,12 +261,12 @@ public class DriveSubsystem extends Subsystem {
 	double ticksRequired = 6.36 * inches;
 	while (Math.abs(rightEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
-	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	    SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
+	    SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	}
 	stop();
-	SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
+	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
     }
 
     /**
@@ -287,7 +277,7 @@ public class DriveSubsystem extends Subsystem {
      */
     public void driveForwardToLine() {
 	while (linesensor.get() && RobotState.isEnabled()) {
-	    arcadeDriveStraight(AUTO_MODE_SPEED);
+	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
 	    SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	}
 	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());

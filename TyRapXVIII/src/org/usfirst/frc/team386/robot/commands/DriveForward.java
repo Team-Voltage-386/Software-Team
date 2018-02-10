@@ -23,7 +23,7 @@ public class DriveForward extends InstantCommand {
 	super();
 	requires(Robot.driveSubsystem);
 	this.distance = distance;
-	this.speed = DriveSubsystem.AUTO_MODE_SPEED;
+	this.speed = DriveSubsystem.FAST_AUTO_MODE_SPEED;
     }
 
     public DriveForward(int distance, double speed) {
