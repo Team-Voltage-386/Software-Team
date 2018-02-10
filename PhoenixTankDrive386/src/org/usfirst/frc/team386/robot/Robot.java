@@ -66,8 +66,8 @@ public class Robot extends IterativeRobot {
 	frontLeft.enableCurrentLimit(true);
 	frontRight.configOpenloopRamp(.1, 0);
 	frontLeft.configOpenloopRamp(.11, 0);
-	
-//	frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ,);
+
+	// frontRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, ,);
 
 	compressor.start();
 	gearShift.start();
@@ -90,7 +90,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-	leftEncodee.reset();
 	// rightEncodee.reset();
 	SmartDashboard.putBoolean("Its Alive!", isAutonomous());
 	SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
@@ -99,8 +98,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber("encoder", frontLeft.getSelectedSensorPosition(0));
 	double leftY = left.getY();
 	double rightY = right.getY();
-	//drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
-        drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+	// drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
+	drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
 
 	// dark
 	// blue
@@ -110,7 +109,7 @@ public class Robot extends IterativeRobot {
 	// #4
 	SmartDashboard.putNumber("y", manipulator.getRawAxis(1));
 	SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
-	SmartDashboard.putNumber("Left Encoder", leftEncodee.get() * -1);
+	SmartDashboard.putNumber("Left Encoder", leftEncodee.get());
 	SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
 	// System.out.println("Right Encoder:"+rightEncodee.get());
 	// System.out.println("Left Encoder:"+leftEncodee.get());
@@ -153,26 +152,46 @@ public class Robot extends IterativeRobot {
      * }
      */
     double encoderValue = frontLeft.getSelectedSensorPosition(0);
+
     public void autonomousInit() {
 	leftEncodee.reset();
 	rightEncodee.reset();
 
-
 	// hello world
     }
 
+    public void turningWithEncoder() {
+	while (Math.abs(rightEncodee.getRaw()) < 100) {
+	    frontLeft.set(1);
+	    frontRight.set(1);
+	}
+	while (Math.abs(rightEncodee.getRaw()) > 100 && Math.abs(rightEncodee.getRaw()) < 230) {
+	    frontLeft.set(.6);
+	    frontRight.set(.6);
+	}
+	while (Math.abs(rightEncodee.getRaw()) > 250 && Math.abs(rightEncodee.getRaw()) < 500) {
+	    frontLeft.set(.3);
+	    frontRight.set(.3);
+	}
+	frontLeft.set(0);
+	frontRight.set(0);
+    }
+
+    public void autonomusInit() {
+	rightEncodee.reset();
+	// turningWithEncoder();
+    }
+
     public void autonomousPeriodic() {
-	
-	/*while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
-									    // thursday
-	{
-	    drive.tankDrive(.5, .5);
-	    SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
-	    SmartDashboard.putNumber("Ultra", ultra.getInches());
-	}
-	while (!isOperatorControl() && Math.abs(gyro.getAngle()) < 80) {
-	    drive.tankDrive(-.5, .5);
-	}
-	drive.tankDrive(0, 0);*/
+	turningWithEncoder();
+	SmartDashboard.putNumber("right encoder", rightEncodee.getRaw());
+
+	/*
+	 * while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
+	 * // thursday { drive.tankDrive(.5, .5); SmartDashboard.putNumber("Encoder",
+	 * leftEncodee.getRaw()); SmartDashboard.putNumber("Ultra", ultra.getInches());
+	 * } while (!isOperatorControl() && Math.abs(gyro.getAngle()) < 80) {
+	 * drive.tankDrive(-.5, .5); } drive.tankDrive(0, 0);
+	 */
     }
 }
