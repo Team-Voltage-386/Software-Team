@@ -123,7 +123,11 @@ public class CubeVisionThread extends Thread {
 	    }
 	    rectOutputStream.putFrame(base);
 
-	    // TODO: Thread may need to yield here
+	    try {
+		sleep(50);
+	    } catch (InterruptedException e) {
+
+	    }
 	}
     }
 

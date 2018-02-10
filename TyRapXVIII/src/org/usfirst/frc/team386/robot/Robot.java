@@ -107,13 +107,13 @@ public class Robot extends IterativeRobot {
      */
     private void initializeDashboard() {
 	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
-	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
+	chooser.addObject(STOP_LABEL, new Stop()); // martian rock
+	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForward(120));
 	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
 	chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
 	chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
 	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
 	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
-	chooser.addObject(STOP_LABEL, new Stop());
 
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
