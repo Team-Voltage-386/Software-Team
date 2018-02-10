@@ -179,6 +179,10 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
 	SmartDashboard.putNumber(ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
 	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
+	SmartDashboard.putNumber("encoder on talon 1", Robot.driveSubsystem.frontLeft.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber("encoder on talon 4", Robot.driveSubsystem.frontRight.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber("Left encoder on rio", driveSubsystem.leftEncoder.get());
+	SmartDashboard.putNumber("Right encoder on rio", driveSubsystem.rightEncoder.get());
 	Scheduler.getInstance().run();
     }
 
@@ -209,6 +213,10 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
 	SmartDashboard.putNumber(ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
 	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
+	SmartDashboard.putNumber("encoder on talon 1", Robot.driveSubsystem.frontLeft.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber("encoder on talon 4", Robot.driveSubsystem.frontRight.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber("Left encoder on rio", driveSubsystem.leftEncoder.get());
+	SmartDashboard.putNumber("Right encoder on rio", driveSubsystem.rightEncoder.get());
 	Scheduler.getInstance().run();
 
 	if (!Robot.driveSubsystem.linesensor.get()) {

@@ -39,13 +39,19 @@ public class CenterSwitchAuto extends InstantCommand {
 
 	public CenterSwitchAutoLeft() {
 	    addSequential(new LowerIntake());
-	    addSequential(new DriveForward(18));
-	    addSequential(new TurnLeft(45));
-	    addSequential(new DriveForward(75));
-	    addSequential(new TurnRight(45));
-	    addSequential(new DriveForward(25));
-	    addSequential(new ElevatorRaise());
+	    addParallel(new CenterSwitchAutoLeftDrive());
+	    addParallel(new ElevatorRaise());
 	    addSequential(new CubeRelease());
+	}
+    }
+
+    class CenterSwitchAutoLeftDrive extends CommandGroup {
+	public CenterSwitchAutoLeftDrive() {
+	    addSequential(new DriveForward(12));
+	    addSequential(new TurnLeft(45));
+	    addSequential(new DriveForward(65));
+	    addSequential(new TurnRight(45));
+	    addSequential(new DriveForward(12));
 	}
     }
 
@@ -56,14 +62,19 @@ public class CenterSwitchAuto extends InstantCommand {
 
 	public CenterSwitchAutoRight() {
 	    addSequential(new LowerIntake());
-	    addSequential(new DriveForward(18));
-	    addSequential(new TurnRight(45));
-	    addSequential(new DriveForward(75));
-	    addSequential(new TurnLeft(40));
-	    addSequential(new DriveForward(26));
-	    addSequential(new ElevatorRaise());
+	    addParallel(new CenterSwitchAutoRightDrive());
+	    addParallel(new ElevatorRaise());
 	    addSequential(new CubeRelease());
 	}
 
+	class CenterSwitchAutoRightDrive extends CommandGroup {
+	    public CenterSwitchAutoRightDrive() {
+		addSequential(new DriveForward(12));
+		addSequential(new TurnRight(45));
+		addSequential(new DriveForward(60));
+		addSequential(new TurnLeft(45));
+		addSequential(new DriveForward(8));
+	    }
+	}
     }
 }

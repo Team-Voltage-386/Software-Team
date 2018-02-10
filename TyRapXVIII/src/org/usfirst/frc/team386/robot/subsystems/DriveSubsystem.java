@@ -50,8 +50,8 @@ public class DriveSubsystem extends Subsystem {
 
     double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
-    WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
-    WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
+    public WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
+    public WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
 
     /* extra talons for six motor drives */
     WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor);
@@ -66,8 +66,9 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB, true);
-    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB,
+	    true);
+    public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
     public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
@@ -264,8 +265,11 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
 	resetEncoders();
 
-	double ticksRequired = 6.36 * inches * 4;
-	while (Math.abs(frontLeft.getSelectedSensorPosition(0)) < ticksRequired && RobotState.isEnabled()) {
+	// double ticksRequired = 6.36 * inches * 4;
+	// while (Math.abs(frontLeft.getSelectedSensorPosition(0)) < ticksRequired &&
+	// RobotState.isEnabled()) {
+	double ticksRequired = 6.36 * inches;
+	while (Math.abs(rightEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
 	    SmartDashboard.putNumber(Robot.LEFT_DRIVE_ENCODER, leftEncoder.get());
 	    SmartDashboard.putNumber(Robot.RIGHT_DRIVE_ENCODER, rightEncoder.get());
@@ -299,7 +303,7 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void turnWithPid(double angle, int direction) {
-	shift(HIGH_GEAR);
+	// shift(HIGH_GEAR);
 	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
 	double tolerance = 1;
 	gyro.reset();

@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -44,7 +45,7 @@ public class RightScaleAuto extends InstantCommand {
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveForward(50));
 	    addSequential(new TurnRight(90));
-	    // TODO: check ultrasonic and adjust distance to scale by moving fwd or rev
+	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
 	    addSequential(new CubeRelease());
 	}
@@ -59,7 +60,7 @@ public class RightScaleAuto extends InstantCommand {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnLeft(90));
-	    // TODO: check ultrasonic and adjust distance to scale by moving fwd or rev
+	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
 	    addSequential(new CubeRelease());
 	}
