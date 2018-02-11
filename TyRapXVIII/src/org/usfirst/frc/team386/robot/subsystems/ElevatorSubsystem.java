@@ -8,6 +8,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class ElevatorSubsystem extends Subsystem {
 
+    /**
+     * Update the smart dashboard with diagnostics values.
+     */
+    public void updateDiagnostics() {
+	// place smart dashboard output here to refresh regularly in either auto or
+	// teleop modes.
+    }
+
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 

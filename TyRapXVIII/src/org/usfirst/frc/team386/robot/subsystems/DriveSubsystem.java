@@ -39,8 +39,6 @@ public class DriveSubsystem extends Subsystem {
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
     public static final double DEAD_BAND_LIMIT = 0.1;
 
-    public static final int NO_TIMEOUT = 0;
-
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
@@ -48,6 +46,8 @@ public class DriveSubsystem extends Subsystem {
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
+
+    private static final int NO_TIMEOUT = 0;
 
     double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
@@ -67,13 +67,12 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB,
-	    true);
-    public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB, true);
+    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-    public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
-    public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
+    Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
+    Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
 
     Command defaultCommand;
 
@@ -100,10 +99,26 @@ public class DriveSubsystem extends Subsystem {
 
 	compressor.start();
 
-	ultrasonic.setAutomaticMode(true);
+	rearUltrasonic.setAutomaticMode(true);
+	frontUltrasonic.setAutomaticMode(true);
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
+    }
+
+    /**
+     * Update the smart dashboard with diagnostics values.
+     */
+    public void updateDiagnostics() {
+	// place smart dashboard output here to refresh regularly in either auto or
+	// teleop modes.
+	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
+	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
+	SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC, frontUltrasonic.getRangeMM());
+	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
     }
 
     /**
@@ -231,12 +246,12 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
 	resetEncoders();
 
-	if (ultrasonic.getRangeMM() > distanceFromWall) {
-	    while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
+	if (rearUltrasonic.getRangeMM() > distanceFromWall) {
+	    while ((rearUltrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
 		arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
 	    }
 	} else {
-	    while ((ultrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
+	    while ((rearUltrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
 		arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
 	    }
 	}

@@ -35,6 +35,7 @@ public class Robot extends IterativeRobot {
     public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
 
     public static OI oi;
@@ -123,15 +124,19 @@ public class Robot extends IterativeRobot {
 
 	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 
+	// Configuration fields
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
 	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
+
+	// Diagnostic data
 	SmartDashboard.putNumber(LEFT_ENCODER_RIO, 0);
 	SmartDashboard.putNumber(RIGHT_ENCODER_RIO, 0);
 	SmartDashboard.putNumber(ENCODER_TALON_1, 0);
 	SmartDashboard.putNumber(ENCODER_TALON_4, 0);
 	SmartDashboard.putString(GAME_DATA, "");
 
+	// Command buttons for one-time execution
 	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.5));
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
@@ -185,22 +190,19 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	displayDiagnostics();
+	updateDiagnostics();
 	Scheduler.getInstance().run();
     }
 
     /**
      * Renders a collection of diagnostic data to the smart dashboard.
      */
-    private void displayDiagnostics() {
-	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
-	SmartDashboard.putNumber(REAR_ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
-	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
-	SmartDashboard.putNumber(ENCODER_TALON_1, driveSubsystem.frontLeft.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(ENCODER_TALON_4, driveSubsystem.frontRight.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(LEFT_ENCODER_RIO, driveSubsystem.leftEncoder.get());
-	SmartDashboard.putNumber(RIGHT_ENCODER_RIO, driveSubsystem.rightEncoder.get());
-	SmartDashboard.putNumber(VISION_ERROR, cubeVision.getError());
+    private void updateDiagnostics() {
+	driveSubsystem.updateDiagnostics();
+	elevatorSubsystem.updateDiagnostics();
+	cubeSubsystem.updateDiagnostics();
+	cubeVision.updateDiagnostics();
+
 	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
     }
 
@@ -226,7 +228,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-	displayDiagnostics();
+	updateDiagnostics();
 	Scheduler.getInstance().run();
 
 	if (!driveSubsystem.linesensor.get()) {
