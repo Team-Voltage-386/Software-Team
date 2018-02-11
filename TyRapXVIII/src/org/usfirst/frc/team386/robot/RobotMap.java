@@ -34,4 +34,6 @@ public class RobotMap {
     public static int echoChannel = 6;
     public static int frontPingChannel = 7;
     public static int frontEchoChannel = 8;
+
+    public static int elevatorSpark = -1;
 }

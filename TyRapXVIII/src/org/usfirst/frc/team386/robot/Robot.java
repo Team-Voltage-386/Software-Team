@@ -168,6 +168,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(STOP_LABEL, new Stop());
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCube());
+
+	SmartDashboard.putNumber("Elevator Speed", .25);
     }
 
     /**

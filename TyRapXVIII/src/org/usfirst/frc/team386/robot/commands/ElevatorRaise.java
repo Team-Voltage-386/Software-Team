@@ -18,6 +18,8 @@ public class ElevatorRaise extends InstantCommand {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-	Robot.elevatorSubsystem.raiseElevatorTo(percentage);
+	// Robot.elevatorSubsystem.raiseElevatorTo(percentage);
+	Robot.elevatorSubsystem.elevatorFromDPad();
     }
+
 }
