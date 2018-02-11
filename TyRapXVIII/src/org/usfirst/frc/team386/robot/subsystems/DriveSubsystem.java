@@ -35,7 +35,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double WHEEL_CIRCUMFERENCE = /* 18.85 */ 6 * Math.PI;
     public static final double ENCODER_RATIO = 3;
 
-    public static final int MOTOR_CURRENT_LIMIT_AMPS = 20;
+    public static final int MOTOR_CURRENT_LIMIT_AMPS = 15;
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
     public static final double DEAD_BAND_LIMIT = 0.1;
 
@@ -229,10 +229,16 @@ public class DriveSubsystem extends Subsystem {
 	stop();
     }
 
-    public void driveToCube() {
+    public void driveToCubeTeleop() {
+	while (Robot.oi.xboxControl.getRawButton(3)) {
+	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
+        updateDiagnostics();
+	}
+    }
+
+    public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
-	    drive.arcadeDrive(SLOW_AUTO_MODE_SPEED, Robot.cubeVision.getError() * .005);
-	    updateDiagnostics();
+	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
 	}
     }
 
@@ -313,17 +319,17 @@ public class DriveSubsystem extends Subsystem {
 	double integral = 0, previousTime = timer.get(), derivative = 0;
 	double tolerance = 1;
 	gyro.reset();
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
+	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 30)
 		&& RobotState.isEnabled()) {
 	    double time = timer.get();
 	    double error = (gyro.getAngle() - (direction * angle));
 	    derivative = gyro.getRate();
 	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + .0 * integral + -.005 * derivative) > .3) {
-		frontLeft.set(-.05 * error + .0 * integral + -.005 * derivative);
-		frontRight.set(-.05 * error + .0 * integral + -.005 * derivative);
+	    if (Math.abs(-.05 * error + .0 * integral + -.01 * derivative) > .3) {
+		frontLeft.set(-.1 * error + .0 * integral + -.01 * derivative);
+		frontRight.set(-.1 * error + .0 * integral + -.01 * derivative);
 	    } else {
-		if (-.05 * error + .0 * integral + -.005 * derivative > 0) {
+		if (-.05 * error + .0 * integral + -.01 * derivative > 0) {
 		    frontLeft.set(.3);
 		    frontRight.set(.3);
 		} else {

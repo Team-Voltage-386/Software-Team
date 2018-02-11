@@ -8,11 +8,10 @@ import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
-import org.usfirst.frc.team386.robot.commands.auto.CenterSwitchAuto;
-import org.usfirst.frc.team386.robot.commands.auto.LeftScaleAuto;
-import org.usfirst.frc.team386.robot.commands.auto.LeftSwitchAuto;
-import org.usfirst.frc.team386.robot.commands.auto.RightScaleAuto;
-import org.usfirst.frc.team386.robot.commands.auto.RightSwitchAuto;
+import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
+import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
+import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
+import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -91,9 +90,17 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
     public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
     public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
+    public static final String LEFT = "Left";
+    public static final String RIGHT = "Right";
+    public static final String CENTER = "Center";
+    public static final Boolean yes = true;
+    public static final Boolean no = false;
 
-    Command autonomousCommand = new Stop();
-    SendableChooser<Command> chooser = new SendableChooser<>();
+    Command autonomousCommand;// = new Stop()
+    public static SendableChooser<Command> chooser = new SendableChooser<>();
+    public static SendableChooser<Command> chooserMode = new SendableChooser<>();
+    public static SendableChooser<String> chooserPosition = new SendableChooser<>();
+    public static SendableChooser<Boolean> chooserCrossSide = new SendableChooser<>();
     // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     int timesSeenWhiteLine = 0;
 
@@ -113,16 +120,38 @@ public class Robot extends IterativeRobot {
      * Initialize the dashboard.
      */
     private void initializeDashboard() {
-	chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
-	chooser.addObject(STOP_LABEL, new Stop()); // martian rock
-	chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForward(120));
-	chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
-	chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
-	chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
-	chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
-	chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
+	/*
+	 * chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
+	 * chooser.addObject(STOP_LABEL, new Stop()); // martian rock
+	 * chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForward(120));
+	 * chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
+	 * chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
+	 * chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
+	 * chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
+	 * chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
+	 */
 
-	SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
+	chooserMode.addDefault("Rock", new MartianRock());
+	chooserMode.addObject("switch", new SwitchAuto());
+	chooserMode.addObject("scale", new ScaleAuto());
+	chooserMode.addObject("auto line", new AutoLine());
+	// chooserMode.addObject("Rock", new MartianRock());
+	// chooserMode.setName("Choose Mode");
+
+	chooserPosition.addDefault("Center", CENTER);
+	chooserPosition.addObject("Left", LEFT);
+	chooserPosition.addObject("Right", RIGHT);
+	// chooserPosition.addObject("Center", CENTER);
+
+	chooserCrossSide.addDefault("Allow crossing", yes);
+	// chooserCrossSide.addObject("Yes", yes);
+	chooserCrossSide.addObject("Don't allow crossing", no);
+	// SmartDashboard.putBoolean("Cross to other Side", chooseCross);
+
+	// SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
+	SmartDashboard.putData("Auto Mode", chooserMode);
+	SmartDashboard.putData("Start Position", chooserPosition);
+	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
 	// Configuration fields
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
@@ -172,11 +201,13 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
 	gameData.readGameData();
-	autonomousCommand = chooser.getSelected();
+	autonomousCommand = (Command) chooserMode.getSelected();
 	driveSubsystem.resetEncoders();
 
 	// schedule the autonomous command
+
 	if (autonomousCommand != null) {
+	    SmartDashboard.putString("i", "nit");
 	    autonomousCommand.start();
 	}
     }

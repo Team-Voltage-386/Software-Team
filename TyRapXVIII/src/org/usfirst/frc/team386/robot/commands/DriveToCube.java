@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
@@ -15,6 +16,10 @@ public class DriveToCube extends InstantCommand {
     }
 
     protected void initialize() {
-	Robot.driveSubsystem.driveToCube();
+	if (RobotState.isOperatorControl()) {
+	    Robot.driveSubsystem.driveToCubeTeleop();
+	} else {
+	    Robot.driveSubsystem.driveToCubeAuto();
+	}
     }
 }

@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
+import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -22,6 +23,7 @@ public class OI {
     public Button arcadeDriveBoostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
+    public Button cubeButton = new JoystickButton(xboxControl, 3);
 
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
@@ -32,5 +34,7 @@ public class OI {
 
 	tankDriveBoostButton.whenPressed(new BoostStart());
 	tankDriveBoostButton.whenReleased(new BoostStop());
+
+	cubeButton.whenPressed(new DriveToCube());
     }
 }
