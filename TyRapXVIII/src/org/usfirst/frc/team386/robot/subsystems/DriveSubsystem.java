@@ -294,7 +294,7 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithPid(double angle, int direction) {
 	// shift(HIGH_GEAR);
-	double integral = 0, previousError = 0, previousTime = timer.get(), derivative = 0, previousDerivative = 0;
+	double integral = 0, previousTime = timer.get(), derivative = 0;
 	double tolerance = 1;
 	gyro.reset();
 	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > 10)
@@ -322,8 +322,6 @@ public class DriveSubsystem extends Subsystem {
 	    SmartDashboard.putNumber("derivative", -.005 * derivative);
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	    previousTime = time;
-	    previousError = error;
-	    previousDerivative = derivative;
 	}
 	SmartDashboard.putString("Using pid", "true");
 	frontLeft.set(0);
