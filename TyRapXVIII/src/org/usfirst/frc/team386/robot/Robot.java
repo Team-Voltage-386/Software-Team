@@ -130,11 +130,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
 
 	// Diagnostic data
-	SmartDashboard.putNumber(LEFT_ENCODER_RIO, 0);
-	SmartDashboard.putNumber(RIGHT_ENCODER_RIO, 0);
-	SmartDashboard.putNumber(ENCODER_TALON_1, 0);
-	SmartDashboard.putNumber(ENCODER_TALON_4, 0);
-	SmartDashboard.putString(GAME_DATA, "");
+	updateDiagnostics();
 
 	// Command buttons for one-time execution
 	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.5));
@@ -194,18 +190,6 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().run();
     }
 
-    /**
-     * Renders a collection of diagnostic data to the smart dashboard.
-     */
-    private void updateDiagnostics() {
-	driveSubsystem.updateDiagnostics();
-	elevatorSubsystem.updateDiagnostics();
-	cubeSubsystem.updateDiagnostics();
-	cubeVision.updateDiagnostics();
-
-	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
-    }
-
     @Override
     public void teleopInit() {
 	driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
@@ -237,10 +221,14 @@ public class Robot extends IterativeRobot {
     }
 
     /**
-     * This function is called periodically during test mode
+     * Renders a collection of diagnostic data to the smart dashboard.
      */
-    @Override
-    public void testPeriodic() {
+    private void updateDiagnostics() {
+	driveSubsystem.updateDiagnostics();
+	elevatorSubsystem.updateDiagnostics();
+	cubeSubsystem.updateDiagnostics();
+	cubeVision.updateDiagnostics();
 
+	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
     }
 }
