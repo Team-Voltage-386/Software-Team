@@ -64,42 +64,30 @@ public class Robot extends IterativeRobot {
 
     // Labels for commands to execute by pressing a button on the dashboard
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
-    public static final String TURN_LEFT_LABEL = "turn left";
-    public static final String TURN_RIGHT_LABEL = "turn right";
-    public static final String DRIVE_FORWARD_FIVE_FEET_LABEL = "drive forward 5 feet";
+    public static final String TURN_LEFT_LABEL = "Turn left";
+    public static final String TURN_RIGHT_LABEL = "Turn right";
+    public static final String DRIVE_FORWARD_FIVE_FEET_LABEL = "Drive forward 5 feet";
     public static final String MOVE_FROM_WALL = "Move to wall";
     public static final String DRIVE_TO_CUBE = "Drive to cube";
-
-    public static final String AUTO_MODE_LABEL = "Auto mode";
-    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
-    // Strategic autonomous commands
-    public static final String CENTER_START_SWITCH = "Center switch";
-    public static final String LEFT_SWITCH_AUTO = "Starting on left, going for switch";
-    public static final String RIGHT_SWITCH_AUTO = "Starting on right, going for switch";
-    public static final String LEFT_SCALE_AUTO = "Starting on left, going for scale";
-    public static final String RIGHT_SCALE_AUTO = "Starting on right. going for scale";
-
-    // Tactical autonomous commands
-    public static final String LEFT_START_SWITCH_RIGHT = "Left start, Right switch";
-    public static final String LEFT_START_SWITCH_LEFT = "Left start, Left switch";
-    public static final String RIGHT_START_SWITCH_RIGHT = "Right start, Right switch";
-    public static final String LEFT_START_SCALE_LEFT = "Left start, Left scale";
-    public static final String RIGHT_START_SCALE_LEFT = "Right start, Left scale";
     public static final String STOP_LABEL = "Stop the Robit";
-    public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
-    public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
-    public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
+
+    // Strategic autonomous commands
+    public static final String ROCK = "Rock";
+    public static final String SWITCH = "Switch";
+    public static final String SCALE = "Scale";
+    public static final String AUTO_LINE = "Auto Line";
+
     public static final String LEFT = "Left";
     public static final String RIGHT = "Right";
     public static final String CENTER = "Center";
-    public static final Boolean yes = true;
-    public static final Boolean no = false;
+    public static final Boolean YES = true;
+    public static final Boolean NO = false;
 
-    Command autonomousCommand;// = new Stop()
-    public static SendableChooser<Command> chooser = new SendableChooser<>();
     public static SendableChooser<Command> chooserMode = new SendableChooser<>();
     public static SendableChooser<String> chooserPosition = new SendableChooser<>();
     public static SendableChooser<Boolean> chooserCrossSide = new SendableChooser<>();
+
+    Command autonomousCommand;// = new Stop()
     // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     int timesSeenWhiteLine = 0;
 
@@ -119,21 +107,10 @@ public class Robot extends IterativeRobot {
      * Initialize the dashboard.
      */
     private void initializeDashboard() {
-	/*
-	 * chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
-	 * chooser.addObject(STOP_LABEL, new Stop()); // martian rock
-	 * chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForward(120));
-	 * chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
-	 * chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
-	 * chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
-	 * chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
-	 * chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
-	 */
-
-	chooserMode.addDefault("Rock", new MartianRock());
-	chooserMode.addObject("switch", new SwitchAuto());
-	chooserMode.addObject("scale", new ScaleAuto());
-	chooserMode.addObject("auto line", new AutoLine());
+	chooserMode.addDefault(ROCK, new MartianRock());
+	chooserMode.addObject(SWITCH, new SwitchAuto());
+	chooserMode.addObject(SCALE, new ScaleAuto());
+	chooserMode.addObject(AUTO_LINE, new AutoLine());
 	// chooserMode.addObject("Rock", new MartianRock());
 	// chooserMode.setName("Choose Mode");
 
@@ -142,9 +119,9 @@ public class Robot extends IterativeRobot {
 	chooserPosition.addObject("Right", RIGHT);
 	// chooserPosition.addObject("Center", CENTER);
 
-	chooserCrossSide.addDefault("Allow crossing", yes);
+	chooserCrossSide.addDefault("Allow crossing", YES);
 	// chooserCrossSide.addObject("Yes", yes);
-	chooserCrossSide.addObject("Don't allow crossing", no);
+	chooserCrossSide.addObject("Don't allow crossing", NO);
 	// SmartDashboard.putBoolean("Cross to other Side", chooseCross);
 
 	// SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
