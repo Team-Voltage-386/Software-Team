@@ -12,18 +12,17 @@ public class AutoLine extends InstantCommand {
 
     public AutoLine() {
 	super();
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.chooserPosition.getSelected() == "Left") {
+	switch (Robot.chooserPosition.getSelected()) {
+	case Robot.LEFT:
+	case Robot.RIGHT:
 	    new DriveForward(120).start();
-	} else if (Robot.chooserPosition.getSelected() == "Center") {
+	    break;
+	case Robot.CENTER:
 	    // need to make
-	} else if (Robot.chooserPosition.getSelected() == "Right") {
-	    new DriveForward(120).start();
 	}
     }
 

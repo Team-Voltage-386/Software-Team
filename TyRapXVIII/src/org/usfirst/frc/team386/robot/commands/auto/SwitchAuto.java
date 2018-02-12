@@ -8,6 +8,7 @@ import org.usfirst.frc.team386.robot.commands.LowerIntake;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -18,39 +19,52 @@ public class SwitchAuto extends InstantCommand {
 
     public SwitchAuto() {
 	super();
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.chooserPosition.getSelected().equals("Left")) {
+	select(Robot.chooserPosition.getSelected()).start();
+    }
+
+    /**
+     * Select the command to use based on the position.
+     * 
+     * @param position
+     *            The robot starting position
+     * @return The Command to start
+     */
+    private Command select(String position) {
+	Command command = null;
+	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		new LeftSwitchAutoLeft().start();
+		command = new LeftSwitchAutoLeft();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new LeftSwitchAutoRight().start();
+		    command = new LeftSwitchAutoRight();
 		} else {
-		    new AutoLine().start();
+		    command = new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Right")) {
+	} else if (Robot.chooserPosition.getSelected().equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isSwitchRight()) {
-		new RightSwitchAutoRight().start();
+		command = new RightSwitchAutoRight();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new RightSwitchAutoLeft().start();
+		    command = new RightSwitchAutoLeft();
 		} else {
-		    new AutoLine().start();
+		    command = new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Center")) {
+	} else if (Robot.chooserPosition.getSelected().equals(Robot.CENTER)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		new CenterSwitchAutoLeft().start();
+		command = new CenterSwitchAutoLeft();
 	    } else {
-		new CenterSwitchAutoRight().start();
+		command = new CenterSwitchAutoRight();
 	    }
+	} else {
+	    throw new IllegalArgumentException("Unsupported position: " + position);
 	}
+	return command;
     }
 
     /**
