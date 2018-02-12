@@ -6,7 +6,7 @@ import org.usfirst.frc.team386.robot.commands.DriveForward;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for crossing the auto line.
  */
 public class AutoLine extends InstantCommand {
 

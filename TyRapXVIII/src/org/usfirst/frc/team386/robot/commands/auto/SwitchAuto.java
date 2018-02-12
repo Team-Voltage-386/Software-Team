@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for winning the switch.
  */
 public class SwitchAuto extends InstantCommand {
 
@@ -28,7 +28,7 @@ public class SwitchAuto extends InstantCommand {
 
     /**
      * Select the command to use based on the position.
-     * 
+     *
      * @param position
      *            The robot starting position
      * @return The Command to start
@@ -72,7 +72,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class LeftSwitchAutoLeft extends CommandGroup {
 
-	public LeftSwitchAutoLeft() {
+	LeftSwitchAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(140));
 	    addSequential(new TurnRight(90));
@@ -87,7 +87,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class LeftSwitchAutoRight extends CommandGroup {
 
-	public LeftSwitchAutoRight() {
+	LeftSwitchAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(215));
 	    addSequential(new TurnRight(90));
@@ -102,9 +102,9 @@ public class SwitchAuto extends InstantCommand {
     /**
      * Auto mode for right switch starting on the right side.
      */
-    public class RightSwitchAutoRight extends CommandGroup {
+    class RightSwitchAutoRight extends CommandGroup {
 
-	public RightSwitchAutoRight() {
+	RightSwitchAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(140));
 	    addSequential(new TurnLeft(90));
@@ -117,9 +117,9 @@ public class SwitchAuto extends InstantCommand {
     /**
      * Auto mode for left switch starting on the right side.
      */
-    public class RightSwitchAutoLeft extends CommandGroup {
+    class RightSwitchAutoLeft extends CommandGroup {
 
-	public RightSwitchAutoLeft() {
+	RightSwitchAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(215));
 	    addSequential(new TurnLeft(90));
@@ -136,7 +136,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoLeft extends CommandGroup {
 
-	public CenterSwitchAutoLeft() {
+	CenterSwitchAutoLeft() {
 	    addSequential(new LowerIntake());
 	    addParallel(new CenterSwitchAutoLeftDrive());
 	    addParallel(new ElevatorRaise());
@@ -148,7 +148,7 @@ public class SwitchAuto extends InstantCommand {
      * Drive sequence for left switch starting from center.
      */
     class CenterSwitchAutoLeftDrive extends CommandGroup {
-	public CenterSwitchAutoLeftDrive() {
+	CenterSwitchAutoLeftDrive() {
 	    addSequential(new DriveForward(12));
 	    addSequential(new TurnLeft(45));
 	    addSequential(new DriveForward(65));
@@ -162,7 +162,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoRight extends CommandGroup {
 
-	public CenterSwitchAutoRight() {
+	CenterSwitchAutoRight() {
 	    addSequential(new LowerIntake());
 	    addParallel(new CenterSwitchAutoRightDrive());
 	    addParallel(new ElevatorRaise());
@@ -174,7 +174,7 @@ public class SwitchAuto extends InstantCommand {
      * Drive sequence for right switch starting from center.
      */
     class CenterSwitchAutoRightDrive extends CommandGroup {
-	public CenterSwitchAutoRightDrive() {
+	CenterSwitchAutoRightDrive() {
 	    addSequential(new DriveForward(12));
 	    addSequential(new TurnRight(45));
 	    addSequential(new DriveForward(60));

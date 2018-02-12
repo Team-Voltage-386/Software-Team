@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for winning the scale.
  */
 public class ScaleAuto extends InstantCommand {
 
@@ -65,9 +65,12 @@ public class ScaleAuto extends InstantCommand {
 	}
     }
 
+    /**
+     * Auto mode for left scale starting on the left side.
+     */
     class LeftScaleAutoLeft extends CommandGroup {
 
-	public LeftScaleAutoLeft() {
+	LeftScaleAutoLeft() {
 	    addSequential(new LowerIntake());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnRight(90));
@@ -82,7 +85,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class LeftScaleAutoRight extends CommandGroup {
 
-	public LeftScaleAutoRight() {
+	LeftScaleAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnRight(90));
@@ -101,7 +104,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class RightScaleAutoRight extends CommandGroup {
 
-	public RightScaleAutoRight() {
+	RightScaleAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnLeft(90));
@@ -116,7 +119,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class RightScaleAutoLeft extends CommandGroup {
 
-	public RightScaleAutoLeft() {
+	RightScaleAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(208));
 	    addSequential(new TurnLeft(90));
