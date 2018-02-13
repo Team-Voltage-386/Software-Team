@@ -34,6 +34,7 @@ public class Robot extends IterativeRobot {
     public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
 
     public static OI oi;
@@ -64,42 +65,30 @@ public class Robot extends IterativeRobot {
 
     // Labels for commands to execute by pressing a button on the dashboard
     public static final String DRIVE_TO_LINE_LABEL = "Drive to line";
-    public static final String TURN_LEFT_LABEL = "turn left";
-    public static final String TURN_RIGHT_LABEL = "turn right";
-    public static final String DRIVE_FORWARD_FIVE_FEET_LABEL = "drive forward 5 feet";
+    public static final String TURN_LEFT_LABEL = "Turn left";
+    public static final String TURN_RIGHT_LABEL = "Turn right";
+    public static final String DRIVE_FORWARD_FIVE_FEET_LABEL = "Drive forward 5 feet";
     public static final String MOVE_FROM_WALL = "Move to wall";
     public static final String DRIVE_TO_CUBE = "Drive to cube";
-
-    public static final String AUTO_MODE_LABEL = "Auto mode";
-    public static final String DEFAULT_AUTO_LABEL = "Default Auto";
-    // Strategic autonomous commands
-    public static final String CENTER_START_SWITCH = "Center switch";
-    public static final String LEFT_SWITCH_AUTO = "Starting on left, going for switch";
-    public static final String RIGHT_SWITCH_AUTO = "Starting on right, going for switch";
-    public static final String LEFT_SCALE_AUTO = "Starting on left, going for scale";
-    public static final String RIGHT_SCALE_AUTO = "Starting on right. going for scale";
-
-    // Tactical autonomous commands
-    public static final String LEFT_START_SWITCH_RIGHT = "Left start, Right switch";
-    public static final String LEFT_START_SWITCH_LEFT = "Left start, Left switch";
-    public static final String RIGHT_START_SWITCH_RIGHT = "Right start, Right switch";
-    public static final String LEFT_START_SCALE_LEFT = "Left start, Left scale";
-    public static final String RIGHT_START_SCALE_LEFT = "Right start, Left scale";
     public static final String STOP_LABEL = "Stop the Robit";
-    public static final String LEFT_START_SCALE_RIGHT = "Left start, Right scale";
-    public static final String RIGHT_START_SCALE_RIGHT = "Right start, Right scale";
-    public static final String RIGHT_START_SWITCH_LEFT = "Right start, Left switch";
+
+    // Strategic autonomous commands
+    public static final String ROCK = "Rock";
+    public static final String SWITCH = "Switch";
+    public static final String SCALE = "Scale";
+    public static final String AUTO_LINE = "Auto Line";
+
     public static final String LEFT = "Left";
     public static final String RIGHT = "Right";
     public static final String CENTER = "Center";
-    public static final Boolean yes = true;
-    public static final Boolean no = false;
+    public static final Boolean YES = true;
+    public static final Boolean NO = false;
 
-    Command autonomousCommand;// = new Stop()
-    public static SendableChooser<Command> chooser = new SendableChooser<>();
     public static SendableChooser<Command> chooserMode = new SendableChooser<>();
     public static SendableChooser<String> chooserPosition = new SendableChooser<>();
     public static SendableChooser<Boolean> chooserCrossSide = new SendableChooser<>();
+
+    Command autonomousCommand;// = new Stop()
     // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     int timesSeenWhiteLine = 0;
 
@@ -119,21 +108,10 @@ public class Robot extends IterativeRobot {
      * Initialize the dashboard.
      */
     private void initializeDashboard() {
-	/*
-	 * chooser.addDefault(DEFAULT_AUTO_LABEL, new Stop()); // martian rock
-	 * chooser.addObject(STOP_LABEL, new Stop()); // martian rock
-	 * chooser.addObject(DRIVE_TO_LINE_LABEL, new DriveForward(120));
-	 * chooser.addObject(CENTER_START_SWITCH, new CenterSwitchAuto());
-	 * chooser.addObject(LEFT_SWITCH_AUTO, new LeftSwitchAuto());
-	 * chooser.addObject(RIGHT_SWITCH_AUTO, new RightSwitchAuto());
-	 * chooser.addObject(LEFT_SCALE_AUTO, new LeftScaleAuto());
-	 * chooser.addObject(RIGHT_SCALE_AUTO, new RightScaleAuto());
-	 */
-
-	chooserMode.addDefault("Rock", new MartianRock());
-	chooserMode.addObject("switch", new SwitchAuto());
-	chooserMode.addObject("scale", new ScaleAuto());
-	chooserMode.addObject("auto line", new AutoLine());
+	chooserMode.addDefault(ROCK, new MartianRock());
+	chooserMode.addObject(SWITCH, new SwitchAuto());
+	chooserMode.addObject(SCALE, new ScaleAuto());
+	chooserMode.addObject(AUTO_LINE, new AutoLine());
 	// chooserMode.addObject("Rock", new MartianRock());
 	// chooserMode.setName("Choose Mode");
 
@@ -142,9 +120,9 @@ public class Robot extends IterativeRobot {
 	chooserPosition.addObject("Right", RIGHT);
 	// chooserPosition.addObject("Center", CENTER);
 
-	chooserCrossSide.addDefault("Allow crossing", yes);
+	chooserCrossSide.addDefault("Allow crossing", YES);
 	// chooserCrossSide.addObject("Yes", yes);
-	chooserCrossSide.addObject("Don't allow crossing", no);
+	chooserCrossSide.addObject("Don't allow crossing", NO);
 	// SmartDashboard.putBoolean("Cross to other Side", chooseCross);
 
 	// SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
@@ -152,15 +130,15 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Start Position", chooserPosition);
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
+	// Configuration fields
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
 	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
-	SmartDashboard.putNumber(LEFT_ENCODER_RIO, 0);
-	SmartDashboard.putNumber(RIGHT_ENCODER_RIO, 0);
-	SmartDashboard.putNumber(ENCODER_TALON_1, 0);
-	SmartDashboard.putNumber(ENCODER_TALON_4, 0);
-	SmartDashboard.putString(GAME_DATA, "");
 
+	// Diagnostic data
+	updateDiagnostics();
+
+	// Command buttons for one-time execution
 	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.5));
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
@@ -218,30 +196,15 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	displayDiagnostics();
+	updateDiagnostics();
 	Scheduler.getInstance().run();
-    }
-
-    /**
-     * Renders a collection of diagnostic data to the smart dashboard.
-     */
-    private void displayDiagnostics() {
-	SmartDashboard.putBoolean(LINE_SENSOR, driveSubsystem.linesensor.get());
-	SmartDashboard.putNumber(REAR_ULTRASONIC, driveSubsystem.ultrasonic.getRangeMM());
-	SmartDashboard.putNumber(FRONT_ULTRASONIC, driveSubsystem.frontUltrasonic.getRangeMM());
-	SmartDashboard.putNumber(ENCODER_TALON_1, driveSubsystem.frontLeft.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(ENCODER_TALON_4, driveSubsystem.frontRight.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(LEFT_ENCODER_RIO, driveSubsystem.leftEncoder.get());
-	SmartDashboard.putNumber(RIGHT_ENCODER_RIO, driveSubsystem.rightEncoder.get());
-	SmartDashboard.putNumber(VISION_ERROR, cubeVision.getError());
-	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
     }
 
     @Override
     public void teleopInit() {
 	driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
 	cubeSubsystem.setCubeControlMode(SmartDashboard.getBoolean(CUBE_CONTROL_LABEL, true));
-
+	Robot.driveSubsystem.isGoingUpRamp = true;
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
@@ -259,7 +222,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-	displayDiagnostics();
+	updateDiagnostics();
 	Scheduler.getInstance().run();
 
 	if (!driveSubsystem.linesensor.get()) {
@@ -268,10 +231,14 @@ public class Robot extends IterativeRobot {
     }
 
     /**
-     * This function is called periodically during test mode
+     * Renders a collection of diagnostic data to the smart dashboard.
      */
-    @Override
-    public void testPeriodic() {
+    private void updateDiagnostics() {
+	driveSubsystem.updateDiagnostics();
+	elevatorSubsystem.updateDiagnostics();
+	cubeSubsystem.updateDiagnostics();
+	cubeVision.updateDiagnostics();
 
+	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
     }
 }

@@ -6,6 +6,7 @@ import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
 import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
@@ -39,26 +40,29 @@ public class DriveSubsystem extends Subsystem {
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
     public static final double DEAD_BAND_LIMIT = 0.1;
 
-    public static final int NO_TIMEOUT = 0;
-
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
+    public boolean isGoingUpRamp = false;
+
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
 
+    private static final int NO_TIMEOUT = 0;
+
     double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
 
-    public WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
-    public WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
+    WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
+    WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
 
     /* extra talons for six motor drives */
     WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor);
     WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor);
-    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
-    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
+    // WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
+    // WPI_TalonSRX rightSlave2 = new
+    // WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
 
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
@@ -67,12 +71,16 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB,
-	    true);
-    public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB, true);
+    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+<<<<<<< HEAD
     public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
+=======
+    public PigeonIMU pigeon = new PigeonIMU(0);
+    public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
+>>>>>>> 511d021340fea294c0609b24e790d3417314459a
     public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
 
     Command defaultCommand;
@@ -86,9 +94,9 @@ public class DriveSubsystem extends Subsystem {
      */
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
-	leftSlave2.follow(frontLeft);
+	// leftSlave2.follow(frontLeft);
 	rightSlave1.follow(frontRight);
-	rightSlave2.follow(frontRight);
+	// rightSlave2.follow(frontRight);
 
 	frontRight.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
 	frontLeft.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
@@ -100,10 +108,26 @@ public class DriveSubsystem extends Subsystem {
 
 	compressor.start();
 
-	ultrasonic.setAutomaticMode(true);
+	rearUltrasonic.setAutomaticMode(true);
+	frontUltrasonic.setAutomaticMode(true);
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
+    }
+
+    /**
+     * Update the smart dashboard with diagnostics values.
+     */
+    public void updateDiagnostics() {
+	// place smart dashboard output here to refresh regularly in either auto or
+	// teleop modes.
+	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
+	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
+	SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC, frontUltrasonic.getRangeMM());
+	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
+	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
     }
 
     /**
@@ -197,6 +221,7 @@ public class DriveSubsystem extends Subsystem {
 	leftEncoder.reset();
 	rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
+	frontRight.setSelectedSensorPosition(0, 0, 10);
     }
 
     /**
@@ -208,6 +233,7 @@ public class DriveSubsystem extends Subsystem {
     public void moveForwardTicks(int ticks) {
 	while (Math.abs(rightEncoder.get()) < ticks && RobotState.isEnabled()) {
 	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
+	    updateDiagnostics();
 	}
 	stop();
     }
@@ -215,12 +241,14 @@ public class DriveSubsystem extends Subsystem {
     public void driveToCubeTeleop() {
 	while (Robot.oi.xboxControl.getRawButton(3)) {
 	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
+	    updateDiagnostics();
 	}
     }
 
     public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
 	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
+	    updateDiagnostics();
 	}
     }
 
@@ -237,13 +265,15 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
 	resetEncoders();
 
-	if (ultrasonic.getRangeMM() > distanceFromWall) {
-	    while ((ultrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
+	if (rearUltrasonic.getRangeMM() > distanceFromWall) {
+	    while ((rearUltrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
 		arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
+		updateDiagnostics();
 	    }
 	} else {
-	    while ((ultrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
+	    while ((rearUltrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
 		arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
+		updateDiagnostics();
 	    }
 	}
 	stop();
@@ -267,12 +297,9 @@ public class DriveSubsystem extends Subsystem {
 	double ticksRequired = 6.36 * inches;
 	while (Math.abs(rightEncoder.get()) < ticksRequired && RobotState.isEnabled()) {
 	    arcadeDriveStraight(speed);
-	    SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
-	    SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
+	    updateDiagnostics();
 	}
 	stop();
-	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
     }
 
     /**
@@ -284,9 +311,8 @@ public class DriveSubsystem extends Subsystem {
     public void driveForwardToLine() {
 	while (linesensor.get() && RobotState.isEnabled()) {
 	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
-	    SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
+	    updateDiagnostics();
 	}
-	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	stop();
     }
 
@@ -300,17 +326,30 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithPid(double angle, int direction) {
 	// shift(HIGH_GEAR);
+<<<<<<< HEAD
 	double tolerance = 1, speedThreshold = 30;
 	double KP = -.1, KD = -.01;
+=======
+	double integral = 0, previousTime = timer.get(), derivative = 0;
+	double tolerance = 1;
+>>>>>>> 511d021340fea294c0609b24e790d3417314459a
 	gyro.reset();
 	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > speedThreshold)
 		&& RobotState.isEnabled()) {
 	    double error = (gyro.getAngle() - (direction * angle));
+<<<<<<< HEAD
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
 	    if (Math.abs(value) > .3 || derivative > speedThreshold) {
 		frontLeft.set(value);
 		frontRight.set(value);
+=======
+	    derivative = gyro.getRate();
+	    integral = integral + error * (time - previousTime);
+	    if (Math.abs(-.05 * error + -.01 * derivative) > .3) {
+		frontLeft.set(-.1 * error + -.01 * derivative);
+		frontRight.set(-.1 * error + -.01 * derivative);
+>>>>>>> 511d021340fea294c0609b24e790d3417314459a
 	    } else {
 		if (value > 0) {
 		    frontLeft.set(.3);
@@ -323,6 +362,10 @@ public class DriveSubsystem extends Subsystem {
 	    SmartDashboard.putNumber("proportional", KP * error);
 	    SmartDashboard.putNumber("derivative", KD * derivative);
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+<<<<<<< HEAD
+=======
+	    previousTime = time;
+>>>>>>> 511d021340fea294c0609b24e790d3417314459a
 	}
 	SmartDashboard.putString("Using pid", "true");
 	stop();
@@ -428,4 +471,28 @@ public class DriveSubsystem extends Subsystem {
 	    return in * in;
 	}
     }
+<<<<<<< HEAD
+=======
+
+    public void tiltPrevention() {
+	if (pitch() > 1) {
+	    double startTime = timer.get();
+	    while (timer.get() - startTime < 3 && !isGoingUpRamp) {
+		drive.tankDrive((speedMultiplier * 1.25), (speedMultiplier * 1.25));
+	    }
+	} else if (pitch() < -1 && !isGoingUpRamp) {
+	    double startTime = timer.get();
+	    while (timer.get() - startTime < 3) {
+		drive.tankDrive(-(speedMultiplier * 1.25), -(speedMultiplier * 1.25));
+	    }
+	}
+    }
+
+    public double pitch() {
+	double[] pig = new double[3];
+	pigeon.getYawPitchRoll(pig);
+	return pig[1];
+    }
+
+>>>>>>> 511d021340fea294c0609b24e790d3417314459a
 }
