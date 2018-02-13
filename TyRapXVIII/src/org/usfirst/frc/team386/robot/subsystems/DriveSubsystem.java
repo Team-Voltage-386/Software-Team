@@ -6,6 +6,7 @@ import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
 import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
@@ -45,6 +46,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
+    
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -72,6 +74,7 @@ public class DriveSubsystem extends Subsystem {
     public Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+    public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.pingChannel, RobotMap.echoChannel);
     public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
 
@@ -437,6 +440,24 @@ public class DriveSubsystem extends Subsystem {
 	} else {
 	    return in * in;
 	}
+    }
+    public void tiltPrevention() {
+	if (pitch() > 1) {
+	    double startTime = timer.get();
+	    while (timer.get()-startTime < 3) {
+		drive.tankDrive((speedMultiplier * 1.25), (speedMultiplier * 1.25));
+	    }
+	} else if (pitch() < -1) {
+	    double startTime = timer.get();
+	    while (timer.get()-startTime < 3) {
+		drive.tankDrive(-(speedMultiplier * 1.25), -(speedMultiplier * 1.25));
+	    }
+	}
+    }
+    public double pitch() {
+	double[] pig = new double[3];
+	pigeon.getYawPitchRoll(pig);
+	return pig[1];
     }
 
 }
