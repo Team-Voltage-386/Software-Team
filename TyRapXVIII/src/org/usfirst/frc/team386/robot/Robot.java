@@ -218,7 +218,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
 	driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
 	cubeSubsystem.setCubeControlMode(SmartDashboard.getBoolean(CUBE_CONTROL_LABEL, true));
-
+	Robot.driveSubsystem.isGoingUpRamp = true;
 	// This makes sure that the autonomous stops running when
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove

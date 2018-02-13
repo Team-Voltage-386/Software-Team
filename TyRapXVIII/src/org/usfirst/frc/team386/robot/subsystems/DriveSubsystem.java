@@ -47,6 +47,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
     
+    public static boolean isGoingUpRamp = false;
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -444,10 +445,10 @@ public class DriveSubsystem extends Subsystem {
     public void tiltPrevention() {
 	if (pitch() > 1) {
 	    double startTime = timer.get();
-	    while (timer.get()-startTime < 3) {
+	    while (timer.get()-startTime < 3 && !isGoingUpRamp) {
 		drive.tankDrive((speedMultiplier * 1.25), (speedMultiplier * 1.25));
 	    }
-	} else if (pitch() < -1) {
+	} else if (pitch() < -1 && !isGoingUpRamp) {
 	    double startTime = timer.get();
 	    while (timer.get()-startTime < 3) {
 		drive.tankDrive(-(speedMultiplier * 1.25), -(speedMultiplier * 1.25));
