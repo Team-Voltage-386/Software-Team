@@ -2,28 +2,27 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
-
+import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for crossing the auto line.
  */
 public class AutoLine extends InstantCommand {
 
     public AutoLine() {
 	super();
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.chooserPosition.getSelected() == "Left") {
+	switch (Robot.chooserPosition.getSelected()) {
+	case Robot.LEFT:
+	case Robot.RIGHT:
 	    new DriveForward(120).start();
-	} else if (Robot.chooserPosition.getSelected() == "Center") {
-	    // need to make
-	} else if (Robot.chooserPosition.getSelected() == "Right") {
-	    new DriveForward(120).start();
+	    break;
+	case Robot.CENTER:
+	    new SwitchAuto().start();
 	}
     }
 

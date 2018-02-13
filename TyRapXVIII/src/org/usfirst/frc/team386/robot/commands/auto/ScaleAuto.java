@@ -9,53 +9,68 @@ import org.usfirst.frc.team386.robot.commands.LowerIntake;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for winning the scale.
  */
 public class ScaleAuto extends InstantCommand {
 
     public ScaleAuto() {
 	super();
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.chooserPosition.getSelected().equals("Left")) {
+	select(Robot.chooserPosition.getSelected()).start();
+    }
+
+    /**
+     * Select the command to use based on the position.
+     * 
+     * @param position
+     *            The robot starting position
+     * @return The Command to start
+     */
+    private Command select(String position) {
+	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isScaleLeft()) {
-		new LeftScaleAutoLeft().start();
+		return new LeftScaleAutoLeft();
 	    } else {
-		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new LeftScaleAutoRight().start();
+		if (Robot.chooserCrossSide.getSelected()) {
+		    return new LeftScaleAutoRight();
 		} else {
-		    new AutoLine().start();
+		    return new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Right")) {
+	} else if (position.equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isScaleRight()) {
-		new RightScaleAutoRight().start();
+		return new RightScaleAutoRight();
 	    } else {
-		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new RightScaleAutoLeft().start();
+		if (Robot.chooserCrossSide.getSelected()) {
+		    return new RightScaleAutoLeft();
 		} else {
-		    new AutoLine().start();
+		    return new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Center")) {
+	} else if (position.equals(Robot.CENTER)) {
 	    // This is where the auto line from center would go
 	    // this is an error condition
 	    // suggested to go to switch
-	    new SwitchAuto().start();
+	    return new SwitchAuto();
+	} else {
+	    throw new IllegalArgumentException("Unsupported position: " + position);
 	}
     }
 
+    /**
+     * Auto mode for left scale starting on the left side.
+     */
     class LeftScaleAutoLeft extends CommandGroup {
 
-	public LeftScaleAutoLeft() {
+	LeftScaleAutoLeft() {
 	    addSequential(new LowerIntake());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnRight(90));
@@ -70,7 +85,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class LeftScaleAutoRight extends CommandGroup {
 
-	public LeftScaleAutoRight() {
+	LeftScaleAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnRight(90));
@@ -89,7 +104,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class RightScaleAutoRight extends CommandGroup {
 
-	public RightScaleAutoRight() {
+	RightScaleAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnLeft(90));
@@ -104,7 +119,7 @@ public class ScaleAuto extends InstantCommand {
      */
     class RightScaleAutoLeft extends CommandGroup {
 
-	public RightScaleAutoLeft() {
+	RightScaleAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(208));
 	    addSequential(new TurnLeft(90));
