@@ -1,13 +1,19 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.RobotMap;
+
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The ElevatorSubsyste is responsible for operations related to the elevator,
  * such as raising and lowering the elevator.
  */
 public class ElevatorSubsystem extends Subsystem {
-    // Spark leftElevator = new Spark(RobotMap.elevatorSpark);
+    Spark leftElevator = new Spark(RobotMap.elevatorSpark);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -25,7 +31,6 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void elevatorFromDPad() {
-<<<<<<< HEAD
 	while (RobotState.isEnabled())
 	    if (Robot.oi.xboxControl.getPOV(0) != -1) {
 		leftElevator.set(SmartDashboard.getNumber("Elevator Speed", 0)
@@ -33,13 +38,10 @@ public class ElevatorSubsystem extends Subsystem {
 	    } else {
 		leftElevator.set(0);
 	    }
-
-=======
 	// while (RobotState.isEnabled())
 	// if (Robot.oi.xboxControl.getPOV(0) != -1)
 	// leftElevator.set(SmartDashboard.getNumber("Elevator Speed", 0)
 	// * Math.acos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
     }
 
     public void raiseElevatorTo(double percent) {

@@ -75,12 +75,9 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-<<<<<<< HEAD
     public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
-=======
     public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
     public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
 
     Command defaultCommand;
@@ -326,49 +323,37 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithPid(double angle, int direction) {
 	// shift(HIGH_GEAR);
-<<<<<<< HEAD
 	double tolerance = 1, speedThreshold = 30;
 	double KP = -.1, KD = -.01;
-=======
-	double integral = 0, previousTime = timer.get(), derivative = 0;
-	double tolerance = 1;
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
 	gyro.reset();
 	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > speedThreshold)
 		&& RobotState.isEnabled()) {
 	    double error = (gyro.getAngle() - (direction * angle));
-<<<<<<< HEAD
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
 	    if (Math.abs(value) > .3 || derivative > speedThreshold) {
 		frontLeft.set(value);
 		frontRight.set(value);
-=======
-	    derivative = gyro.getRate();
-	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + -.01 * derivative) > .3) {
-		frontLeft.set(-.1 * error + -.01 * derivative);
-		frontRight.set(-.1 * error + -.01 * derivative);
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
-	    } else {
-		if (value > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
+		derivative = gyro.getRate();
+		if (Math.abs(-.05 * error + -.01 * derivative) > .3) {
+		    frontLeft.set(-.1 * error + -.01 * derivative);
+		    frontRight.set(-.1 * error + -.01 * derivative);
 		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
+		    if (value > 0) {
+			frontLeft.set(.3);
+			frontRight.set(.3);
+		    } else {
+			frontLeft.set(-.3);
+			frontRight.set(-.3);
+		    }
 		}
+		SmartDashboard.putNumber("proportional", KP * error);
+		SmartDashboard.putNumber("derivative", KD * derivative);
+		SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	    }
-	    SmartDashboard.putNumber("proportional", KP * error);
-	    SmartDashboard.putNumber("derivative", KD * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
-<<<<<<< HEAD
-=======
-	    previousTime = time;
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
+	    SmartDashboard.putString("Using pid", "true");
+	    stop();
 	}
-	SmartDashboard.putString("Using pid", "true");
-	stop();
     }
 
     /**
@@ -471,8 +456,6 @@ public class DriveSubsystem extends Subsystem {
 	    return in * in;
 	}
     }
-<<<<<<< HEAD
-=======
 
     public void tiltPrevention() {
 	if (pitch() > 1) {
@@ -493,6 +476,4 @@ public class DriveSubsystem extends Subsystem {
 	pigeon.getYawPitchRoll(pig);
 	return pig[1];
     }
-
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
 }
