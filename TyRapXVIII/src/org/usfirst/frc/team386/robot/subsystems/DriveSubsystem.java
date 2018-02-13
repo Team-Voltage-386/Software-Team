@@ -45,7 +45,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
-    public static boolean isGoingUpRamp = false;
+    public boolean isGoingUpRamp = false;
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
