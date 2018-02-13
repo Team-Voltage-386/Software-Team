@@ -38,6 +38,15 @@ public class CubeVisionThread extends Thread {
     public int resolutionWidth = 320;
     public int resolutionHeight = 240;
 
+    /**
+     * Update the smart dashboard with diagnostics values.
+     */
+    public void updateDiagnostics() {
+	// place smart dashboard output here to refresh regularly in either auto or
+	// teleop modes.
+	SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
+    }
+
     @Override
     public void run() {
 

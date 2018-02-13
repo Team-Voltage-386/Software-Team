@@ -22,6 +22,14 @@ public class CubeSubsystem extends Subsystem {
     AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
     AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
 
+    /**
+     * Update the smart dashboard with diagnostics values.
+     */
+    public void updateDiagnostics() {
+	// place smart dashboard output here to refresh regularly in either auto or
+	// teleop modes.
+    }
+
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
 	setDefaultCommand(new CubeManual());

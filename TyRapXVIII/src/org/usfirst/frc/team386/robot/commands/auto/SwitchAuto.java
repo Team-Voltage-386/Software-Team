@@ -8,49 +8,63 @@ import org.usfirst.frc.team386.robot.commands.LowerIntake;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Autonomous mode for winning the switch.
  */
 public class SwitchAuto extends InstantCommand {
 
     public SwitchAuto() {
 	super();
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.chooserPosition.getSelected().equals("Left")) {
+	select(Robot.chooserPosition.getSelected()).start();
+    }
+
+    /**
+     * Select the command to use based on the position.
+     *
+     * @param position
+     *            The robot starting position
+     * @return The Command to start
+     */
+    private Command select(String position) {
+	Command command = null;
+	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		new LeftSwitchAutoLeft().start();
+		command = new LeftSwitchAutoLeft();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new LeftSwitchAutoRight().start();
+		    command = new LeftSwitchAutoRight();
 		} else {
-		    new AutoLine().start();
+		    command = new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Right")) {
+	} else if (Robot.chooserPosition.getSelected().equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isSwitchRight()) {
-		new RightSwitchAutoRight().start();
+		command = new RightSwitchAutoRight();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected() == true) {
-		    new RightSwitchAutoLeft().start();
+		    command = new RightSwitchAutoLeft();
 		} else {
-		    new AutoLine().start();
+		    command = new AutoLine();
 		}
 	    }
-	} else if (Robot.chooserPosition.getSelected().equals("Center")) {
+	} else if (Robot.chooserPosition.getSelected().equals(Robot.CENTER)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		new CenterSwitchAutoLeft().start();
+		command = new CenterSwitchAutoLeft();
 	    } else {
-		new CenterSwitchAutoRight().start();
+		command = new CenterSwitchAutoRight();
 	    }
+	} else {
+	    throw new IllegalArgumentException("Unsupported position: " + position);
 	}
+	return command;
     }
 
     /**
@@ -58,7 +72,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class LeftSwitchAutoLeft extends CommandGroup {
 
-	public LeftSwitchAutoLeft() {
+	LeftSwitchAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(140));
 	    addSequential(new TurnRight(90));
@@ -73,7 +87,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class LeftSwitchAutoRight extends CommandGroup {
 
-	public LeftSwitchAutoRight() {
+	LeftSwitchAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(215));
 	    addSequential(new TurnRight(90));
@@ -88,9 +102,9 @@ public class SwitchAuto extends InstantCommand {
     /**
      * Auto mode for right switch starting on the right side.
      */
-    public class RightSwitchAutoRight extends CommandGroup {
+    class RightSwitchAutoRight extends CommandGroup {
 
-	public RightSwitchAutoRight() {
+	RightSwitchAutoRight() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(140));
 	    addSequential(new TurnLeft(90));
@@ -103,9 +117,9 @@ public class SwitchAuto extends InstantCommand {
     /**
      * Auto mode for left switch starting on the right side.
      */
-    public class RightSwitchAutoLeft extends CommandGroup {
+    class RightSwitchAutoLeft extends CommandGroup {
 
-	public RightSwitchAutoLeft() {
+	RightSwitchAutoLeft() {
 	    // addSequential(new LowerIntake());
 	    addSequential(new DriveForward(215));
 	    addSequential(new TurnLeft(90));
@@ -122,7 +136,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoLeft extends CommandGroup {
 
-	public CenterSwitchAutoLeft() {
+	CenterSwitchAutoLeft() {
 	    addSequential(new LowerIntake());
 	    addParallel(new CenterSwitchAutoLeftDrive());
 	    addParallel(new ElevatorRaise());
@@ -134,7 +148,7 @@ public class SwitchAuto extends InstantCommand {
      * Drive sequence for left switch starting from center.
      */
     class CenterSwitchAutoLeftDrive extends CommandGroup {
-	public CenterSwitchAutoLeftDrive() {
+	CenterSwitchAutoLeftDrive() {
 	    addSequential(new DriveForward(12));
 	    addSequential(new TurnLeft(45));
 	    addSequential(new DriveForward(65));
@@ -148,7 +162,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoRight extends CommandGroup {
 
-	public CenterSwitchAutoRight() {
+	CenterSwitchAutoRight() {
 	    addSequential(new LowerIntake());
 	    addParallel(new CenterSwitchAutoRightDrive());
 	    addParallel(new ElevatorRaise());
@@ -160,7 +174,7 @@ public class SwitchAuto extends InstantCommand {
      * Drive sequence for right switch starting from center.
      */
     class CenterSwitchAutoRightDrive extends CommandGroup {
-	public CenterSwitchAutoRightDrive() {
+	CenterSwitchAutoRightDrive() {
 	    addSequential(new DriveForward(12));
 	    addSequential(new TurnRight(45));
 	    addSequential(new DriveForward(60));
