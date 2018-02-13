@@ -44,7 +44,7 @@ public class DriveSubsystem extends Subsystem {
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
     public static final double FAST_AUTO_MODE_SPEED = 0.9;
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
-    
+
     public static boolean isGoingUpRamp = false;
 
     public static final int LEFT = -1;
@@ -60,8 +60,9 @@ public class DriveSubsystem extends Subsystem {
     /* extra talons for six motor drives */
     WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor);
     WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor);
-    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
-    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
+    // WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
+    // WPI_TalonSRX rightSlave2 = new
+    // WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
 
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
@@ -89,9 +90,9 @@ public class DriveSubsystem extends Subsystem {
      */
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
-	leftSlave2.follow(frontLeft);
+	// leftSlave2.follow(frontLeft);
 	rightSlave1.follow(frontRight);
-	rightSlave2.follow(frontRight);
+	// rightSlave2.follow(frontRight);
 
 	frontRight.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
 	frontLeft.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
@@ -236,13 +237,14 @@ public class DriveSubsystem extends Subsystem {
     public void driveToCubeTeleop() {
 	while (Robot.oi.xboxControl.getRawButton(3)) {
 	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
-        updateDiagnostics();
+	    updateDiagnostics();
 	}
     }
 
     public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
 	    drive.arcadeDrive(Robot.oi.xboxControl.getRawAxis(1), Robot.cubeVision.getError() * -.005);
+	    updateDiagnostics();
 	}
     }
 
@@ -456,19 +458,21 @@ public class DriveSubsystem extends Subsystem {
 	    return in * in;
 	}
     }
+
     public void tiltPrevention() {
 	if (pitch() > 1) {
 	    double startTime = timer.get();
-	    while (timer.get()-startTime < 3 && !isGoingUpRamp) {
+	    while (timer.get() - startTime < 3 && !isGoingUpRamp) {
 		drive.tankDrive((speedMultiplier * 1.25), (speedMultiplier * 1.25));
 	    }
 	} else if (pitch() < -1 && !isGoingUpRamp) {
 	    double startTime = timer.get();
-	    while (timer.get()-startTime < 3) {
+	    while (timer.get() - startTime < 3) {
 		drive.tankDrive(-(speedMultiplier * 1.25), -(speedMultiplier * 1.25));
 	    }
 	}
     }
+
     public double pitch() {
 	double[] pig = new double[3];
 	pigeon.getYawPitchRoll(pig);
