@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Spark;
@@ -32,8 +31,7 @@ public class ElevatorSubsystem extends Subsystem {
     public void elevatorFromDPad(int pov) {
 
 	if (pov != -1) {
-	    leftElevator.set(SmartDashboard.getNumber("Elevator Speed", 0)
-		    * Math.acos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
+	    leftElevator.set(SmartDashboard.getNumber("Elevator Speed", 0) * Math.acos(Math.toRadians(pov)));
 	} else {
 	    leftElevator.set(0);
 	}

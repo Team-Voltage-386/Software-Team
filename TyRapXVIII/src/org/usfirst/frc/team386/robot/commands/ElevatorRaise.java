@@ -2,13 +2,12 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  *
  */
-public class ElevatorRaise extends Command {
+public class ElevatorRaise extends InstantCommand {
 
     public ElevatorRaise() {
 	// Use requires() here to declare subsystem dependencies
@@ -21,12 +20,6 @@ public class ElevatorRaise extends Command {
     protected void initialize() {
 	// Robot.elevatorSubsystem.raiseElevatorTo(percentage);
 	// Robot.elevatorSubsystem.elevatorFromDPad();
-    }
-
-    @Override
-    protected void execute
-    {
-	Robot.elevatorSubsystem.raiseElevatorTo(Robot.oi.xboxControl.getPOV(0));
     }
 
 }

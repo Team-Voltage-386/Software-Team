@@ -75,7 +75,6 @@ public class DriveSubsystem extends Subsystem {
     Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-    public Ultrasonic ultrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
     public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
     public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
@@ -125,6 +124,7 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
+	SmartDashboard.putNumber("Pitch", pitch());
     }
 
     /**
@@ -458,12 +458,15 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void tiltPrevention() {
+	SmartDashboard.putString("Robot tilt", "nuetral");
 	if (pitch() > 1) {
+	    SmartDashboard.putString("Robot tilt", "positive");
 	    double startTime = timer.get();
 	    while (timer.get() - startTime < 3 && !isGoingUpRamp) {
 		drive.tankDrive((speedMultiplier * 1.25), (speedMultiplier * 1.25));
 	    }
 	} else if (pitch() < -1 && !isGoingUpRamp) {
+	    SmartDashboard.putString("Robot tilt", "negative");
 	    double startTime = timer.get();
 	    while (timer.get() - startTime < 3) {
 		drive.tankDrive(-(speedMultiplier * 1.25), -(speedMultiplier * 1.25));
