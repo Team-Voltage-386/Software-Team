@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +54,8 @@ public class Robot extends IterativeRobot {
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     double pigeonYPR [] = new double[3];
     PigeonIMU pigeon = new PigeonIMU(0);
+    public static final double defaultSpeed = 0.5;
+    
     @Override
     public void robotInit() {
 	rightEncodee.reset();
@@ -120,6 +123,21 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber("pitch", pigeonYPR[1]);
 	//SmartDashboard.putNumber("compass", pigeon.getAbsoluteCompassHeading());
 	SmartDashboard.putNumber("yaw", pigeonYPR[0]);
+	tiltPrevention();
+    }
+    public void tiltPrevention() {
+	if (pitch() > 1) {
+	    drive.tankDrive((defaultSpeed * 1.25), (defaultSpeed * 1.25));
+	    Timer.delay(1.5);
+	} else if (pitch() < -1) {
+	    drive.tankDrive(-(defaultSpeed * 1.25), -(defaultSpeed * 1.25));
+	    Timer.delay(1.5);
+	}
+    }
+    public double pitch() {
+	double[] pig = new double[3];
+	pigeon.getYawPitchRoll(pig);
+	return pig[1];
     }
 
     public void moveForward(double xinch) {
@@ -136,7 +154,7 @@ public class Robot extends IterativeRobot {
 	    SmartDashboard.putNumber("the always Right num: ", rightEncodee.getRaw());
 	    // System.out.println("the always Right num:
 	    // "+rightEncodee.getRaw());
-	    drive.tankDrive(0.5, 0.5);
+	    drive.tankDrive(defaultSpeed, defaultSpeed);
 	}
 	drive.tankDrive(0, 0); // drives forward at 0 speed
     }
@@ -167,12 +185,12 @@ public class Robot extends IterativeRobot {
 	while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
 									    // thursday
 	{
-	    drive.tankDrive(.5, .5);
+	    drive.tankDrive(defaultSpeed, defaultSpeed);
 	    SmartDashboard.putNumber("Encoder", leftEncodee.getRaw());
 	    SmartDashboard.putNumber("Ultra", ultra.getInches());
 	}
 	while (!isOperatorControl() && Math.abs(gyro.getAngle()) < 80) {
-	    drive.tankDrive(-.5, .5);
+	    drive.tankDrive(-defaultSpeed, defaultSpeed);
 	}
 	drive.tankDrive(0, 0);
     }
