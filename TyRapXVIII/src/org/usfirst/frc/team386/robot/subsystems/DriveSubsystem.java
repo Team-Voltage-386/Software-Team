@@ -309,9 +309,9 @@ public class DriveSubsystem extends Subsystem {
 	    double error = (gyro.getAngle() - (direction * angle));
 	    derivative = gyro.getRate();
 	    integral = integral + error * (time - previousTime);
-	    if (Math.abs(-.05 * error + .0 * integral + -.01 * derivative) > .3) {
-		frontLeft.set(-.1 * error + .0 * integral + -.01 * derivative);
-		frontRight.set(-.1 * error + .0 * integral + -.01 * derivative);
+	    if (Math.abs(-.05 * error + -.01 * derivative) > .3) {
+		frontLeft.set(-.1 * error + -.01 * derivative);
+		frontRight.set(-.1 * error + -.01 * derivative);
 	    } else {
 		if (-.05 * error + .0 * integral + -.01 * derivative > 0) {
 		    frontLeft.set(.3);
