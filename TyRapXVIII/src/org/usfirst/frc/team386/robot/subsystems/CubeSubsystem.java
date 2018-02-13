@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The CubeSubsystem is responsible cube intake and cube release.
  */
 public class CubeSubsystem extends Subsystem {
+
     public static final String POV_NUMBER_LABEL = "POV value";
     public static final String CUBE_CONTROL_LABEL = "Cube Control";
 

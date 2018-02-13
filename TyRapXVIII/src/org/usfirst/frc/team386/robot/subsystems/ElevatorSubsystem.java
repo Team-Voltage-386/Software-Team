@@ -25,9 +25,13 @@ public class ElevatorSubsystem extends Subsystem {
 
     public void elevatorFromDPad() {
 	while (RobotState.isEnabled())
-	    if (Robot.oi.xboxControl.getPOV(0) != -1)
+	    if (Robot.oi.xboxControl.getPOV(0) != -1) {
 		leftElevator.set(SmartDashboard.getNumber("Elevator Speed", 0)
 			* Math.acos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
+	    } else {
+		leftElevator.set(0);
+	    }
+
     }
 
     public void raiseElevatorTo(double percent) {

@@ -18,5 +18,4 @@ public class BoostStart extends InstantCommand {
     protected void initialize() {
 	Robot.driveSubsystem.startBoost();
     }
-
 }

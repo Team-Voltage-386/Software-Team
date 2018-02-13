@@ -37,8 +37,8 @@ public class Robot extends IterativeRobot {
     WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(2);
     WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(5);
 
-    WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
-    WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
+    // WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(3);
+    // WPI_TalonSRX rightSlave2 = new WPI_TalonSRX(6);
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
     Compressor compressor = new Compressor(0);
     public static Joystick right = new Joystick(0);
@@ -51,17 +51,18 @@ public class Robot extends IterativeRobot {
     public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
     // public Ultrasonic ultra2 = new Ultrasonic(0,1);
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-    double pigeonYPR [] = new double[3];
+    double pigeonYPR[] = new double[3];
     PigeonIMU pigeon = new PigeonIMU(0);
+
     @Override
     public void robotInit() {
 	rightEncodee.reset();
 	leftEncodee.reset();
 	System.out.println("Started");
 	leftSlave1.follow(frontLeft);
-	leftSlave2.follow(frontLeft);
+	// leftSlave2.follow(frontLeft);
 	rightSlave1.follow(frontRight);
-	rightSlave2.follow(frontRight);
+	// rightSlave2.follow(frontRight);
 	frontRight.configContinuousCurrentLimit(20, 0);
 	frontLeft.configContinuousCurrentLimit(20, 0);
 	frontRight.enableCurrentLimit(true);
@@ -71,7 +72,7 @@ public class Robot extends IterativeRobot {
 
 	compressor.start();
 	gearShift.start();
-	
+
 	pigeon.getYawPitchRoll(pigeonYPR);
     }
 
@@ -79,7 +80,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
 	rightEncodee.reset();
 	leftEncodee.reset();
-	//SmartDashboard.putNumber("pitch", pigeonYPR[1]);
+	// SmartDashboard.putNumber("pitch", pigeonYPR[1]);
     }
 
     public double deadBand(double in, double limit) {
@@ -118,7 +119,7 @@ public class Robot extends IterativeRobot {
 	// System.out.println("Left Encoder:"+leftEncodee.get());
 	pigeon.getYawPitchRoll(pigeonYPR);
 	SmartDashboard.putNumber("pitch", pigeonYPR[1]);
-	//SmartDashboard.putNumber("compass", pigeon.getAbsoluteCompassHeading());
+	// SmartDashboard.putNumber("compass", pigeon.getAbsoluteCompassHeading());
 	SmartDashboard.putNumber("yaw", pigeonYPR[0]);
     }
 
