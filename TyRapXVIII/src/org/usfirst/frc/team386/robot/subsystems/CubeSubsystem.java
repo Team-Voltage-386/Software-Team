@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManualWithPad;
@@ -19,8 +18,8 @@ public class CubeSubsystem extends Subsystem {
 
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
-    AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
-    AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
+    // AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
+    // AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -43,7 +42,6 @@ public class CubeSubsystem extends Subsystem {
     public void cubeOut(double speed) {
 	left.set(speed);
 	right.set(speed);
-
     }
 
     public void twistLeft(double speed) {

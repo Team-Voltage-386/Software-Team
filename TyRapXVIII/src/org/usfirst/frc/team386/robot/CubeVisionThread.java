@@ -52,7 +52,7 @@ public class CubeVisionThread extends Thread {
 
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setResolution(resolutionWidth, resolutionHeight);
-	camera.setExposureManual(25);
+	camera.setExposureManual(33);
 	camera.setWhiteBalanceManual(10);
 	// camera.setWhiteBalanceManual(value);
 	camera.setFPS(10);
@@ -66,11 +66,11 @@ public class CubeVisionThread extends Thread {
 	Mat edges = new Mat();
 
 	Size blurSize = new Size(9, 9);
-	Scalar colorStart = new Scalar(10, 100, 0);
+	Scalar colorStart = new Scalar(10, 100, 25);
 	Scalar colorEnd = new Scalar(50, 255, 255);
 	Size erodeSize = new Size(10, 10);
 	Size dilateSize = new Size(10, 10);
-	Size edgeDilateSize = new Size(2, 2);
+	Size edgeDilateSize = new Size(4, 4);
 
 	while (!Thread.interrupted()) {
 
@@ -104,7 +104,7 @@ public class CubeVisionThread extends Thread {
 
 	    Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
 	    Core.multiply(grey, new Scalar(3), grey);
-	    Imgproc.Canny(grey, edges, 120, 200);
+	    Imgproc.Canny(grey, edges, 100, 200);
 
 	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
 	    HSVOutputStream.putFrame(edges);
@@ -166,9 +166,9 @@ public class CubeVisionThread extends Thread {
     }
 
     public int getError() {
-	try {
+	if (rectChoice >= 0 && rects.size() > 0) {
 	    return (int) (160 - rects.get(rectChoice).center.x);
-	} catch (IndexOutOfBoundsException e) {
+	} else {
 	    return 0;
 	}
     }
