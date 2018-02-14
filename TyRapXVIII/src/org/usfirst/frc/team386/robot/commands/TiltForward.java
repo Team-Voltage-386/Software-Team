@@ -5,7 +5,9 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Command to correct tilt forward.
+ * 
+ * This command is started automatically by the TiltDetection command.
  */
 public class TiltForward extends InstantCommand {
 

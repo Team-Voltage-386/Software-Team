@@ -240,6 +240,7 @@ public class Robot extends IterativeRobot {
 	driveSubsystem.updateDiagnostics();
 	elevatorSubsystem.updateDiagnostics();
 	cubeSubsystem.updateDiagnostics();
+	tiltSubsystem.updateDiagnostics();
 	cubeVision.updateDiagnostics();
 
 	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
