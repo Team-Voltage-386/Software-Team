@@ -54,12 +54,9 @@ public class Robot extends IterativeRobot {
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     double pigeonYPR[] = new double[3];
     PigeonIMU pigeon = new PigeonIMU(0);
-<<<<<<< HEAD
 
-=======
     public static final double defaultSpeed = 0.5;
-    
->>>>>>> 511d021340fea294c0609b24e790d3417314459a
+
     @Override
     public void robotInit() {
 	rightEncodee.reset();
