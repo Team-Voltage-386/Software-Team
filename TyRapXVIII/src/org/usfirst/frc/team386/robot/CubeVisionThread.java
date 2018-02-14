@@ -76,8 +76,8 @@ public class CubeVisionThread extends Thread {
 
 	    cvSink.grabFrame(base);
 
-	    SmartDashboard.putString("image", image.toString());
-
+	    // SmartDashboard.putString("image", image.toString());
+	    // base.copyTo(mat);
 	    Imgproc.blur(base, mat, blurSize);
 	    // Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
 	    // Size(20, 20));
@@ -85,9 +85,11 @@ public class CubeVisionThread extends Thread {
 	    // Size(20, 20));
 
 	    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-	    SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
-	    SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
-	    SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
+	    /*
+	     * SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
+	     * SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
+	     * SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
+	     */
 	    Core.inRange(mat, colorStart, colorEnd, mat);
 	    // Imgproc.dilate(mat, mat, dilateElement);
 	    // Imgproc.erode(mat, mat, erodeElement);
@@ -103,7 +105,7 @@ public class CubeVisionThread extends Thread {
 	    Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
 
 	    Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
-	    Core.multiply(grey, new Scalar(3), grey);
+	    // Core.multiply(grey, new Scalar(3), grey);
 	    Imgproc.Canny(grey, edges, 100, 200);
 
 	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
@@ -145,11 +147,11 @@ public class CubeVisionThread extends Thread {
 		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
 	    }
 	    rectOutputStream.putFrame(base);
-	    try {
-		sleep(50);
-	    } catch (InterruptedException e) {
-
-	    }
+	    // try {
+	    // sleep(50);
+	    // } catch (InterruptedException e) {
+	    //
+	    // }
 	}
     }
 

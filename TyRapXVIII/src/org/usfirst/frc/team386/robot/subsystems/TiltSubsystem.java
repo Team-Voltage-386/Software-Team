@@ -1,69 +1,46 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.commands.TiltDetection;
+
+import com.ctre.phoenix.sensors.PigeonIMU;
+
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 
 /**
  *
  */
 public class TiltSubsystem extends Subsystem {
 
-	WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
-    WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);
-    DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
-	public static PigeonIMU pigeon = new PigeonIMU(0);
-	Timer timer = new Timer();
-    
+    public static PigeonIMU pigeon = new PigeonIMU(0);
+    Timer timer = new Timer();
 
     public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+	setDefaultCommand(new TiltDetection());
     }
-    public void tiltPrevention(boolean isRunningElevator, boolean isGoingUpRamp) {
-    	SmartDashboard.putString("Robot tilt", "nuetral");
-    	if (pitch() > 1 && !isGoingUpRamp) {
-    	    SmartDashboard.putString("Robot tilt", "positive");
-    	    double startTime = timer.get();
-    	    while (timer.get() - startTime < 3 && !isGoingUpRamp) {
-    	    	drive.tankDrive((DriveSubsystem.speedMultiplier * 1.25), (DriveSubsystem.speedMultiplier * 1.25));
-    	    }
-    	} else if (pitch() < -1 && !isGoingUpRamp) {
-    	    SmartDashboard.putString("Robot tilt", "negative");
-    	    double startTime = timer.get();
-    	    while (timer.get() - startTime < 3 && !isGoingUpRamp) {
-    	    	drive.tankDrive(-(DriveSubsystem.speedMultiplier * 1.25), -(DriveSubsystem.speedMultiplier * 1.25));
-    	    }
-    	}
+
+    public void tiltForward() {
+	SmartDashboard.putString("Robot tilt", "forwards");
+	while (pitch() < -1 * pitchLeeway / 2 && RobotState.isEnabled()) {
+	    Robot.driveSubsystem.drive.tankDrive(.5, .5);
+	}
     }
-    public void tiltCorrection() {
-    	SmartDashboard.putString("Robot tilt", "nuetral");
-    	if (pitch() > Math.abs(pitchLeeway)) {
-    	    SmartDashboard.putString("Robot tilt", "positive");
-    	    double startTime = timer.get();
-    	    while (timer.get() - startTime < 3) {
-    	    	drive.tankDrive((DriveSubsystem.speedMultiplier * 1.25), (DriveSubsystem.speedMultiplier * 1.25));
-    	    }
-    	} else if (pitch() < -Math.abs(pitchLeeway)) {
-    	    SmartDashboard.putString("Robot tilt", "negative");
-    	    double startTime = timer.get();
-    	    while (timer.get() - startTime < 3) {
-    	    	drive.tankDrive(-(DriveSubsystem.speedMultiplier * 1.25), -(DriveSubsystem.speedMultiplier * 1.25));
-    	    }
-    	}
+
+    public void tiltBackwards() {
+	SmartDashboard.putString("Robot tilt", "backwards");
+	while (pitch() > pitchLeeway / 2 && RobotState.isEnabled()) {
+	    Robot.driveSubsystem.drive.tankDrive(-.5, -.5);
+	}
     }
-    public static double pitchLeeway = 1;
-    public static double pitch() {
-    	double[] pig = new double[3];
-    	pigeon.getYawPitchRoll(pig);
-    	return pig[1];
+
+    public double pitchLeeway = 10;
+
+    public double pitch() {
+	double[] pig = new double[3];
+	pigeon.getYawPitchRoll(pig);
+	return pig[1];
     }
 }
-
