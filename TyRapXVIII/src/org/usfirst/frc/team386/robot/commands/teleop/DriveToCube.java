@@ -26,7 +26,8 @@ public class DriveToCube extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-	return Robot.oi.xboxControl.getRawButton(3);
+	// This should return false as long as the button is pushed.
+	return !Robot.oi.xboxControl.getRawButton(3);
     }
 
     // Called once after isFinished returns true
