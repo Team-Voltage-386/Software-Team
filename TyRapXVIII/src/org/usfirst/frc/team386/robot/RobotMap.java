@@ -25,15 +25,15 @@ public class RobotMap {
     public static int rightDriveEncoderChannelA = 2;
     public static int rightDriveEncoderChannelB = 3;
 
-    public static int leftCubeIntakeMotor = 9;
-    public static int rightCubeIntakeMotor = 8;
+    public static int leftCubeIntakeMotor = 2;
+    public static int rightCubeIntakeMotor = 3;
 
-    public static int lineSensorChannel = 4;
+    public static int lineSensorChannel = 7;
 
     public static int rearPingChannel = 5;
     public static int rearEchoChannel = 6;
-    public static int frontPingChannel = 7;
-    public static int frontEchoChannel = 8;
+    public static int frontPingChannel = 3;
+    public static int frontEchoChannel = 4;
 
-    public static int elevatorSpark = 19;
+    public static int elevatorSpark = 0;
 }
