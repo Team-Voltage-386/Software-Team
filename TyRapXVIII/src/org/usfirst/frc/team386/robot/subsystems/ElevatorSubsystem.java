@@ -49,6 +49,4 @@ public class ElevatorSubsystem extends Subsystem {
 	// 100 - highest it can go
     }
 
-    int testEncoder = 0; // remove this once its actually implemented
-    public boolean elevatorIsUp = testEncoder < 1;
 }
