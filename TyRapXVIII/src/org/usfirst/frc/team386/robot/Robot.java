@@ -6,6 +6,7 @@ import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
+import org.usfirst.frc.team386.robot.commands.TiltDetection;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
@@ -15,6 +16,7 @@ import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.TiltSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -34,8 +36,10 @@ public class Robot extends IterativeRobot {
     public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    public static final TiltSubsystem tiltSubsystem = new TiltSubsystem();
 
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
+    public static final TiltDetection tiltDetection = new TiltDetection();
 
     public static OI oi;
     public static GameData gameData;
@@ -102,6 +106,7 @@ public class Robot extends IterativeRobot {
 	gameData = new GameData();
 	cubeVision.start();
 	initializeDashboard();
+	tiltDetection.start();
     }
 
     /**
