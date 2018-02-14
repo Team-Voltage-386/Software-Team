@@ -147,6 +147,8 @@ public class CubeVisionThread extends Thread {
 		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
 	    }
 	    rectOutputStream.putFrame(base);
+
+	    Thread.yield();
 	    // try {
 	    // sleep(50);
 	    // } catch (InterruptedException e) {
