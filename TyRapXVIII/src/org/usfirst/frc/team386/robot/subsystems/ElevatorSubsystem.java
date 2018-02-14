@@ -24,7 +24,7 @@ public class ElevatorSubsystem extends Subsystem {
     // here. Call these from Commands.
 
     public void initDefaultCommand() {
-	// setDefaultCommand(new ElevatorRaise());
+	// setDefaultCommand(new ManualElevator());
     }
 
     public void elevatorFromDPad(int pov, double speed) {
