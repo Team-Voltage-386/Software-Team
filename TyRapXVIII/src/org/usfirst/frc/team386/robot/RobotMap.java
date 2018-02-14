@@ -36,4 +36,6 @@ public class RobotMap {
     public static int frontEchoChannel = 8;
 
     public static int elevatorSpark = 19;
+
+    public static int pigeon = 0;
 }

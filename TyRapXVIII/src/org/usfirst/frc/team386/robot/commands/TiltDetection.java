@@ -5,7 +5,8 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This command is run continuously as the default command in the tilt
+ * subsystem. It decides if tilt correction should be applied.
  */
 public class TiltDetection extends Command {
 
