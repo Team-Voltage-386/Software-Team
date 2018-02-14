@@ -131,6 +131,8 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber("Pitch", pitch());
 	SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
 	SmartDashboard.putNumber("One ultra", oneUltra.getInches());
+	// SmartDashboard.putNumber("Elevator output",
+	// Math.cos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
     }
 
     /**

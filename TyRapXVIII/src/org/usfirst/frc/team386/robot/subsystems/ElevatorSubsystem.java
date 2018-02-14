@@ -28,8 +28,10 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void elevatorFromDPad(int pov, double speed) {
-	if (pov != -1) {
-	    leftElevator.set(speed * Math.acos(Math.toRadians(pov)));
+	if (pov != -1 && pov < 270 && pov > 90) {
+	    leftElevator.set(-1 * speed);
+	} else if (pov != -1) {
+	    leftElevator.set(speed);
 	} else {
 	    leftElevator.set(0);
 	}
