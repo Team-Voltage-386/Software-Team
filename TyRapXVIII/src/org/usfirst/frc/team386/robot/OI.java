@@ -4,6 +4,7 @@ import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.GearShift;
+import org.usfirst.frc.team386.robot.commands.teleop.SetElevatorToVault;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -17,13 +18,14 @@ public class OI {
     public Joystick xboxControl = new Joystick(2);
     public Joystick leftJoy = new Joystick(0);
     public Joystick rightJoy = new Joystick(1);
-    public Joystick manipulator = new Joystick(3);
+    public static Joystick manipulator = new Joystick(3);
 
     public Button arcadeDriveShiftButton = new JoystickButton(xboxControl, 5);
     public Button arcadeDriveBoostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
     public Button cubeButton = new JoystickButton(xboxControl, 3);
+    public Button arcadeDriveVaultButton = new JoystickButton(xboxControl, 2);
 
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
@@ -36,5 +38,7 @@ public class OI {
 	tankDriveBoostButton.whenReleased(new BoostStop());
 
 	cubeButton.whenPressed(new DriveToCube());
+
+	arcadeDriveVaultButton.whenPressed(new SetElevatorToVault());
     }
 }
