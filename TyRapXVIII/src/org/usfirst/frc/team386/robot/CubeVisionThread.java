@@ -20,6 +20,12 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * This is a thread that is responsible for reading images from the camera and
+ * detecting the cubes in the camera's view. If it detects cubes in the view, it
+ * will render the contours of the cubes, highlighting all of the detected
+ * cubes.
+ */
 public class CubeVisionThread extends Thread {
 
     public CvSink cvSink;
@@ -47,9 +53,11 @@ public class CubeVisionThread extends Thread {
 	SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
     }
 
+    /**
+     * Run the vision thread.
+     */
     @Override
     public void run() {
-
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setResolution(resolutionWidth, resolutionHeight);
 	camera.setExposureManual(33);
@@ -157,10 +165,12 @@ public class CubeVisionThread extends Thread {
 	}
     }
 
+    // TODO: is this used?
     public void setRectangleChoice(int rectIn) {
 	rectChoice = rectIn;
     }
 
+    // TODO: is this used?
     public RotatedRect getRectChoice() {
 	try {
 	    return rects.get(rectChoice);
@@ -169,6 +179,11 @@ public class CubeVisionThread extends Thread {
 	}
     }
 
+    /**
+     * Used to determine if the cube is centered in the camera's view.
+     * 
+     * @return The number of pixels the cube is off center
+     */
     public int getError() {
 	if (rectChoice >= 0 && rects.size() > 0) {
 	    return (int) (160 - rects.get(rectChoice).center.x);

@@ -5,7 +5,9 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Drive command that works with an arcade-style controller. This is meant to be
+ * run as the default command of the drive subsystem if the driver is driving in
+ * arcade mode.
  */
 public class ArcadeDrive extends Command {
 
@@ -21,7 +23,6 @@ public class ArcadeDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 	Robot.driveSubsystem.driveArcade(Robot.oi.xboxControl.getRawAxis(1), Robot.oi.xboxControl.getRawAxis(2));
-	// Robot.driveSubsystem.tiltPrevention();
     }
 
     // Make this return true when this Command no longer needs to run execute()

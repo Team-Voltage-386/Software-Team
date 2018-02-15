@@ -21,10 +21,13 @@ public class OI {
     public Joystick rightJoy = new Joystick(1);
     public Joystick manipulator = new Joystick(3);
 
+    // driver buttons
     public Button arcadeDriveShiftButton = new JoystickButton(xboxControl, 5);
     public Button arcadeDriveBoostButton = new JoystickButton(xboxControl, 8);
     public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
+
+    // manipulator buttons
     public Button cubeButton = new JoystickButton(xboxControl, 3);
     public Button arcadeDriveVaultButton = new JoystickButton(xboxControl, 2);
     public Button arcadeDriveLockElevator = new JoystickButton(xboxControl, 1);

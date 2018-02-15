@@ -119,7 +119,8 @@ public class Robot extends IterativeRobot {
     }
 
     /**
-     * Initialize the dashboard.
+     * Initialize the dashboard. Sets up all of the controls and initializes any
+     * diagnostic display fields.
      */
     private void initializeDashboard() {
 	// Autonomous control
@@ -175,6 +176,9 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().removeAll();
     }
 
+    /**
+     * Called repeatedly while the robot is disabled.
+     */
     @Override
     public void disabledPeriodic() {
 	Scheduler.getInstance().run();
@@ -191,7 +195,6 @@ public class Robot extends IterativeRobot {
      * chooser code above (like the commented example) or additional comparisons to
      * the switch structure below with additional strings & commands.
      */
-
     @Override
     public void autonomousInit() {
 	gameData.readGameData();
@@ -215,6 +218,9 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().run();
     }
 
+    /**
+     * Called once when the robot enters teleop mode.
+     */
     @Override
     public void teleopInit() {
 	driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));

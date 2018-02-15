@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Use the DPad to manipulate the cube.
  */
 public class CubeManualWithPad extends Command {
 
