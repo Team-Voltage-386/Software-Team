@@ -1,4 +1,4 @@
-package org.usfirst.frc.team386.robot.commands.teleop;
+package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 

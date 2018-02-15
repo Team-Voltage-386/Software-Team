@@ -3,8 +3,8 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
+import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
-import org.usfirst.frc.team386.robot.commands.teleop.SetElevator;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
