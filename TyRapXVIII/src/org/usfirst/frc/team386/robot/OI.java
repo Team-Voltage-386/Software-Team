@@ -2,8 +2,8 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
-import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.GearShift;
+import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.teleop.SetElevatorToVault;
 
 import edu.wpi.first.wpilibj.Joystick;

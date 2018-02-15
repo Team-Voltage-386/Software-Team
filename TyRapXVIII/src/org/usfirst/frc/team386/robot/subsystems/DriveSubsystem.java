@@ -87,6 +87,8 @@ public class DriveSubsystem extends Subsystem {
 
     ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
+    private DriveToCube driveToCube;
+
     /*
      * Construct a new DriveSubsystem.
      */
@@ -129,6 +131,8 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber("Pitch", pitch());
 	SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
 	SmartDashboard.putNumber("One ultra", oneUltra.getInches());
+	// SmartDashboard.putNumber("Elevator output",
+	// Math.cos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
     }
 
     /**
@@ -239,18 +243,27 @@ public class DriveSubsystem extends Subsystem {
 	stop();
     }
 
-    public void driveToCubeTeleop() {
-	timer.reset();
+    /**
+     * An instance of this internal class is used whenever the driver wants to
+     * computer-vision assistance to drive towards a cube. It contains internal
+     * state for PID control.
+     */
+    class DriveToCube {
 	double KP = -.0075, KD = -.1, KI = -.001;
 	double previousTime = 0, time, integral = 0;
 	double previousError = Robot.cubeVision.getError();
-	while (Robot.oi.xboxControl.getRawButton(3)) {
+
+	DriveToCube() {
+	    timer.reset();
+	}
+
+	void drive(double speed) {
 	    time = timer.get();
 	    double error = (Robot.cubeVision.getError());
 	    double derivative = (error - previousError) / (time - previousTime);
 	    integral += error * (time - previousTime);
 	    double value = KP * error + KD * derivative + KI * integral;
-	    drive.arcadeDrive(-1 * Robot.oi.xboxControl.getRawAxis(1), value);
+	    drive.arcadeDrive(-1 * speed, value);
 	    updateDiagnostics();
 	    previousTime = time;
 	    previousError = error;
@@ -258,6 +271,32 @@ public class DriveSubsystem extends Subsystem {
 	    SmartDashboard.putNumber("derivative", KD * derivative);
 	    SmartDashboard.putNumber("integral", KI * integral);
 	}
+    }
+
+    /**
+     * Prepare to drive to the cube with computer vision assistance in teleop mode.
+     */
+    public void prepareDriveToCubeTeleop() {
+	driveToCube = new DriveToCube();
+    }
+
+    /**
+     * Execute the drive to the cube with computer vision assistance in telop mode.
+     * 
+     * @param speed
+     *            The speed to drive
+     */
+    public void driveToCubeTeleop(double speed) {
+	if (driveToCube == null)
+	    throw new IllegalStateException("Call prepareDriveToCubeTeleop before executing the assisted drive");
+	driveToCube.drive(speed);
+    }
+
+    /**
+     * Complete the drive to cube with computer vision assistance.
+     */
+    public void completeDriveToCubeTeleop() {
+	driveToCube = null;
     }
 
     public void driveToCubeAuto() {

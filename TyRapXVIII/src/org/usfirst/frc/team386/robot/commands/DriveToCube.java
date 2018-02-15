@@ -15,10 +15,8 @@ public class DriveToCube extends InstantCommand {
 	requires(Robot.driveSubsystem);
     }
 
-    protected void initialize() {
-	if (RobotState.isOperatorControl()) {
-	    Robot.driveSubsystem.driveToCubeTeleop();
-	} else {
+    protected void execute() {
+	if (!RobotState.isOperatorControl()) {
 	    Robot.driveSubsystem.driveToCubeAuto();
 	}
     }

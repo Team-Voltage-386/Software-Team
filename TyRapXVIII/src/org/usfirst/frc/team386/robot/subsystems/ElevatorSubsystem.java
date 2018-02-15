@@ -2,7 +2,7 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -11,8 +11,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * such as raising and lowering the elevator.
  */
 public class ElevatorSubsystem extends Subsystem {
-    Spark leftElevator = new Spark(RobotMap.elevatorSpark);
-    DoubleSolenoid raiseIntake = new DoubleSolenoid(4, 5);
+    /*
+     * <<<<<<< HEAD Spark leftElevator = new Spark(RobotMap.elevatorSpark);
+     * DoubleSolenoid raiseIntake = new DoubleSolenoid(4, 5); =======
+     */ Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
+    Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
+    /* >>>>>>> 32a0bf106497aca4269ab73f725daa772f246589 */
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -30,10 +34,12 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void elevatorFromDPad(int pov, double speed) {
-	if (pov != -1) {
-	    leftElevator.set(speed * Math.acos(Math.toRadians(pov)));
+	if (pov != -1 && pov < 270 && pov > 90) {
+	    elevatorSpark.set(-1 * speed);
+	} else if (pov != -1) {
+	    elevatorSpark.set(speed);
 	} else {
-	    leftElevator.set(0);
+	    elevatorSpark.set(0);
 	}
     }
 
@@ -42,6 +48,7 @@ public class ElevatorSubsystem extends Subsystem {
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
+	// encoder.reset();
     }
 
     public void lowerElevatorTo(double percent) {
@@ -49,6 +56,19 @@ public class ElevatorSubsystem extends Subsystem {
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
+	// encoder.reset();
+    }
+
+    public void setHeight(int ticks) {
+	if (elevatorEncoder.get() < ticks) {
+	    while (elevatorEncoder.get() < ticks) {
+		elevatorSpark.set(1);
+	    }
+	} else {
+	    while (elevatorEncoder.get() > ticks) {
+		elevatorSpark.set(-1);
+	    }
+	}
     }
 
 }
