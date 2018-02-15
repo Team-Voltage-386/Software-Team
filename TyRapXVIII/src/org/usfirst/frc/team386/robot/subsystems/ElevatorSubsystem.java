@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -10,7 +11,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * such as raising and lowering the elevator.
  */
 public class ElevatorSubsystem extends Subsystem {
-    Spark leftElevator = new Spark(RobotMap.elevatorSpark);
+    Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
+    Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -29,11 +31,11 @@ public class ElevatorSubsystem extends Subsystem {
 
     public void elevatorFromDPad(int pov, double speed) {
 	if (pov != -1 && pov < 270 && pov > 90) {
-	    leftElevator.set(-1 * speed);
+	    elevatorSpark.set(-1 * speed);
 	} else if (pov != -1) {
-	    leftElevator.set(speed);
+	    elevatorSpark.set(speed);
 	} else {
-	    leftElevator.set(0);
+	    elevatorSpark.set(0);
 	}
     }
 
@@ -42,6 +44,7 @@ public class ElevatorSubsystem extends Subsystem {
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
+	// encoder.reset();
     }
 
     public void lowerElevatorTo(double percent) {
@@ -49,6 +52,19 @@ public class ElevatorSubsystem extends Subsystem {
 	// plan is to make it a percentage on how much we can raise it in general.
 	// 0 - lowest it can go
 	// 100 - highest it can go
+	// encoder.reset();
+    }
+
+    public void setHeight(int ticks) {
+	if (elevatorEncoder.get() < ticks) {
+	    while (elevatorEncoder.get() < ticks) {
+		elevatorSpark.set(1);
+	    }
+	} else {
+	    while (elevatorEncoder.get() > ticks) {
+		elevatorSpark.set(-1);
+	    }
+	}
     }
 
 }
