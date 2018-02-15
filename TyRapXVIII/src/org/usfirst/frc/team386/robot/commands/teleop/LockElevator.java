@@ -12,8 +12,6 @@ public class LockElevator extends InstantCommand {
     public LockElevator() {
 	super();
 	requires(Robot.elevatorSubsystem);
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes

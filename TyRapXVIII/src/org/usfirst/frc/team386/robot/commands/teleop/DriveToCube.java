@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveToCube extends Command {
 
     public DriveToCube() {
-	// Use requires() here to declare subsystem dependencies
 	requires(Robot.driveSubsystem);
     }
 

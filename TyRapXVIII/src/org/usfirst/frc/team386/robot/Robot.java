@@ -41,7 +41,16 @@ public class Robot extends IterativeRobot {
 
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
 
+    /**
+     * The operator interface. This is where the joystick(s) and manipulator are
+     * configured.
+     */
     public static OI oi;
+
+    /**
+     * Provides game data from the driver station. This is where the randomized
+     * switch and scale data comes from.
+     */
     public static GameData gameData;
 
     // Game data configurations
