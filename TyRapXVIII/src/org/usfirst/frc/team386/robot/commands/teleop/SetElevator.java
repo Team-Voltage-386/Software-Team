@@ -7,18 +7,20 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class SetElevatorToVault extends InstantCommand {
+public class SetElevator extends InstantCommand {
+    int ticks;
 
-    public SetElevatorToVault() {
+    public SetElevator(int ticksIn) {
 	super();
 	requires(Robot.elevatorSubsystem);
+	ticks = ticksIn;
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
     }
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.elevatorSubsystem.setHeight(200/* set acutal ticks later */);
+	Robot.elevatorSubsystem.setHeight(ticks);
     }
 
 }

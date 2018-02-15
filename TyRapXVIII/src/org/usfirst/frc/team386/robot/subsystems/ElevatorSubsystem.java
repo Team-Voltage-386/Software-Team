@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.RobotMap;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -15,6 +16,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
     Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
+    Solenoid chainBreaker = new Solenoid(20);
+    DoubleSolenoid leftArm = new DoubleSolenoid(18, 19);
+    DoubleSolenoid rightArm = new DoubleSolenoid(16, 17);
 
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
@@ -71,4 +75,17 @@ public class ElevatorSubsystem extends Subsystem {
 	solenoid.set(gear);
     }
 
+    public void breakChain() {
+	chainBreaker.set(true);
+    }
+
+    public void shiftArms() {
+	if (leftArm.get() == DoubleSolenoid.Value.kReverse) {
+	    leftArm.set(DoubleSolenoid.Value.kForward);
+	    rightArm.set(DoubleSolenoid.Value.kForward);
+	} else {
+	    leftArm.set(DoubleSolenoid.Value.kReverse);
+	    rightArm.set(DoubleSolenoid.Value.kReverse);
+	}
+    }
 }
