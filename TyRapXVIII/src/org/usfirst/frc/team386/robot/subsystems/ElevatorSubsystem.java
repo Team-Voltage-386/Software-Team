@@ -23,8 +23,8 @@ public class ElevatorSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward;
-    public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kForward;
+    public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -64,10 +64,10 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void lockElevator() {
-	if (solenoid.get() == HIGH_GEAR) {
-	    lock(LOW_GEAR);
+	if (solenoid.get() == LOCKED) {
+	    lock(UNLOCKED);
 	} else {
-	    lock(HIGH_GEAR);
+	    lock(LOCKED);
 	}
     }
 
