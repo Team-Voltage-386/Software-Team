@@ -4,7 +4,7 @@ import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
-import org.usfirst.frc.team386.robot.commands.teleop.SetElevatorToVault;
+import org.usfirst.frc.team386.robot.commands.teleop.SetElevator;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -39,6 +39,6 @@ public class OI {
 
 	cubeButton.whenPressed(new DriveToCube());
 
-	arcadeDriveVaultButton.whenPressed(new SetElevatorToVault());
+	arcadeDriveVaultButton.whenPressed(new SetElevator(200));
     }
 }
