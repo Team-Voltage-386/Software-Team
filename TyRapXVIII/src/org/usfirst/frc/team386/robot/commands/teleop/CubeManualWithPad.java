@@ -5,13 +5,12 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Use the DPad to manipulate the cube.
  */
 public class CubeManualWithPad extends Command {
 
     public CubeManualWithPad() {
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
+	requires(Robot.cubeSubsystem);
     }
 
     // Called just before this Command runs the first time

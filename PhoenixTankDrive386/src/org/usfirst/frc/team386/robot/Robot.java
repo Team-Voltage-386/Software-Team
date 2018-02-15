@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Spark;
 //import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,14 +43,17 @@ public class Robot extends IterativeRobot {
     Compressor compressor = new Compressor(0);
     public static Joystick right = new Joystick(0);
     public static Joystick left = new Joystick(1);
-    public static Joystick manipulator = new Joystick(2);
+    public static Joystick manipulator = new Joystick(0);
     Encoder leftEncodee = new Encoder(0, 1);
     Encoder rightEncodee = new Encoder(2, 3);
     public GearShift gearShift = new GearShift();
     SmartDashboard smarty = new SmartDashboard();
-    public final static AnalogUltrasonic ultra = new AnalogUltrasonic(0, 1.18, 10.3);
+    public final static AnalogUltrasonic ultraLeft = new AnalogUltrasonic(0, 1.18, 10.3);
+    public final static AnalogUltrasonic ultraRight = new AnalogUltrasonic(1, 1.18, 10.3);
     // public Ultrasonic ultra2 = new Ultrasonic(0,1);
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    public final Spark leftIntake = new Spark(0);
+    public final Spark rightIntake = new Spark(1);
 
     @Override
     public void robotInit() {
@@ -71,7 +75,10 @@ public class Robot extends IterativeRobot {
 
 	compressor.start();
 	gearShift.start();
-
+	SmartDashboard.putNumber("left fast", .5);
+	SmartDashboard.putNumber("right fast", .5);
+	SmartDashboard.putNumber("left slow", -.5);
+	SmartDashboard.putNumber("right slow", -.5);
     }
 
     @Override
@@ -100,6 +107,7 @@ public class Robot extends IterativeRobot {
 	double rightY = right.getY();
 	// drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
 	drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
+	cubeIntake();
 
 	// dark
 	// blue
@@ -158,6 +166,22 @@ public class Robot extends IterativeRobot {
 	rightEncodee.reset();
 
 	// hello world
+    }
+
+    public void cubeIntake() {
+	double difference = ultraLeft.getInches() - ultraRight.getInches();
+	if (manipulator.getRawAxis(1) < 0) {
+	    if (difference > 2) {
+		leftIntake.set(SmartDashboard.getNumber("left fast", .5));
+		rightIntake.set(SmartDashboard.getNumber("right slow", -.5));
+	    } else if (-2 < difference) {
+		leftIntake.set(SmartDashboard.getNumber("left slow", -.5));
+		rightIntake.set(SmartDashboard.getNumber("right fast", .5));
+	    } else if (difference < -2 || difference < 2) {
+		leftIntake.set(manipulator.getRawAxis(1));
+		rightIntake.set(manipulator.getRawAxis(1));
+	    }
+	}
     }
 
     public void turningWithEncoder() {

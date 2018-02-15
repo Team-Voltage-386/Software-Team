@@ -1,33 +1,35 @@
 package org.usfirst.frc.team386.robot.commands;
 
+import org.usfirst.frc.team386.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team386.robot.Robot;
-import org.usfirst.frc.team386.robot.subsystems.TiltSubsystem;
 /**
- *
+ * This command is run continuously as the default command in the tilt
+ * subsystem. It decides if tilt correction should be applied.
  */
 public class TiltDetection extends Command {
-	
+
     public TiltDetection() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+	requires(Robot.tiltSubsystem);
     }
+
     // Called just before this Command runs the first time
     protected void initialize() {
-    	requires(Robot.elevatorSubsystem);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if ((TiltSubsystem.pitch() > Math.abs(TiltSubsystem.pitchLeeway) && Robot.elevatorSubsystem.elevatorIsUp) || (TiltSubsystem.pitch() < -Math.abs(TiltSubsystem.pitchLeeway) && Robot.elevatorSubsystem.elevatorIsUp)) {
-    		new TiltCorrect().start();
-    	}
+	if (Robot.tiltSubsystem.pitch() > Robot.tiltSubsystem.pitchLeeway)
+	    new TiltBack().start();
+	if (Robot.tiltSubsystem.pitch() < -1 * Robot.tiltSubsystem.pitchLeeway)
+	    new TiltForward().start();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+	return false;
     }
 
     // Called once after isFinished returns true

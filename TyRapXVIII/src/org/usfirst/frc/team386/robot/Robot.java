@@ -6,13 +6,13 @@ import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.Stop;
-import org.usfirst.frc.team386.robot.commands.TiltDetection;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
 import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -37,11 +37,20 @@ public class Robot extends IterativeRobot {
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static final TiltSubsystem tiltSubsystem = new TiltSubsystem();
+    public static final ArmsSubsystem armsSubsystem = new ArmsSubsystem();
 
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
-    public static final TiltDetection tiltDetection = new TiltDetection();
 
+    /**
+     * The operator interface. This is where the joystick(s) and manipulator are
+     * configured.
+     */
     public static OI oi;
+
+    /**
+     * Provides game data from the driver station. This is where the randomized
+     * switch and scale data comes from.
+     */
     public static GameData gameData;
 
     // Game data configurations
@@ -75,6 +84,7 @@ public class Robot extends IterativeRobot {
     public static final String MOVE_FROM_WALL = "Move to wall";
     public static final String DRIVE_TO_CUBE = "Drive to cube";
     public static final String STOP_LABEL = "Stop the Robit";
+    public static final String ELEVATOR_SPEED_LABEL = "Elevator Speed";
 
     // Strategic autonomous commands
     public static final String ROCK = "Rock";
@@ -106,13 +116,14 @@ public class Robot extends IterativeRobot {
 	gameData = new GameData();
 	cubeVision.start();
 	initializeDashboard();
-	tiltDetection.start();
     }
 
     /**
-     * Initialize the dashboard.
+     * Initialize the dashboard. Sets up all of the controls and initializes any
+     * diagnostic display fields.
      */
     private void initializeDashboard() {
+	// Autonomous control
 	chooserMode.addDefault(ROCK, new MartianRock());
 	chooserMode.addObject(SWITCH, new SwitchAuto());
 	chooserMode.addObject(SCALE, new ScaleAuto());
@@ -139,6 +150,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
 	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
+	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .25);
 
 	// Diagnostic data
 	updateDiagnostics();
@@ -152,7 +164,6 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCube());
 
-	SmartDashboard.putNumber("Elevator Speed", .25);
     }
 
     /**
@@ -165,6 +176,9 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().removeAll();
     }
 
+    /**
+     * Called repeatedly while the robot is disabled.
+     */
     @Override
     public void disabledPeriodic() {
 	Scheduler.getInstance().run();
@@ -181,7 +195,6 @@ public class Robot extends IterativeRobot {
      * chooser code above (like the commented example) or additional comparisons to
      * the switch structure below with additional strings & commands.
      */
-
     @Override
     public void autonomousInit() {
 	gameData.readGameData();
@@ -205,6 +218,9 @@ public class Robot extends IterativeRobot {
 	Scheduler.getInstance().run();
     }
 
+    /**
+     * Called once when the robot enters teleop mode.
+     */
     @Override
     public void teleopInit() {
 	driveSubsystem.setDriveMode(SmartDashboard.getBoolean(DRIVE_MODE_LABEL, true));
@@ -242,6 +258,7 @@ public class Robot extends IterativeRobot {
 	driveSubsystem.updateDiagnostics();
 	elevatorSubsystem.updateDiagnostics();
 	cubeSubsystem.updateDiagnostics();
+	tiltSubsystem.updateDiagnostics();
 	cubeVision.updateDiagnostics();
 
 	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);

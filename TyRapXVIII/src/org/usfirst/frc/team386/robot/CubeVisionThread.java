@@ -20,6 +20,12 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * This is a thread that is responsible for reading images from the camera and
+ * detecting the cubes in the camera's view. If it detects cubes in the view, it
+ * will render the contours of the cubes, highlighting all of the detected
+ * cubes.
+ */
 public class CubeVisionThread extends Thread {
 
     public CvSink cvSink;
@@ -47,12 +53,14 @@ public class CubeVisionThread extends Thread {
 	SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
     }
 
+    /**
+     * Run the vision thread.
+     */
     @Override
     public void run() {
-
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setResolution(resolutionWidth, resolutionHeight);
-	camera.setExposureManual(25);
+	camera.setExposureManual(33);
 	camera.setWhiteBalanceManual(10);
 	// camera.setWhiteBalanceManual(value);
 	camera.setFPS(10);
@@ -66,18 +74,18 @@ public class CubeVisionThread extends Thread {
 	Mat edges = new Mat();
 
 	Size blurSize = new Size(9, 9);
-	Scalar colorStart = new Scalar(10, 100, 0);
+	Scalar colorStart = new Scalar(10, 100, 25);
 	Scalar colorEnd = new Scalar(50, 255, 255);
 	Size erodeSize = new Size(10, 10);
 	Size dilateSize = new Size(10, 10);
-	Size edgeDilateSize = new Size(2, 2);
+	Size edgeDilateSize = new Size(4, 4);
 
 	while (!Thread.interrupted()) {
 
 	    cvSink.grabFrame(base);
 
-	    SmartDashboard.putString("image", image.toString());
-
+	    // SmartDashboard.putString("image", image.toString());
+	    // base.copyTo(mat);
 	    Imgproc.blur(base, mat, blurSize);
 	    // Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
 	    // Size(20, 20));
@@ -85,9 +93,11 @@ public class CubeVisionThread extends Thread {
 	    // Size(20, 20));
 
 	    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-	    SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
-	    SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
-	    SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
+	    /*
+	     * SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
+	     * SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
+	     * SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
+	     */
 	    Core.inRange(mat, colorStart, colorEnd, mat);
 	    // Imgproc.dilate(mat, mat, dilateElement);
 	    // Imgproc.erode(mat, mat, erodeElement);
@@ -103,8 +113,8 @@ public class CubeVisionThread extends Thread {
 	    Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
 
 	    Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
-	    Core.multiply(grey, new Scalar(3), grey);
-	    Imgproc.Canny(grey, edges, 120, 200);
+	    // Core.multiply(grey, new Scalar(3), grey);
+	    Imgproc.Canny(grey, edges, 100, 200);
 
 	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
 	    HSVOutputStream.putFrame(edges);
@@ -145,18 +155,22 @@ public class CubeVisionThread extends Thread {
 		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
 	    }
 	    rectOutputStream.putFrame(base);
-	    try {
-		sleep(50);
-	    } catch (InterruptedException e) {
 
-	    }
+	    Thread.yield();
+	    // try {
+	    // sleep(50);
+	    // } catch (InterruptedException e) {
+	    //
+	    // }
 	}
     }
 
+    // TODO: is this used?
     public void setRectangleChoice(int rectIn) {
 	rectChoice = rectIn;
     }
 
+    // TODO: is this used?
     public RotatedRect getRectChoice() {
 	try {
 	    return rects.get(rectChoice);
@@ -165,10 +179,15 @@ public class CubeVisionThread extends Thread {
 	}
     }
 
+    /**
+     * Used to determine if the cube is centered in the camera's view.
+     * 
+     * @return The number of pixels the cube is off center
+     */
     public int getError() {
-	try {
+	if (rectChoice >= 0 && rects.size() > 0) {
 	    return (int) (160 - rects.get(rectChoice).center.x);
-	} catch (IndexOutOfBoundsException e) {
+	} else {
 	    return 0;
 	}
     }

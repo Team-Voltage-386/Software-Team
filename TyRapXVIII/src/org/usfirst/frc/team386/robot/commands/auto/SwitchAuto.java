@@ -4,7 +4,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
-import org.usfirst.frc.team386.robot.commands.LowerIntake;
+import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 
@@ -137,7 +137,7 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoLeft extends CommandGroup {
 
 	CenterSwitchAutoLeft() {
-	    addSequential(new LowerIntake());
+	    addSequential(new ShiftArms());
 	    addParallel(new CenterSwitchAutoLeftDrive());
 	    addParallel(new ElevatorRaise());
 	    addSequential(new CubeRelease());
@@ -163,7 +163,7 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRight extends CommandGroup {
 
 	CenterSwitchAutoRight() {
-	    addSequential(new LowerIntake());
+	    addSequential(new ShiftArms());
 	    addParallel(new CenterSwitchAutoRightDrive());
 	    addParallel(new ElevatorRaise());
 	    addSequential(new CubeRelease());
