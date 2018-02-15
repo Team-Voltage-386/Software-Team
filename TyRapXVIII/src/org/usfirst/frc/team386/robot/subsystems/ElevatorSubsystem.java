@@ -11,12 +11,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * such as raising and lowering the elevator.
  */
 public class ElevatorSubsystem extends Subsystem {
-    /*
-     * <<<<<<< HEAD Spark leftElevator = new Spark(RobotMap.elevatorSpark);
-     * DoubleSolenoid raiseIntake = new DoubleSolenoid(4, 5); =======
-     */ Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
+    Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
     Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
-    /* >>>>>>> 32a0bf106497aca4269ab73f725daa772f246589 */
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -41,22 +37,6 @@ public class ElevatorSubsystem extends Subsystem {
 	} else {
 	    elevatorSpark.set(0);
 	}
-    }
-
-    public void raiseElevatorTo(double percent) {
-	// System.out.println("Work In Progress");
-	// plan is to make it a percentage on how much we can raise it in general.
-	// 0 - lowest it can go
-	// 100 - highest it can go
-	// encoder.reset();
-    }
-
-    public void lowerElevatorTo(double percent) {
-	// System.out.println("Work In Progress");
-	// plan is to make it a percentage on how much we can raise it in general.
-	// 0 - lowest it can go
-	// 100 - highest it can go
-	// encoder.reset();
     }
 
     public void setHeight(int ticks) {
