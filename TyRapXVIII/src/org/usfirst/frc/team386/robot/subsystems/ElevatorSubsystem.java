@@ -19,8 +19,7 @@ public class ElevatorSubsystem extends Subsystem {
 												 // values
     Solenoid chainBreaker = new Solenoid(RobotMap.chainBreaker);
 
-    DoubleSolenoid lockSolenoid = new DoubleSolenoid(RobotMap.elevatorLockForwardChannel,
-	    RobotMap.elevatorLockReverseChannel);
+    DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
 
     public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
@@ -63,7 +62,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void lockElevator() {
-	if (lockSolenoid.get() == LOCKED) {
+	if (latchSolenoid.get() == LOCKED) {
 	    lock(UNLOCKED);
 	} else {
 	    lock(LOCKED);
@@ -71,7 +70,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void lock(Value gear) {
-	lockSolenoid.set(gear);
+	latchSolenoid.set(gear);
     }
 
     public void breakChain() {

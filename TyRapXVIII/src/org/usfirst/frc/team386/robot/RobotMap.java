@@ -44,12 +44,9 @@ public class RobotMap {
 
     public static int chainBreaker = 19;
 
-    public static int leftArmForwardChannel = 17;
-    public static int leftArmReverseChannel = 18;
+    public static int armsForwardChannel = 17;
+    public static int armsReverseChannel = 18;
 
-    public static int rightArmForwardChannel = 15;
-    public static int rightArmReverseChannel = 16;
-
-    public static int elevatorLockForwardChannel = 13;
-    public static int elevatorLockReverseChannel = 14;
+    public static int latchForwardChannel = 13;
+    public static int latchReverseChannel = 14;
 }
