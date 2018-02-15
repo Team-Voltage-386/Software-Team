@@ -67,7 +67,7 @@ public class DriveSubsystem extends Subsystem {
 
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
-    Compressor compressor = new Compressor(RobotMap.gearShiftCompressor);
+    Compressor compressor = new Compressor(RobotMap.compressor);
 
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
