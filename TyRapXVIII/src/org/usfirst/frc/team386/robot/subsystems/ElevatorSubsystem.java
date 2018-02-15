@@ -17,8 +17,6 @@ public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
     Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
     Solenoid chainBreaker = new Solenoid(20);
-    DoubleSolenoid leftArm = new DoubleSolenoid(18, 19);
-    DoubleSolenoid rightArm = new DoubleSolenoid(16, 17);
 
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
@@ -79,13 +77,4 @@ public class ElevatorSubsystem extends Subsystem {
 	chainBreaker.set(true);
     }
 
-    public void shiftArms() {
-	if (leftArm.get() == DoubleSolenoid.Value.kReverse) {
-	    leftArm.set(DoubleSolenoid.Value.kForward);
-	    rightArm.set(DoubleSolenoid.Value.kForward);
-	} else {
-	    leftArm.set(DoubleSolenoid.Value.kReverse);
-	    rightArm.set(DoubleSolenoid.Value.kReverse);
-	}
-    }
 }

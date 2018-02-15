@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.commands.CubeRelease;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
-import org.usfirst.frc.team386.robot.commands.LowerIntake;
+import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 
@@ -71,7 +71,7 @@ public class ScaleAuto extends InstantCommand {
     class LeftScaleAutoLeft extends CommandGroup {
 
 	LeftScaleAutoLeft() {
-	    addSequential(new LowerIntake());
+	    addSequential(new ShiftArms());
 	    addSequential(new DriveForward(292));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(558)); // measured in mm

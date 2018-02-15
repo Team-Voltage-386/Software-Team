@@ -12,6 +12,7 @@ import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
 import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static final TiltSubsystem tiltSubsystem = new TiltSubsystem();
+    public static final ArmsSubsystem armsSubsystem = new ArmsSubsystem();
 
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
 
