@@ -1,5 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -10,8 +12,8 @@ public class ArmsSubsystem extends Subsystem {
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    DoubleSolenoid leftArm = new DoubleSolenoid(18, 19);
-    DoubleSolenoid rightArm = new DoubleSolenoid(16, 17);
+    DoubleSolenoid leftArm = new DoubleSolenoid(RobotMap.leftArmForwardChannel, RobotMap.leftArmReverseChannel);
+    DoubleSolenoid rightArm = new DoubleSolenoid(RobotMap.rightArmForwardChannel, RobotMap.rightArmReverseChannel);
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.

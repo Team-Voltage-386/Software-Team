@@ -38,4 +38,18 @@ public class RobotMap {
     public static int elevatorSpark = 19;
 
     public static int pigeon = 0;
+
+    public static int elevatorEncoderA = 1;
+    public static int elevatorEncoderB = 2;
+
+    public static int chainBreaker = 19;
+
+    public static int leftArmForwardChannel = 17;
+    public static int leftArmReverseChannel = 18;
+
+    public static int rightArmForwardChannel = 15;
+    public static int rightArmReverseChannel = 16;
+
+    public static int elevatorLockForwardChannel = 13;
+    public static int elevatorLockReverseChannel = 14;
 }

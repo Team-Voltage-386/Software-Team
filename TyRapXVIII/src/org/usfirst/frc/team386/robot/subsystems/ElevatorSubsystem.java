@@ -15,11 +15,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
-    Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
-    Solenoid chainBreaker = new Solenoid(20);
+    Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB); // find out actual
+												 // values
+    Solenoid chainBreaker = new Solenoid(RobotMap.chainBreaker);
 
-    DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
-	    RobotMap.gearShiftSolenoidReverseChannel);
+    DoubleSolenoid lockSolenoid = new DoubleSolenoid(RobotMap.elevatorLockForwardChannel,
+	    RobotMap.elevatorLockReverseChannel);
 
     public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
@@ -62,7 +63,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void lockElevator() {
-	if (solenoid.get() == LOCKED) {
+	if (lockSolenoid.get() == LOCKED) {
 	    lock(UNLOCKED);
 	} else {
 	    lock(LOCKED);
@@ -70,7 +71,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void lock(Value gear) {
-	solenoid.set(gear);
+	lockSolenoid.set(gear);
     }
 
     public void breakChain() {
