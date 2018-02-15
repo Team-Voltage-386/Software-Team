@@ -28,7 +28,7 @@ public class OI {
     public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
 
     // manipulator buttons
-    public Button cubeButton = new JoystickButton(xboxControl, 3);
+    public Button driveToCubeButton = new JoystickButton(xboxControl, 3);
     public Button arcadeDriveVaultButton = new JoystickButton(xboxControl, 2);
     public Button arcadeDriveLockElevator = new JoystickButton(xboxControl, 1);
 
@@ -42,7 +42,7 @@ public class OI {
 	tankDriveBoostButton.whenPressed(new BoostStart());
 	tankDriveBoostButton.whenReleased(new BoostStop());
 
-	cubeButton.whenPressed(new DriveToCube());
+	driveToCubeButton.whenPressed(new DriveToCube());
 
 	arcadeDriveVaultButton.whenPressed(new SetElevator(200));
 	arcadeDriveLockElevator.whenPressed(new LockElevator());
