@@ -2,7 +2,6 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
@@ -16,8 +15,6 @@ public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
     Encoder elevatorEncoder = new Encoder(1, 2); // find out actual values
     Solenoid chainBreaker = new Solenoid(20);
-    DoubleSolenoid leftArm = new DoubleSolenoid(18, 19);
-    DoubleSolenoid rightArm = new DoubleSolenoid(16, 17);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -60,13 +57,4 @@ public class ElevatorSubsystem extends Subsystem {
 	chainBreaker.set(true);
     }
 
-    public void shiftArms() {
-	if (leftArm.get() == DoubleSolenoid.Value.kReverse) {
-	    leftArm.set(DoubleSolenoid.Value.kForward);
-	    rightArm.set(DoubleSolenoid.Value.kForward);
-	} else {
-	    leftArm.set(DoubleSolenoid.Value.kReverse);
-	    rightArm.set(DoubleSolenoid.Value.kReverse);
-	}
-    }
 }
