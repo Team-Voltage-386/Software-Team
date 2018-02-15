@@ -75,6 +75,7 @@ public class Robot extends IterativeRobot {
     public static final String MOVE_FROM_WALL = "Move to wall";
     public static final String DRIVE_TO_CUBE = "Drive to cube";
     public static final String STOP_LABEL = "Stop the Robit";
+    public static final String ELEVATOR_SPEED_LABEL = "Elevator Speed";
 
     // Strategic autonomous commands
     public static final String ROCK = "Rock";
@@ -106,13 +107,13 @@ public class Robot extends IterativeRobot {
 	gameData = new GameData();
 	cubeVision.start();
 	initializeDashboard();
-	// tiltDetection.start();
     }
 
     /**
      * Initialize the dashboard.
      */
     private void initializeDashboard() {
+	// Autonomous control
 	chooserMode.addDefault(ROCK, new MartianRock());
 	chooserMode.addObject(SWITCH, new SwitchAuto());
 	chooserMode.addObject(SCALE, new ScaleAuto());
@@ -139,6 +140,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean(DRIVE_MODE_LABEL, true);
 	SmartDashboard.putBoolean(TURN_WITH_PID_LABEL, false);
 	SmartDashboard.putBoolean(CUBE_CONTROL_LABEL, true);
+	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .25);
 
 	// Diagnostic data
 	updateDiagnostics();
@@ -152,7 +154,6 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCube());
 
-	SmartDashboard.putNumber("Elevator Speed", .25);
     }
 
     /**

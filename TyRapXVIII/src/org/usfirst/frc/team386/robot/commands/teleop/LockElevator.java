@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Lock the elevator in place.
  */
 public class LockElevator extends InstantCommand {
 
