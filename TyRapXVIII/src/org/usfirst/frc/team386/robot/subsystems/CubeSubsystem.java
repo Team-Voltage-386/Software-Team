@@ -1,9 +1,11 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManualWithPad;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,8 +20,9 @@ public class CubeSubsystem extends Subsystem {
 
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
-    // AnalogUltrasonic ultra1 = new AnalogUltrasonic(0, 1.18, 10.3);
-    // AnalogUltrasonic ultra2 = new AnalogUltrasonic(1, 1.18, 10.3);
+    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(0, 1.18, 10.3);
+    AnalogUltrasonic ultraRight = new AnalogUltrasonic(1, 1.18, 10.3);
+    Solenoid cubeMechanism = new Solenoid(5); // will need to change that
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -60,8 +63,19 @@ public class CubeSubsystem extends Subsystem {
     }
 
     public void run(double leftSpeed, double rightSpeed) {
-	left.set(leftSpeed);
-	right.set(rightSpeed);
+	// left.set(leftSpeed);
+	// right.set(rightSpeed);
+	double difference = ultraLeft.getInches() - ultraRight.getInches();
+	if (difference > 2) {
+	    left.set(SmartDashboard.getNumber("left fast", .5));
+	    right.set(SmartDashboard.getNumber("right slow", -.5));
+	} else if (-2 < difference) {
+	    left.set(SmartDashboard.getNumber("left slow", -.5));
+	    right.set(SmartDashboard.getNumber("right fast", .5));
+	} else if (difference < -2 || difference < 2) {
+	    left.set(leftSpeed);
+	    right.set(rightSpeed);
+	}
     }
 
     /**

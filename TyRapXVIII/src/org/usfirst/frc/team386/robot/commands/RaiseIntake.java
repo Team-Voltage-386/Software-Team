@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class LowerIntake extends InstantCommand {
-    DoubleSolenoid lowerIntake = new DoubleSolenoid(4, 5); // find actual value
+public class RaiseIntake extends InstantCommand {
+    DoubleSolenoid raiseIntake = new DoubleSolenoid(4, 5);
 
-    public LowerIntake() {
+    public RaiseIntake() {
 	super();
 	// Use requires() here to declare subsystem dependencies
 	// eg. requires(chassis);
@@ -17,7 +17,7 @@ public class LowerIntake extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	lowerIntake.set(DoubleSolenoid.Value.kForward);
+	raiseIntake.set(DoubleSolenoid.Value.kReverse);
     }
 
 }

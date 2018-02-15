@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class ElevatorSubsystem extends Subsystem {
     Spark leftElevator = new Spark(RobotMap.elevatorSpark);
+    DoubleSolenoid raiseIntake = new DoubleSolenoid(4, 5);
 
     /**
      * Update the smart dashboard with diagnostics values.
