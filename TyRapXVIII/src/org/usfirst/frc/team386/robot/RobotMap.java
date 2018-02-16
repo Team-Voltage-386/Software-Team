@@ -48,4 +48,16 @@ public class RobotMap {
     public static int latchForwardChannel = 6; // solenoid
     public static int latchReverseChannel = 7; // solenoid
 
+    // Controls
+    public static int driverPort = 0;
+    public static int manipulatorPort = 1;
+
+    // Manipulator Buttons
+    public static int shiftButton = 5;
+    public static int moveToVaultLevelButton = 2;
+    public static int chainBreakButton = 1;
+
+    // Drive buttons
+    public static int boostButton = 8;
+    public static int driveToCubeButton = 3;
 }
