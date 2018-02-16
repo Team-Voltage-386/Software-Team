@@ -20,7 +20,7 @@ public class ManualElevator extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.elevatorSubsystem.elevatorFromDPad(Robot.oi.xboxControl.getPOV(0),
+	Robot.elevatorSubsystem.elevatorFromDPad(Robot.oi.manipulator.getPOV(0),
 		SmartDashboard.getNumber("Elevator Speed", 0));
     }
 

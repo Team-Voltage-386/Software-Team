@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
@@ -79,8 +78,8 @@ public class DriveSubsystem extends Subsystem {
     public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
     public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
-    public AnalogUltrasonic zeroUltra = new AnalogUltrasonic(0, 1, 10);
-    public AnalogUltrasonic oneUltra = new AnalogUltrasonic(1, 1, 10);
+    // public AnalogUltrasonic zeroUltra = new AnalogUltrasonic(0, 1, 10);
+    // public AnalogUltrasonic oneUltra = new AnalogUltrasonic(1, 1, 10);
     Command defaultCommand;
 
     Timer timer = new Timer();
@@ -118,6 +117,8 @@ public class DriveSubsystem extends Subsystem {
     /**
      * Update the smart dashboard with diagnostics values.
      */
+    DigitalInput dio0 = new DigitalInput(0);
+
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
@@ -129,8 +130,9 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Pitch", pitch());
-	SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
-	SmartDashboard.putNumber("One ultra", oneUltra.getInches());
+	SmartDashboard.putBoolean("DIO0", dio0.get());
+	// SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
+	// SmartDashboard.putNumber("One ultra", oneUltra.getInches());
 	// SmartDashboard.putNumber("Elevator output",
 	// Math.cos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
     }

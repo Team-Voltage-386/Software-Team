@@ -25,14 +25,13 @@ public class RobotMap {
     public static int compressor = 0;
 
     // encoders
-    public static int leftDriveEncoderChannelA = 0;
-    public static int leftDriveEncoderChannelB = 1;
-    public static int rightDriveEncoderChannelA = 2;
-    public static int rightDriveEncoderChannelB = 3;
+    public static int leftDriveEncoderChannelA = 10;
+    public static int leftDriveEncoderChannelB = 11;
+    public static int rightDriveEncoderChannelA = 12;
+    public static int rightDriveEncoderChannelB = 13;
 
     public static int elevatorEncoderA = 1;
     public static int elevatorEncoderB = 2;
-
 
     // sensors
     public static int lineSensorChannel = 7;
@@ -42,18 +41,18 @@ public class RobotMap {
     public static int frontPingChannel = 3;
     public static int frontEchoChannel = 4;
 
-    public static int pigeon = 0;
+    public static int pigeon = 17;
 
     // solenoids
     public static int gearShiftSolenoidForwardChannel = 0;
     public static int gearShiftSolenoidReverseChannel = 1;
 
-    public static int chainBreaker = 19;
+    public static int chainBreaker = 2;
 
-    public static int armsForwardChannel = 17;
-    public static int armsReverseChannel = 18;
+    public static int armsForwardChannel = 3;
+    public static int armsReverseChannel = 4;
 
-    public static int latchForwardChannel = 13;
-    public static int latchReverseChannel = 14;
+    public static int latchForwardChannel = 6;
+    public static int latchReverseChannel = 7;
 
 }

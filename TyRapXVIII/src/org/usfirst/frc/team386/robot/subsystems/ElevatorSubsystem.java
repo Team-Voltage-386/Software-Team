@@ -1,6 +1,7 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.RobotMap;
+import org.usfirst.frc.team386.robot.commands.teleop.ManualElevator;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -41,7 +42,7 @@ public class ElevatorSubsystem extends Subsystem {
     // here. Call these from Commands.
 
     public void initDefaultCommand() {
-	// setDefaultCommand(new ManualElevator());
+	setDefaultCommand(new ManualElevator());
     }
 
     /**
@@ -54,9 +55,9 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void elevatorFromDPad(int pov, double speed) {
 	if (pov != -1 && pov < 270 && pov > 90) {
-	    elevatorSpark.set(-1 * speed);
-	} else if (pov != -1) {
 	    elevatorSpark.set(speed);
+	} else if (pov != -1) {
+	    elevatorSpark.set(-1 * speed);
 	} else {
 	    elevatorSpark.set(0);
 	}
