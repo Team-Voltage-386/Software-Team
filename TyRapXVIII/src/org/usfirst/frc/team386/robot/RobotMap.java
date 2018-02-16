@@ -38,9 +38,10 @@ public class RobotMap {
     public static int elevatorSpark = 0; //spark
 
     
-    // canbus
+    // canbus & etc
     public static int compressor = 0; //compressor //
     public static int lineSensorChannel = 7; //digital input //canbus
+    public static int limitSwitch = 0; //digital input
     public static int pigeon = 17; //pigeonimu
     
     

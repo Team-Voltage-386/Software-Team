@@ -77,7 +77,7 @@ public class DriveSubsystem extends Subsystem {
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
     public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
-    public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
+    //public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
     // public AnalogUltrasonic zeroUltra = new AnalogUltrasonic(0, 1, 10);
     // public AnalogUltrasonic oneUltra = new AnalogUltrasonic(1, 1, 10);
     Command defaultCommand;
@@ -108,7 +108,7 @@ public class DriveSubsystem extends Subsystem {
 	compressor.start();
 
 	rearUltrasonic.setAutomaticMode(true);
-	frontUltrasonic.setAutomaticMode(true);
+	//frontUltrasonic.setAutomaticMode(true);
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
@@ -117,14 +117,14 @@ public class DriveSubsystem extends Subsystem {
     /**
      * Update the smart dashboard with diagnostics values.
      */
-    DigitalInput dio0 = new DigitalInput(0);
+    DigitalInput dio0 = new DigitalInput(RobotMap.limitSwitch);
 
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
 	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
-	SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC, frontUltrasonic.getRangeMM());
+	//SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC, frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
