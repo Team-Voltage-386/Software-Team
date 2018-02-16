@@ -5,7 +5,6 @@ import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManualWithPad;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,9 +19,9 @@ public class CubeSubsystem extends Subsystem {
 
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
-    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(0, 1.18, 10.3);
-    AnalogUltrasonic ultraRight = new AnalogUltrasonic(1, 1.18, 10.3);
-    Solenoid cubeMechanism = new Solenoid(5); // will need to change that
+    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(RobotMap.cubeUltraLeft, 1.18, 10.3);
+    AnalogUltrasonic ultraRight = new AnalogUltrasonic(RobotMap.cubeUltraRight, 1.18, 10.3);
+    //Solenoid cubeMechanism = new Solenoid(5); // will need to change that
 
     /**
      * Update the smart dashboard with diagnostics values.
