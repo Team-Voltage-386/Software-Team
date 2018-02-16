@@ -19,9 +19,8 @@ public class CubeSubsystem extends Subsystem {
 
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
-    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(RobotMap.cubeUltrasonicCenter, 1.18, 10.3);
-    AnalogUltrasonic ultraRight = new AnalogUltrasonic(RobotMap.cubeUltrasonicEdge, 1.18, 10.3);
-    // Solenoid cubeMechanism = new Solenoid(5); // will need to change that
+    AnalogUltrasonic ultraCenter = new AnalogUltrasonic(RobotMap.cubeUltrasonicCenter, 1.18, 10.3);
+    AnalogUltrasonic ultraEdge = new AnalogUltrasonic(RobotMap.cubeUltrasonicEdge, 1.18, 10.3);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -29,8 +28,8 @@ public class CubeSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putNumber("Analog Ultra 0", ultraLeft.getInches());
-	SmartDashboard.putNumber("Analog Ultrasonic 1", ultraRight.getInches());
+	SmartDashboard.putNumber("Analog Ultra 0", ultraCenter.getInches());
+	SmartDashboard.putNumber("Analog Ultrasonic 1", ultraEdge.getInches());
     }
 
     public void initDefaultCommand() {
@@ -66,7 +65,7 @@ public class CubeSubsystem extends Subsystem {
     public void run(double leftSpeed, double rightSpeed) {
 	// left.set(leftSpeed);
 	// right.set(rightSpeed);
-	double difference = ultraLeft.getInches() - ultraRight.getInches();
+	double difference = ultraCenter.getInches() - ultraEdge.getInches();
 	if (difference > 2) {
 	    left.set(SmartDashboard.getNumber("left fast", .5));
 	    right.set(SmartDashboard.getNumber("right slow", -.5));
