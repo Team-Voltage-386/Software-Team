@@ -12,8 +12,6 @@ public class ShiftArms extends InstantCommand {
     public ShiftArms() {
 	super();
 	requires(Robot.armsSubsystem);
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes

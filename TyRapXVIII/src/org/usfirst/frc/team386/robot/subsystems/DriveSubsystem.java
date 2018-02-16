@@ -117,7 +117,7 @@ public class DriveSubsystem extends Subsystem {
     /**
      * Update the smart dashboard with diagnostics values.
      */
-    DigitalInput dio0 = new DigitalInput(RobotMap.limitSwitch);
+    DigitalInput dio0 = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
 
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or

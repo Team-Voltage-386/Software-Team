@@ -22,7 +22,7 @@ public class ElevatorSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
 
-    Spark elevatorSpark = new Spark(RobotMap.elevatorSpark);
+    Spark elevatorSpark = new Spark(RobotMap.elevatorSparks);
     Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
 
     Solenoid chainBreaker = new Solenoid(RobotMap.chainBreaker);

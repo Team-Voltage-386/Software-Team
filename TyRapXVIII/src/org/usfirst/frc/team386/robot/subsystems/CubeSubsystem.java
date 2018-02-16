@@ -19,9 +19,9 @@ public class CubeSubsystem extends Subsystem {
 
     Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
     Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
-    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(RobotMap.cubeUltraLeft, 1.18, 10.3);
-    AnalogUltrasonic ultraRight = new AnalogUltrasonic(RobotMap.cubeUltraRight, 1.18, 10.3);
-    //Solenoid cubeMechanism = new Solenoid(5); // will need to change that
+    AnalogUltrasonic ultraLeft = new AnalogUltrasonic(RobotMap.cubeUltrasonicCenter, 1.18, 10.3);
+    AnalogUltrasonic ultraRight = new AnalogUltrasonic(RobotMap.cubeUltrasonicEdge, 1.18, 10.3);
+    // Solenoid cubeMechanism = new Solenoid(5); // will need to change that
 
     /**
      * Update the smart dashboard with diagnostics values.
