@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.subsystems;
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
-import org.usfirst.frc.team386.robot.commands.teleop.CubeManualWithPad;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -37,26 +36,6 @@ public class CubeSubsystem extends Subsystem {
 	setDefaultCommand(new CubeManual());
     }
 
-    public void cubeIn(double speed) {
-	left.set(speed * -1);
-	right.set(speed * -1);
-    }
-
-    public void cubeOut(double speed) {
-	left.set(speed);
-	right.set(speed);
-    }
-
-    public void twistLeft(double speed) {
-	left.set(-speed);
-	right.set(speed);
-    }
-
-    public void twistRight(double speed) {
-	left.set(speed);
-	right.set(-speed);
-    }
-
     public void stop() {
 	left.set(0);
 	right.set(0);
@@ -78,45 +57,6 @@ public class CubeSubsystem extends Subsystem {
 	} else if (difference < -2 || difference < 2) {
 	    left.set(SmartDashboard.getNumber("left fast", .5));
 	    right.set(SmartDashboard.getNumber("right fast", .5));
-	}
-    }
-
-    /**
-     * Use the POV pad value to determine what action to take on the cube control.
-     * 
-     * @param pov
-     *            The current POV (pad) value
-     */
-    public void runWithPOV(int pov) {
-	double cubeSpeed = 0.5;
-	SmartDashboard.putNumber(POV_NUMBER_LABEL, pov);
-	if (pov == 0) {
-	    cubeOut(cubeSpeed);
-	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Cube Out");
-	} else if (pov == 90) {
-	    twistRight(cubeSpeed);
-	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Twist Right");
-	} else if (pov == 180) {
-	    cubeIn(cubeSpeed);
-	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Cube In");
-	} else if (pov == 270) {
-	    twistLeft(cubeSpeed);
-	    SmartDashboard.putString(CUBE_CONTROL_LABEL, "Twist Left");
-	}
-    }
-
-    /**
-     * Set to true to use the xbox joysticks to control the cube intake, false to
-     * use the pad.
-     * 
-     * @param useJoystick
-     *            True to use the xbox joysticks, false for the pad
-     */
-    public void setCubeControlMode(boolean useJoystick) {
-	if (useJoystick) {
-	    setDefaultCommand(new CubeManual());
-	} else {
-	    setDefaultCommand(new CubeManualWithPad());
 	}
     }
 }

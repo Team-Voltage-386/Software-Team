@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.subsystems;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
-import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -173,20 +172,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void stopBoost() {
 	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
-    }
-
-    /**
-     * Set the drive mode.
-     * 
-     * @param arcadeMode
-     *            If true, then use arcade mode, otherwise use tank mode.
-     */
-    public void setDriveMode(boolean arcadeMode) {
-	if (arcadeMode) {
-	    setDefaultCommand(new ArcadeDrive());
-	} else {
-	    setDefaultCommand(new TankDrive());
-	}
     }
 
     /**
