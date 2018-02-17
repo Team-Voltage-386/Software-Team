@@ -40,13 +40,15 @@ public class RobotMap {
 
     // PCM (Pneumatic Control Module)
     public static int compressor = 0;
+
     public static int gearShiftSolenoidForwardChannel = 0; // solenoid
     public static int gearShiftSolenoidReverseChannel = 1; // solenoid
-    public static int chainBreaker = 2; // solenoid
-    public static int armsForwardChannel = 3; // solenoid
-    public static int armsReverseChannel = 4; // solenoid
-    public static int latchForwardChannel = 6; // solenoid
-    public static int latchReverseChannel = 7; // solenoid
+    public static int latchForwardChannel = 2; // solenoid
+    public static int latchReverseChannel = 3; // solenoid
+
+    public static int chainBreaker = 4; // solenoid // waiting on electrical for these three
+    public static int armsForwardChannel = 6; // solenoid
+    public static int armsReverseChannel = 7; // solenoid
 
     // Controls
     public static int driverPort = 0;
