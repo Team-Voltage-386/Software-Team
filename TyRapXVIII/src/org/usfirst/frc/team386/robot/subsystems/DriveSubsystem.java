@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -71,13 +70,16 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA, RobotMap.leftDriveEncoderChannelB, true);
-    Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA, RobotMap.rightDriveEncoderChannelB);
+    // Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA,
+    // RobotMap.leftDriveEncoderChannelB, true);
+    // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
+    // RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
     public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
-    //public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel, RobotMap.frontEchoChannel);
+    // public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel,
+    // RobotMap.frontEchoChannel);
     // public AnalogUltrasonic zeroUltra = new AnalogUltrasonic(0, 1, 10);
     // public AnalogUltrasonic oneUltra = new AnalogUltrasonic(1, 1, 10);
     Command defaultCommand;
@@ -108,7 +110,7 @@ public class DriveSubsystem extends Subsystem {
 	compressor.start();
 
 	rearUltrasonic.setAutomaticMode(true);
-	//frontUltrasonic.setAutomaticMode(true);
+	// frontUltrasonic.setAutomaticMode(true);
 
 	solenoid.set(LOW_GEAR);
 	timer.start();
@@ -124,11 +126,12 @@ public class DriveSubsystem extends Subsystem {
 	// teleop modes.
 	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
-	//SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC, frontUltrasonic.getRangeMM());
+	// SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC,
+	// frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
-	SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
+	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
+	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Pitch", pitch());
 	SmartDashboard.putBoolean("DIO0", dio0.get());
 	// SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
@@ -225,8 +228,8 @@ public class DriveSubsystem extends Subsystem {
      * Zero all drive encoders.
      */
     public void resetEncoders() {
-	leftEncoder.reset();
-	rightEncoder.reset();
+	// leftEncoder.reset();
+	// rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
 	frontRight.setSelectedSensorPosition(0, 0, 10);
     }
@@ -238,7 +241,7 @@ public class DriveSubsystem extends Subsystem {
      *            Encoder ticks to move forward
      */
     public void moveForwardTicks(int ticks) {
-	while (Math.abs(rightEncoder.get()) < ticks && RobotState.isEnabled()) {
+	while (Math.abs(frontLeft.getSelectedSensorPosition(0)) < ticks && RobotState.isEnabled()) {
 	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
 	    updateDiagnostics();
 	}
