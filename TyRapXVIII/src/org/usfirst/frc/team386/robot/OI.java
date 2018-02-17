@@ -31,7 +31,7 @@ public class OI {
 
     // manipulator buttons
     public Button driveToCubeButton = new JoystickButton(xboxControl, RobotMap.driveToCubeButton);
-    public Button arcadeDriveVaultButton = new JoystickButton(manipulator, RobotMap.moveToVaultLevelButton);
+    public Button arcadeDriveVaultButton = new JoystickButton(manipulator, RobotMap.elevatorToExchange);
     public Button arcadeDriveLockElevator = new JoystickButton(manipulator, RobotMap.chainBreakButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton);

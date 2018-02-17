@@ -56,7 +56,7 @@ public class RobotMap {
 
     // Manipulator Buttons
     public static int shiftButton = 5;
-    public static int moveToVaultLevelButton = 2;
+    public static int elevatorToExchange = 2;
     public static int chainBreakButton = 1;
     public static int autoCubeIntakeButton = 3;
     public static int prepForClimbButton = 4;
