@@ -28,8 +28,8 @@ public class CubeSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putNumber("Analog Ultra 0", ultraCenter.getInches());
-	SmartDashboard.putNumber("Analog Ultrasonic 1", ultraEdge.getInches());
+	SmartDashboard.putNumber("Analog Ultra Center", ultraCenter.getInches());
+	SmartDashboard.putNumber("Analog Ultra Edge", ultraEdge.getInches());
     }
 
     public void initDefaultCommand() {
