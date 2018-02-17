@@ -18,10 +18,10 @@ public class PrepForClimb extends InstantCommand {
     }
 
     protected void initialize() {
-	if (DriverStation.getInstance().getMatchTime() > 100) {
+	if (DriverStation.getInstance().getMatchTime() < 30) {
 	    new ExecuteSteps().start();
 	} else {
-	    SmartDashboard.putString("prepClimbErrors", "Error: Prep for climb failed");
+	    SmartDashboard.putString("prepClimbErrors", "Error: climb is only allowed with 30 seconds of game end");
 	}
     }
 
