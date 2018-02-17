@@ -3,7 +3,7 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
-import org.usfirst.frc.team386.robot.commands.PrepForClimb;
+import org.usfirst.frc.team386.robot.commands.InstPrepForClimb;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
@@ -53,6 +53,6 @@ public class OI {
 
 	autoCubeIntakeButton.whenPressed(new CubeWithUltrasonics());
 
-	prepForClimbButton.whenPressed(new PrepForClimb());
+	prepForClimbButton.whenPressed(new InstPrepForClimb());
     }
 }
