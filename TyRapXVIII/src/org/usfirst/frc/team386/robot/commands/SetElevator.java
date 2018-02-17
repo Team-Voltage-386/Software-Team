@@ -5,7 +5,9 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- *
+ * Set the elevator to a certain position based on the number of encoder ticks.
+ * The encoders MUST be zeroed while the elevator is at its lowest position, as
+ * indicated by the lower limit switch.
  */
 public class SetElevator extends InstantCommand {
     int ticks;
@@ -14,8 +16,6 @@ public class SetElevator extends InstantCommand {
 	super();
 	requires(Robot.elevatorSubsystem);
 	ticks = ticksIn;
-	// Use requires() here to declare subsystem dependencies
-	// eg. requires(chassis);
     }
 
     // Called once when the command executes
