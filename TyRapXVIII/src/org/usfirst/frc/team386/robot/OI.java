@@ -4,6 +4,7 @@ import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
+import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.teleop.LockElevator;
 
@@ -29,8 +30,9 @@ public class OI {
 
     // manipulator buttons
     public Button driveToCubeButton = new JoystickButton(xboxControl, RobotMap.driveToCubeButton);
-    public Button arcadeDriveVaultButton = new JoystickButton(xboxControl, RobotMap.moveToVaultLevelButton);
-    public Button arcadeDriveLockElevator = new JoystickButton(xboxControl, RobotMap.chainBreakButton);
+    public Button arcadeDriveVaultButton = new JoystickButton(manipulator, RobotMap.moveToVaultLevelButton);
+    public Button arcadeDriveLockElevator = new JoystickButton(manipulator, RobotMap.chainBreakButton);
+    public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
 
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
@@ -46,5 +48,7 @@ public class OI {
 
 	arcadeDriveVaultButton.whenPressed(new SetElevator(200));
 	arcadeDriveLockElevator.whenPressed(new LockElevator());
+
+	autoCubeIntakeButton.whenPressed(new CubeWithUltrasonics());
     }
 }

@@ -58,6 +58,7 @@ public class RobotMap {
     public static int shiftButton = 5;
     public static int moveToVaultLevelButton = 2;
     public static int chainBreakButton = 1;
+    public static int autoCubeIntakeButton = 3;
 
     // Drive buttons
     public static int boostButton = 8;

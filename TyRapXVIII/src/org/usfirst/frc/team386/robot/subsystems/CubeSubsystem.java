@@ -63,8 +63,12 @@ public class CubeSubsystem extends Subsystem {
     }
 
     public void run(double leftSpeed, double rightSpeed) {
-	// left.set(leftSpeed);
-	// right.set(rightSpeed);
+	left.set(leftSpeed);
+	right.set(rightSpeed);
+
+    }
+
+    public void runWithUltrasonics() {
 	double difference = ultraCenter.getInches() - ultraEdge.getInches();
 	if (difference > 2) {
 	    left.set(SmartDashboard.getNumber("left fast", .5));
@@ -73,8 +77,8 @@ public class CubeSubsystem extends Subsystem {
 	    left.set(SmartDashboard.getNumber("left slow", -.5));
 	    right.set(SmartDashboard.getNumber("right fast", .5));
 	} else if (difference < -2 || difference < 2) {
-	    left.set(leftSpeed);
-	    right.set(rightSpeed);
+	    left.set(SmartDashboard.getNumber("left fast", .5));
+	    right.set(SmartDashboard.getNumber("right fast", .5));
 	}
     }
 
