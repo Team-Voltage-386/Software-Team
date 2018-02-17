@@ -301,6 +301,12 @@ public class DriveSubsystem extends Subsystem {
 	driveToCube = null;
     }
 
+    /**
+     * Drive towards the cube using error adjustment values from the cube vision
+     * thread.
+     * 
+     * WARNING: this method will not stop unless you disable the robot!
+     */
     public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
 	    drive.arcadeDrive(.75, Robot.cubeVision.getError() * -.005);
