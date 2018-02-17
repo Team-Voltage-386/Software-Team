@@ -1,6 +1,6 @@
-package org.usfirst.frc.team386.robot.commands;
+package org.usfirst.frc.team386.robot.commands.teleop;
 
-import org.usfirst.frc.team386.robot.commands.teleop.BreakChain;
+import org.usfirst.frc.team386.robot.commands.ShiftArms;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
