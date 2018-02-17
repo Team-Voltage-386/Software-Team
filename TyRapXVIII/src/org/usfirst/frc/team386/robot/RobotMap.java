@@ -9,9 +9,9 @@ package org.usfirst.frc.team386.robot;
 public class RobotMap {
     // Talons
     public static int leftPrimaryDriveMotor = 1; // motor
-    public static int rightPrimaryDriveMotor = 4; // motor
+    public static int rightPrimaryDriveMotor = 3; // motor
     public static int leftFollowerDriveMotor = 2; // motor
-    public static int rightFollowerDriveMotor = 5; // motor
+    public static int rightFollowerDriveMotor = 4; // motor
 
     public static int leftDriveEncoderChannelA = 10; // encoder
     public static int leftDriveEncoderChannelB = 11; // encoder
@@ -46,9 +46,9 @@ public class RobotMap {
     public static int latchForwardChannel = 2; // solenoid
     public static int latchReverseChannel = 3; // solenoid
 
-    public static int chainBreaker = 4; // solenoid // waiting on electrical for these three
-    public static int armsForwardChannel = 6; // solenoid
-    public static int armsReverseChannel = 7; // solenoid
+    public static int chainBreaker = 6; // solenoid // waiting on electrical for these three
+    public static int armsForwardChannel = 4; // solenoid
+    public static int armsReverseChannel = 5; // solenoid
 
     // Controls
     public static int driverPort = 0;
