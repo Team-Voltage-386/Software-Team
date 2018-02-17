@@ -65,7 +65,6 @@ public class CubeSubsystem extends Subsystem {
     public void run(double leftSpeed, double rightSpeed) {
 	left.set(leftSpeed);
 	right.set(rightSpeed);
-
     }
 
     public void runWithUltrasonics() {
