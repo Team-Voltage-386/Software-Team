@@ -55,13 +55,13 @@ public class RobotMap {
     public static int manipulatorPort = 1;
 
     // Manipulator Buttons
-    public static int shiftButton = 5;
     public static int elevatorToExchange = 2;
-    public static int chainBreakButton = 1;
+    public static int lockElevatorButton = 1;
     public static int autoCubeIntakeButton = 3;
     public static int prepForClimbButton = 4;
 
     // Drive buttons
+    public static int shiftButton = 5;
     public static int boostButton = 8;
     public static int driveToCubeButton = 3;
 }

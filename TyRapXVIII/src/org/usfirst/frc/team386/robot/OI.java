@@ -31,8 +31,8 @@ public class OI {
 
     // manipulator buttons
     public Button driveToCubeButton = new JoystickButton(xboxControl, RobotMap.driveToCubeButton);
-    public Button arcadeDriveVaultButton = new JoystickButton(manipulator, RobotMap.elevatorToExchange);
-    public Button arcadeDriveLockElevator = new JoystickButton(manipulator, RobotMap.chainBreakButton);
+    public Button arcadeDriveElevatorToExchangeButton = new JoystickButton(manipulator, RobotMap.elevatorToExchange);
+    public Button arcadeDriveLockElevator = new JoystickButton(manipulator, RobotMap.lockElevatorButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton);
 
@@ -48,7 +48,7 @@ public class OI {
 
 	driveToCubeButton.whenPressed(new DriveToCube());
 
-	arcadeDriveVaultButton.whenPressed(new SetElevator(200));
+	arcadeDriveElevatorToExchangeButton.whenPressed(new SetElevator(200));
 	arcadeDriveLockElevator.whenPressed(new LockElevator());
 
 	autoCubeIntakeButton.whenPressed(new CubeWithUltrasonics());
