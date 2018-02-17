@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Break the chain in preparation for climbing.
+ * Disconnect the chain in preparation for climbing.
  */
 public class BreakChain extends InstantCommand {
 

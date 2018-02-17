@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
- * Drive forward to a cube.
+ * Drive forward to a cube using vision assist.
  */
 public class DriveToCube extends InstantCommand {
 
