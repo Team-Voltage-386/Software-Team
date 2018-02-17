@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
-	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	WPI_TalonSRX frontLeft = new WPI_TalonSRX(1); //Designates master motors
@@ -112,7 +111,6 @@ public class Robot extends IterativeRobot {
 		 
 		drive.tankDrive(leftJoystick.getY(), rightJoystick.getY());
 		
-//		drive.arcadeDrive(-1*rumblePad.getY(), rumblePad.getZ());
 	 }
 		
 

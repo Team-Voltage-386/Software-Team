@@ -7,14 +7,11 @@
 
 package org.usfirst.frc.team863.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -28,7 +25,6 @@ public class Robot extends IterativeRobot {
 	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	static Spark left = new Spark(9);
 	static Spark right = new Spark(8);
 	SparkOnPositive sparkOnPositive = new SparkOnPositive();

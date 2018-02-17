@@ -5,9 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import Utility.AnalogUltrasonic;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -54,8 +52,6 @@ public class Robot extends IterativeRobot {
 		double rightOut = SmartDashboard.getNumber(rightName, 0);
 		SmartDashboard.putNumber("Left out", leftOut);
 		SmartDashboard.putNumber("Right out", rightOut);
-		int rightUltrasonic = (int) (ultra2.getInches()*10);
-		int leftUltrasonic = (int) (ultra1.getInches()*10);
 		if(controller.getRawButtonPressed(3))
 		{
 			double startTime = Timer.getFPGATimestamp();
@@ -75,37 +71,6 @@ public class Robot extends IterativeRobot {
 				SmartDashboard.putBoolean("backwards", true);
 			}
 		}
-	/*	if (on) {
-			SmartDashboard.putBoolean("button pressed", on);
-			if (SmartDashboard.getNumber(leftName, 0) > 0) {
-				if (ultra2.getInches() > 2) {
-					if(rightUltrasonic > leftUltrasonic) //ultra2 = right, ultra1 = left
-					{
-						left.set(leftOut*50);
-						right.set(rightOut);
-					}
-					else if(leftUltrasonic > rightUltrasonic)
-					{
-						left.set(leftOut);
-						right.set(rightOut*.50);
-					}
-					else if(leftUltrasonic == rightUltrasonic) {
-					left.set(leftOut);
-					right.set(rightOut);
-					}
-				} else {
-					left.set(0);
-					right.set(0);
-				}
-			} else {
-				left.set(leftOut);
-				right.set(rightOut);
-			}
-		} else {
-			left.set(0);
-			right.set(0);
-		}
-	}*/
 	left.set(controller.getRawAxis(1));
 	right.set(controller.getRawAxis(5));
 }

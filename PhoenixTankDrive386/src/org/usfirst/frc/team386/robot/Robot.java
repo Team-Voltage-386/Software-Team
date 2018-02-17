@@ -103,9 +103,6 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putBoolean("mind control!!", isOperatorControl());
 	SmartDashboard.putBoolean("mind control!!", RobotState.isOperatorControl());
 	SmartDashboard.putNumber("encoder", frontLeft.getSelectedSensorPosition(0));
-	double leftY = left.getY();
-	double rightY = right.getY();
-	// drive.tankDrive((-1 * deadBand(rightY, .1)), (-1 * deadBand(leftY, .1)));
 	drive.arcadeDrive(deadBand(-1 * manipulator.getRawAxis(1), .1), deadBand(manipulator.getRawAxis(2), .1));
 	cubeIntake();
 
@@ -119,9 +116,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber("z", manipulator.getRawAxis(2));
 	SmartDashboard.putNumber("Left Encoder", leftEncodee.get());
 	SmartDashboard.putNumber("Right Encoder", rightEncodee.get());
-	// System.out.println("Right Encoder:"+rightEncodee.get());
-	// System.out.println("Left Encoder:"+leftEncodee.get());
-
+	
     }
 
     public void moveForward(double xinch) {
@@ -133,32 +128,12 @@ public class Robot extends IterativeRobot {
 							   * || (Math.abs(rightEncodee.getRaw()) < 256)
 							   */ {
 	    SmartDashboard.putNumber("Left Encodee Number :D ", leftEncodee.getRaw());
-	    // System.out.println("Left Encodee Number :D
-	    // "+leftEncodee.getRaw());
 	    SmartDashboard.putNumber("the always Right num: ", rightEncodee.getRaw());
-	    // System.out.println("the always Right num:
-	    // "+rightEncodee.getRaw());
 	    drive.tankDrive(0.5, 0.5);
 	}
 	drive.tankDrive(0, 0); // drives forward at 0 speed
     }
 
-    /*
-     * public void autonomousInit(){ leftEncodee.reset(); rightEncodee.reset();
-     * SmartDashboard.putBoolean("Its Alive!", isAutonomous());
-     * SmartDashboard.putBoolean("Its Alive!2", RobotState.isAutonomous());
-     * SmartDashboard.putBoolean("mind control!!", isOperatorControl());
-     * SmartDashboard.putBoolean("mind control!!2", RobotState.isOperatorControl());
-     * moveForward(5); }
-     */
-    /*
-     * public void shift() { DoubleSolenoid piston = new DoubleSolenoid(0,1);
-     * if(left.getRawButtonPressed(0)== true) {
-     * 
-     * if(piston.) }
-     * 
-     * }
-     */
     double encoderValue = frontLeft.getSelectedSensorPosition(0);
 
     public void autonomousInit() {
@@ -203,19 +178,10 @@ public class Robot extends IterativeRobot {
 
     public void autonomusInit() {
 	rightEncodee.reset();
-	// turningWithEncoder();
     }
 
     public void autonomousPeriodic() {
 	turningWithEncoder();
 	SmartDashboard.putNumber("right encoder", rightEncodee.getRaw());
-
-	/*
-	 * while (!isOperatorControl() && Math.abs(leftEncodee.getRaw()) < 80) // test
-	 * // thursday { drive.tankDrive(.5, .5); SmartDashboard.putNumber("Encoder",
-	 * leftEncodee.getRaw()); SmartDashboard.putNumber("Ultra", ultra.getInches());
-	 * } while (!isOperatorControl() && Math.abs(gyro.getAngle()) < 80) {
-	 * drive.tankDrive(-.5, .5); } drive.tankDrive(0, 0);
-	 */
     }
 }

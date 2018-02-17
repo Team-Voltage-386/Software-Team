@@ -1,6 +1,5 @@
 package org.usfirst.frc.team863.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,7 +15,6 @@ public class SparkOnPositive extends Thread{
 		while (!Thread.interrupted()) {
 			if (RobotState.isOperatorControl()) {
 				boolean buttonPressed =Robot.manipulator.getRawButton(1);
-				//System.out.println("Thread running" + previous + buttonPressed);
 				while(!Robot.limit.get()) {
 				if (buttonPressed == true && previous == false) {
 					if (!sparkState) {
