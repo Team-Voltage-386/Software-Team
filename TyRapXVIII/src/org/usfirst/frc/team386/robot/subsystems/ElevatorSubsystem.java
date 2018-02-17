@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot.subsystems;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ManualElevator;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
@@ -28,6 +29,8 @@ public class ElevatorSubsystem extends Subsystem {
     Solenoid chainBreaker = new Solenoid(RobotMap.chainBreaker);
 
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
+    DigitalInput dio0 = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
+    DigitalInput dio4 = new DigitalInput(4);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -55,8 +58,11 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void elevatorFromDPad(int pov, double speed) {
 	if (pov != -1 && pov < 270 && pov > 90) {
-	    elevatorSpark.set(speed);
-	} else if (pov != -1) {
+	    if (dio0.get())
+		elevatorSpark.set(speed);
+	    else
+		elevatorSpark.set(0);
+	} else if (pov != -1 && dio4.get()) {
 	    elevatorSpark.set(-1 * speed);
 	} else {
 	    elevatorSpark.set(0);

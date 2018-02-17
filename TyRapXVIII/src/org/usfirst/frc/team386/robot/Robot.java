@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
     public static final String LEFT_ENCODER_RIO = "Left encoder RIO";
     public static final String RIGHT_ENCODER_RIO = "Right encoder RIO";
     public static final String ENCODER_TALON_1 = "Encoder Talon 1";
-    public static final String ENCODER_TALON_4 = "Encoder Talon 4";
+    public static final String ENCODER_TALON_3 = "Encoder Talon 3";
     public static final String LINE_SENSOR = "Line sensor";
     public static final String GAME_DATA = "Game data";
     public static final String REAR_ULTRASONIC = "Rear ultra";

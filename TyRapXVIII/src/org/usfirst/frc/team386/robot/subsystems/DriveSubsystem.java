@@ -119,7 +119,6 @@ public class DriveSubsystem extends Subsystem {
     /**
      * Update the smart dashboard with diagnostics values.
      */
-    DigitalInput dio0 = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
 
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
@@ -129,11 +128,11 @@ public class DriveSubsystem extends Subsystem {
 	// SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC,
 	// frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber(Robot.ENCODER_TALON_4, frontRight.getSelectedSensorPosition(0));
+	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
 	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Pitch", pitch());
-	SmartDashboard.putBoolean("DIO0", dio0.get());
+	// SmartDashboard.putBoolean("DIO0", dio0.get());
 	// SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
 	// SmartDashboard.putNumber("One ultra", oneUltra.getInches());
 	// SmartDashboard.putNumber("Elevator output",
