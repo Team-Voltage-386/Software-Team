@@ -89,15 +89,12 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     /**
-     * Lock the elevator in place with the latching mechanism, or unlock it if it is
-     * already locked.
+     * Toggle the elevator latching mechanism.
      * 
      * This should be triggered at the end of the climb to hold the elevator in
      * place.
-     * 
-     * TODO: when does the unlock occur?
      */
-    public void lockElevator() {
+    public void toggleElevatorLock() {
 	if (latchSolenoid.get() == LOCKED) {
 	    lock(UNLOCKED);
 	} else {
