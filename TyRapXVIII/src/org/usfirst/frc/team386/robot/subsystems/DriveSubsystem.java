@@ -481,7 +481,10 @@ public class DriveSubsystem extends Subsystem {
      * @return The adjusted speed
      */
     private double adjustSpeed(double speed) {
-	return deadBand((-1 * speedMultiplier * speed), DEAD_BAND_LIMIT);
+	if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
+	    return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	else
+	    return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
     }
 
     /**
@@ -497,5 +500,13 @@ public class DriveSubsystem extends Subsystem {
 	} else {
 	    return in * in;
 	}
+    }
+
+    public double frontLeftEncoder() {
+	return frontLeft.getSelectedSensorPosition(0);
+    }
+
+    public double frontRightEncoder() {
+	return frontRight.getSelectedSensorPosition(0);
     }
 }

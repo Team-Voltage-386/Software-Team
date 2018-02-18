@@ -73,6 +73,6 @@ public class RobotMap {
     public static int driveLeftJoystickVertical = 1;
     public static int driveRightJoystickHorizontal = 4;
     public static int shiftButton = 5;
-    public static int boostButton = 6;
-    public static int driveToCubeButton = 3;
+    public static int breakTrigger = 3;
+    public static int driveToCubeButton = 6;
 }
