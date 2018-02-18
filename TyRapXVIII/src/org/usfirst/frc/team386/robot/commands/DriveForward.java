@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveForward extends Command {
 
-    private int distance;
     private double speed;
 
     /**
@@ -25,7 +24,6 @@ public class DriveForward extends Command {
     public DriveForward(int distance) {
 	super();
 	requires(Robot.driveSubsystem);
-	this.distance = distance;
 	this.speed = DriveSubsystem.FAST_AUTO_MODE_SPEED;
 	ticksRequired = 6.36 * distance * 4;
     }
@@ -33,7 +31,6 @@ public class DriveForward extends Command {
     public DriveForward(int distance, double speed) {
 	super();
 	requires(Robot.driveSubsystem);
-	this.distance = distance;
 	this.speed = speed;
 	ticksRequired = 6.36 * distance * 4;
     }

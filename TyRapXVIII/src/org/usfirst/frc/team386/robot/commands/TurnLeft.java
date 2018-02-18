@@ -9,12 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TurnLeft extends Command {
 
-    private int angle;
-
     public TurnLeft(int angle) {
 	super();
 	requires(Robot.driveSubsystem);
-	this.angle = angle;
 	Robot.driveSubsystem.resetPidTurn(angle, -1);
     }
 
@@ -30,7 +27,6 @@ public class TurnLeft extends Command {
 
     @Override
     protected boolean isFinished() {
-	// TODO Auto-generated method stub
 	return !Robot.driveSubsystem.pidTurnDone();
     }
 
