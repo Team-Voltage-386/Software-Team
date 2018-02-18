@@ -39,7 +39,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-    public static final double FAST_AUTO_MODE_SPEED = 0.9;
+    public static final double FAST_AUTO_MODE_SPEED = 0.75;// .9
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
     public boolean isGoingUpRamp = false;
@@ -128,7 +128,7 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
 	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
-
+	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
     }
 
@@ -497,7 +497,10 @@ public class DriveSubsystem extends Subsystem {
      * @return The adjusted speed
      */
     private double adjustSpeed(double speed) {
-	return deadBand((-1 * speedMultiplier * speed), DEAD_BAND_LIMIT);
+	if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
+	    return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	else
+	    return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
     }
 
     /**

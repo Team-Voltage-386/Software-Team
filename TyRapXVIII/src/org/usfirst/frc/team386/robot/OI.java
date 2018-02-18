@@ -1,7 +1,5 @@
 package org.usfirst.frc.team386.robot;
 
-import org.usfirst.frc.team386.robot.commands.BoostStart;
-import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
@@ -25,7 +23,8 @@ public class OI {
 
     // driver buttons
     public Button arcadeDriveShiftButton = new JoystickButton(xboxControl, RobotMap.shiftButton);
-    public Button arcadeDriveBoostButton = new JoystickButton(xboxControl, RobotMap.boostButton);
+    // public Button arcadeDriveBoostButton = new JoystickButton(xboxControl,
+    // RobotMap.boostButton);
     // public Button tankDriveShiftButton = new JoystickButton(leftJoy, 1);
     // public Button tankDriveBoostButton = new JoystickButton(rightJoy, 1);
 
@@ -36,14 +35,15 @@ public class OI {
     public Button arcadeDriveToggerElevatorLock = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton1);
-    public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
+    public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.shiftArmsButton);
 
+    // RobotMap.toggleElevatorLockButton
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
 	// tankDriveShiftButton.whenPressed(new GearShift());
 
-	arcadeDriveBoostButton.whenPressed(new BoostStop());
-	arcadeDriveBoostButton.whenReleased(new BoostStart());
+	// arcadeDriveBoostButton.whenPressed(new BoostStop());
+	// arcadeDriveBoostButton.whenReleased(new BoostStart());
 
 	// tankDriveBoostButton.whenPressed(new BoostStart());
 	// tankDriveBoostButton.whenReleased(new BoostStop());

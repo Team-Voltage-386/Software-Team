@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Set the elevator to a certain position based on the number of encoder ticks.
@@ -26,7 +25,7 @@ public class SetElevator extends Command {
 
     @Override
     protected void execute() {
-	Robot.elevatorSubsystem.setHeight(ticks, SmartDashboard.getNumber("Elevator Speed", 0));
+	Robot.elevatorSubsystem.setHeight(ticks);
     }
 
     @Override

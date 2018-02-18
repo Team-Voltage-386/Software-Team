@@ -68,11 +68,12 @@ public class RobotMap {
     public static int climbButton = 4;
     public static int prepForClimbButton1 = 8;
     public static int prepForClimbButton2 = 9;
+    public static int shiftArmsButton = 1;
 
     // Drive buttons
     public static int driveLeftJoystickVertical = 1;
     public static int driveRightJoystickHorizontal = 4;
     public static int shiftButton = 5;
-    public static int boostButton = 6;
-    public static int driveToCubeButton = 3;
+    public static int breakTrigger = 3;
+    public static int driveToCubeButton = 6;
 }

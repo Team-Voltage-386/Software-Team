@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -38,6 +39,11 @@ public class ElevatorSubsystem extends Subsystem {
     public ElevatorSubsystem() {
 	super();
 	lock(LOCKED);
+	elevatorEncoder.reset();
+    }
+
+    public void resetEncoder() {
+	elevatorEncoder.reset();
     }
 
     /**
@@ -60,6 +66,10 @@ public class ElevatorSubsystem extends Subsystem {
 	setDefaultCommand(new ManualElevator());
     }
 
+    public void climb() {
+	elevatorSpark.set(1);
+    }
+
     /**
      * Control elevator via DPad values.
      * 
@@ -72,7 +82,7 @@ public class ElevatorSubsystem extends Subsystem {
 	// TODO: clean this up so it is easier to understand
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
-		elevatorSpark.set(0);
+		elevatorSpark.set(.25);
 	    else
 		elevatorSpark.set(0);
 	} else if (pov != -1) {
@@ -96,18 +106,22 @@ public class ElevatorSubsystem extends Subsystem {
      * @param ticks
      *            The encoder ticks
      */
-    public void setHeight(int ticks, double speed) {
-	if (elevatorEncoder.get() < ticks) {
-	    // while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get() &&
-	    // upperElevatorLimitSwitch.get()) {
-	    elevatorSpark.set(speed);
+
+    public void setHeight(int ticks) {
+	SmartDashboard.putString("Setting", "nuetral");
+	if (elevatorEncoder.get() < ticks && RobotState.isEnabled()) {
+	    // while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get()) {
+	    SmartDashboard.putString("Setting", "Down");
+	    elevatorSpark.set(.25);
 	    // }
 	} else {
-	    // while (elevatorEncoder.get() > ticks && lowerElevatorLimitSwitch.get() &&
-	    // upperElevatorLimitSwitch.get()) {
-	    elevatorSpark.set(0);
+	    // while (elevatorEncoder.get() > ticks && upperElevatorLimitSwitch.get() &&
+	    // RobotState.isEnabled()) {
+	    SmartDashboard.putString("Setting", "Up");
+	    elevatorSpark.set(-.65);
 	    // }
 	}
+	elevatorSpark.set(-.2);
     }
 
     /**

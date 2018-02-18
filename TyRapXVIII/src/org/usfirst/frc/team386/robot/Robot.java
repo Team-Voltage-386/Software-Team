@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
+import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -141,7 +142,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
 	// Configuration fields
-	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .25);
+	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .65);
 
 	// Diagnostic data
 	updateDiagnostics();
@@ -154,6 +155,10 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(STOP_LABEL, new Stop());
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCubeTeleop());
+	SmartDashboard.putData("Elevator to -500", new SetElevator(-500));
+	SmartDashboard.putData("Reset elevator", new SetElevator(0));
+	SmartDashboard.putData("Shift arms", new ShiftArms());
+	SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
 
     }
 
@@ -164,7 +169,9 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
-	new SetElevator(0).start();
+	// new SetElevator(0).start();
+	if (autonomousCommand != null)
+	    autonomousCommand.cancel();
 	Scheduler.getInstance().removeAll();
     }
 
@@ -192,7 +199,7 @@ public class Robot extends IterativeRobot {
 	gameData.readGameData();
 	autonomousCommand = (Command) chooserMode.getSelected();
 	driveSubsystem.resetEncoders();
-
+	elevatorSubsystem.resetEncoder();
 	// schedule the autonomous command
 
 	if (autonomousCommand != null) {
