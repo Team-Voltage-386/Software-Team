@@ -3,12 +3,13 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * A command to drive forward a certain distance in inches.
  */
-public class DriveForward extends InstantCommand {
+public class DriveForward extends Command {
 
     private int distance;
     private double speed;
@@ -19,11 +20,14 @@ public class DriveForward extends InstantCommand {
      * @param distance
      *            The distance in inches
      */
+    double ticksRequired;
+
     public DriveForward(int distance) {
 	super();
 	requires(Robot.driveSubsystem);
 	this.distance = distance;
 	this.speed = DriveSubsystem.FAST_AUTO_MODE_SPEED;
+	ticksRequired = 6.36 * distance * 4;
     }
 
     public DriveForward(int distance, double speed) {
@@ -31,11 +35,22 @@ public class DriveForward extends InstantCommand {
 	requires(Robot.driveSubsystem);
 	this.distance = distance;
 	this.speed = speed;
+	ticksRequired = 6.36 * distance * 4;
     }
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.driveSubsystem.moveForward(distance, speed);
+
+    }
+
+    @Override
+    protected void execute() {
+	Robot.driveSubsystem.arcadeDriveStraight(speed);
+    }
+
+    @Override
+    public boolean isFinished() {
+	return !(Math.abs(Robot.driveSubsystem.getLeftEncoder()) < ticksRequired || RobotState.isEnabled());
     }
 
 }

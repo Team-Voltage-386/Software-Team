@@ -5,7 +5,7 @@ import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
-import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
+import org.usfirst.frc.team386.robot.commands.teleop.DriveToCubeTeleop;
 import org.usfirst.frc.team386.robot.commands.teleop.PrepForClimb;
 import org.usfirst.frc.team386.robot.commands.teleop.ToggleElevatorLock;
 
@@ -48,7 +48,7 @@ public class OI {
 	// tankDriveBoostButton.whenPressed(new BoostStart());
 	// tankDriveBoostButton.whenReleased(new BoostStop());
 
-	driveToCubeButton.whenPressed(new DriveToCube());
+	driveToCubeButton.whenPressed(new DriveToCubeTeleop());
 
 	// arcadeDriveElevatorToExchangeButton.whenPressed(new SetElevator(-200));
 	arcadeDriveToggerElevatorLock.whenPressed(new ToggleElevatorLock());

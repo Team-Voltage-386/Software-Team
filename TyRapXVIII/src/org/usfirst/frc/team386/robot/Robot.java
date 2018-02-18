@@ -4,7 +4,6 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
-import org.usfirst.frc.team386.robot.commands.DriveToCube;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -13,6 +12,7 @@ import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
 import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+import org.usfirst.frc.team386.robot.commands.teleop.DriveToCubeTeleop;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -153,7 +153,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
-	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCube());
+	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCubeTeleop());
 
     }
 

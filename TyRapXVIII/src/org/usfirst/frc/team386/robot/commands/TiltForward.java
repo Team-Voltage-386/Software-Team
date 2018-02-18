@@ -2,14 +2,15 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * Command to correct tilt forward.
  * 
  * This command is started automatically by the TiltDetection command.
  */
-public class TiltForward extends InstantCommand {
+public class TiltForward extends Command {
 
     public TiltForward() {
 	super();
@@ -19,7 +20,18 @@ public class TiltForward extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.tiltSubsystem.tiltForward();
+
+    }
+
+    @Override
+    protected void execute() {
+	Robot.driveSubsystem.driveTank(.5, .5);
+    }
+
+    @Override
+    protected boolean isFinished() {
+	// TODO Auto-generated method stub
+	return !(Robot.tiltSubsystem.pitch() < Robot.tiltSubsystem.pitchLeeway / 2 || RobotState.isEnabled());
     }
 
 }

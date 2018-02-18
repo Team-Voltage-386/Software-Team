@@ -85,7 +85,7 @@ public class DriveSubsystem extends Subsystem {
 
     ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-    private DriveToCube driveToCube;
+    // private DriveToCube driveToCube;
 
     /*
      * Construct a new DriveSubsystem.
@@ -231,36 +231,40 @@ public class DriveSubsystem extends Subsystem {
      * computer-vision assistance to drive towards a cube. It contains internal
      * state for PID control.
      */
-    class DriveToCube {
-	double KP = -.0075, KD = -.1, KI = -.001;
-	double previousTime = 0, time, integral = 0;
-	double previousError = Robot.cubeVision.getError();
+    double KP = -.0075, KD = -.1, KI = -.001;
+    public double previousTime = 0, time, integral = 0;
+    double previousError = Robot.cubeVision.getError();
 
-	DriveToCube() {
-	    timer.reset();
-	}
+    public void resetTime() {
+	timer.reset();
+    }
 
-	void drive(double speed) {
-	    time = timer.get();
-	    double error = (Robot.cubeVision.getError());
-	    double derivative = (error - previousError) / (time - previousTime);
-	    integral += error * (time - previousTime);
-	    double value = KP * error + KD * derivative + KI * integral;
-	    drive.arcadeDrive(-1 * speed, value);
-	    updateDiagnostics();
-	    previousTime = time;
-	    previousError = error;
-	    SmartDashboard.putNumber("proportional", KP * error);
-	    SmartDashboard.putNumber("derivative", KD * derivative);
-	    SmartDashboard.putNumber("integral", KI * integral);
-	}
+    public void driveWithVision(double speed) {
+	time = timer.get();
+	double error = (Robot.cubeVision.getError());
+	double derivative = (error - previousError) / (time - previousTime);
+	integral += error * (time - previousTime);
+	double value = KP * error + KD * derivative + KI * integral;
+	drive.arcadeDrive(-1 * speed, value);
+	updateDiagnostics();
+	previousTime = time;
+	previousError = error;
+	SmartDashboard.putNumber("proportional", KP * error);
+	SmartDashboard.putNumber("derivative", KD * derivative);
+	SmartDashboard.putNumber("integral", KI * integral);
     }
 
     /**
      * Prepare to drive to the cube with computer vision assistance in teleop mode.
      */
-    public void prepareDriveToCubeTeleop() {
-	driveToCube = new DriveToCube();
+    public void prepareDriveToCube() {
+	timer.reset();
+	previousTime = 0;
+	integral = 0;
+	previousError = Robot.cubeVision.getError();
+	KP = -.0075;
+	KD = -.1;
+	KI = -.001;
     }
 
     /**
@@ -269,18 +273,19 @@ public class DriveSubsystem extends Subsystem {
      * @param speed
      *            The speed to drive
      */
-    public void driveToCubeTeleop(double speed) {
-	if (driveToCube == null)
-	    throw new IllegalStateException("Call prepareDriveToCubeTeleop before executing the assisted drive");
-	driveToCube.drive(speed);
-    }
+    // public void driveToCubeTeleop(double speed) {
+    // if (driveToCube == null)
+    // throw new IllegalStateException("Call prepareDriveToCubeTeleop before
+    // executing the assisted drive");
+    // driveToCube.drive(speed);
+    // }
 
     /**
      * Complete the drive to cube with computer vision assistance.
      */
-    public void completeDriveToCubeTeleop() {
-	driveToCube = null;
-    }
+    // public void completeDriveToCubeTeleop() {
+    // driveToCube = null;
+    // }
 
     /**
      * Drive towards the cube using error adjustment values from the cube vision
@@ -309,15 +314,17 @@ public class DriveSubsystem extends Subsystem {
 	resetEncoders();
 
 	if (rearUltrasonic.getRangeMM() > distanceFromWall) {
-	    while ((rearUltrasonic.getRangeMM()) > distanceFromWall && RobotState.isEnabled()) {
-		arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
-		updateDiagnostics();
-	    }
+	    // while ((rearUltrasonic.getRangeMM()) > distanceFromWall &&
+	    // RobotState.isEnabled()) {
+	    arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
+	    updateDiagnostics();
+	    // }
 	} else {
-	    while ((rearUltrasonic.getRangeMM()) < distanceFromWall && RobotState.isEnabled()) {
-		arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
-		updateDiagnostics();
-	    }
+	    // while ((rearUltrasonic.getRangeMM()) < distanceFromWall &&
+	    // RobotState.isEnabled()) {
+	    arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
+	    updateDiagnostics();
+	    // }
 	}
 	stop();
     }
@@ -367,35 +374,50 @@ public class DriveSubsystem extends Subsystem {
      * @param direction
      *            -1 (LEFT), 1 (RIGHT)
      */
-    void turnWithPid(double angle, int direction) {
+    double tolerance, speedThreshold, direction, angle;
+
+    public void turnWithPid() {
 	// shift(HIGH_GEAR);
-	double tolerance = 1, speedThreshold = 30;
-	double KP = -.1, KD = -.01;
-	gyro.reset();
-	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > speedThreshold)
-		&& RobotState.isEnabled()) {
-	    double error = (gyro.getAngle() - (direction * angle));
-	    double derivative = gyro.getRate();
-	    double value = KP * error + KD * derivative;
-	    SmartDashboard.putNumber("Value", value);
-	    if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
-		frontLeft.set(value);
-		frontRight.set(value);
+
+	// while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance ||
+	// Math.abs(gyro.getRate()) > speedThreshold)
+	// && RobotState.isEnabled()) {
+	double error = (gyro.getAngle() - (direction * angle));
+	double derivative = gyro.getRate();
+	double value = KP * error + KD * derivative;
+	SmartDashboard.putNumber("Value", value);
+	if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
+	    frontLeft.set(value);
+	    frontRight.set(value);
+	} else {
+	    if (value > 0) {
+		frontLeft.set(.3);
+		frontRight.set(.3);
 	    } else {
-		if (value > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
-		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
-		}
+		frontLeft.set(-.3);
+		frontRight.set(-.3);
 	    }
-	    SmartDashboard.putNumber("proportional", KP * error);
-	    SmartDashboard.putNumber("derivative", KD * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	}
+	SmartDashboard.putNumber("proportional", KP * error);
+	SmartDashboard.putNumber("derivative", KD * derivative);
+	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	// }
 	SmartDashboard.putString("Using pid", "true");
 	stop();
+    }
+
+    public boolean pidTurnDone() {
+	return (Math.abs(direction * gyro.getAngle() - angle) > tolerance && Math.abs(gyro.getRate()) > speedThreshold);
+    }
+
+    public void resetPidTurn(double angle, int direction) {
+	KP = -.1;
+	KD = -.01;
+	tolerance = 1;
+	speedThreshold = 30;
+	gyro.reset();
+	this.direction = direction;
+	this.angle = angle;
     }
 
     /**
@@ -420,9 +442,6 @@ public class DriveSubsystem extends Subsystem {
      * @param angle
      *            Turning angle
      */
-    public void turnLeft(double angle) {
-	turnWithPid(angle, LEFT);
-    }
 
     /**
      * Turn right the given angle.
@@ -430,9 +449,6 @@ public class DriveSubsystem extends Subsystem {
      * @param angle
      *            Turning angle
      */
-    public void turnRight(double angle) {
-	turnWithPid(angle, RIGHT);
-    }
 
     /**
      * Stop the robot from moving.
@@ -448,7 +464,7 @@ public class DriveSubsystem extends Subsystem {
      * @param speed
      *            The speed to drive straight.
      */
-    private void arcadeDriveStraight(double speed) {
+    public void arcadeDriveStraight(double speed) {
 	drive.arcadeDrive(speed, GYRO_COMPENSATION * gyro.getAngle());
     }
 
@@ -497,5 +513,13 @@ public class DriveSubsystem extends Subsystem {
 	} else {
 	    return in * in;
 	}
+    }
+
+    public double getLeftEncoder() {
+	return frontLeft.getSelectedSensorPosition(0);
+    }
+
+    public double getRightEncoder() {
+	return frontRight.getSelectedSensorPosition(0);
     }
 }

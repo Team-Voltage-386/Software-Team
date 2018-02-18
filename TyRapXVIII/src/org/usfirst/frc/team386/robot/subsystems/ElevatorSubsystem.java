@@ -24,13 +24,13 @@ public class ElevatorSubsystem extends Subsystem {
     public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
 
     Spark elevatorSpark = new Spark(RobotMap.elevatorSparks);
-    Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
+    public Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
 
     DoubleSolenoid chainBreaker = new DoubleSolenoid(RobotMap.chainBreakerIn, RobotMap.chainBreakerOut);
 
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
-    DigitalInput lowerElevatorLimitSwitch = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
-    DigitalInput upperElevatorLimitSwitch = new DigitalInput(RobotMap.upperElevatorLimitSwitch);
+    public DigitalInput lowerElevatorLimitSwitch = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
+    public DigitalInput upperElevatorLimitSwitch = new DigitalInput(RobotMap.upperElevatorLimitSwitch);
 
     Timer timer = new Timer();
     boolean previousState = false;
@@ -96,15 +96,17 @@ public class ElevatorSubsystem extends Subsystem {
      * @param ticks
      *            The encoder ticks
      */
-    public void setHeight(int ticks) {
+    public void setHeight(int ticks, double speed) {
 	if (elevatorEncoder.get() < ticks) {
-	    while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get() && upperElevatorLimitSwitch.get()) {
-		elevatorSpark.set(1);
-	    }
+	    // while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get() &&
+	    // upperElevatorLimitSwitch.get()) {
+	    elevatorSpark.set(speed);
+	    // }
 	} else {
-	    while (elevatorEncoder.get() > ticks && lowerElevatorLimitSwitch.get() && upperElevatorLimitSwitch.get()) {
-		elevatorSpark.set(-1);
-	    }
+	    // while (elevatorEncoder.get() > ticks && lowerElevatorLimitSwitch.get() &&
+	    // upperElevatorLimitSwitch.get()) {
+	    elevatorSpark.set(0);
+	    // }
 	}
     }
 

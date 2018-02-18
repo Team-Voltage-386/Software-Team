@@ -2,14 +2,15 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Set the elevator to a certain position based on the number of encoder ticks.
  * The encoders MUST be zeroed while the elevator is at its lowest position, as
  * indicated by the lower limit switch.
  */
-public class SetElevator extends InstantCommand {
+public class SetElevator extends Command {
     int ticks;
 
     public SetElevator(int ticksIn) {
@@ -20,7 +21,19 @@ public class SetElevator extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	Robot.elevatorSubsystem.setHeight(ticks);
+
+    }
+
+    @Override
+    protected void execute() {
+	Robot.elevatorSubsystem.setHeight(ticks, SmartDashboard.getNumber("Elevator Speed", 0));
+    }
+
+    @Override
+    protected boolean isFinished() {
+	return (Robot.elevatorSubsystem.elevatorEncoder.get() < ticks
+		|| Robot.elevatorSubsystem.lowerElevatorLimitSwitch.get()
+		|| Robot.elevatorSubsystem.upperElevatorLimitSwitch.get());
     }
 
 }
