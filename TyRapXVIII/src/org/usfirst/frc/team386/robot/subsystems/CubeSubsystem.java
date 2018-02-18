@@ -75,4 +75,8 @@ public class CubeSubsystem extends Subsystem {
 	    right.set(-1 * speed);
 	}
     }
+
+    public boolean hasCube() {
+	return ultraCenter.getInches() < 2 && ultraEdge.getInches() < 2;
+    }
 }

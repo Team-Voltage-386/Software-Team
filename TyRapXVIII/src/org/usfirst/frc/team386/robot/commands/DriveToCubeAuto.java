@@ -23,6 +23,6 @@ public class DriveToCubeAuto extends Command {
 
     @Override
     public boolean isFinished() {
-	return !RobotState.isEnabled();
+	return !(RobotState.isEnabled() || Robot.cubeSubsystem.hasCube());
     }
 }
