@@ -26,11 +26,14 @@ public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSparks);
     Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
 
-    DoubleSolenoid chainBreaker = new DoubleSolenoid(6, 7);
+    DoubleSolenoid chainBreaker = new DoubleSolenoid(RobotMap.chainBreakerIn, RobotMap.chainBreakerOut);
 
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
-    DigitalInput botomLimit = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
-    DigitalInput topLimit = new DigitalInput(4);
+    DigitalInput lowerElevatorLimitSwitch = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
+    DigitalInput upperElevatorLimitSwitch = new DigitalInput(RobotMap.upperElevatorLimitSwitch);
+
+    Timer timer = new Timer();
+    boolean previousState = false;
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -38,8 +41,8 @@ public class ElevatorSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putBoolean("DIO0", botomLimit.get());
-	SmartDashboard.putBoolean("DIO4", topLimit.get());
+	SmartDashboard.putBoolean("DIO0", lowerElevatorLimitSwitch.get());
+	SmartDashboard.putBoolean("DIO4", upperElevatorLimitSwitch.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
     }
 
@@ -58,32 +61,28 @@ public class ElevatorSubsystem extends Subsystem {
      * @param speed
      *            The speed at which the elevator moves
      */
-    Timer timer = new Timer();
-    boolean previousState = false;
-
     public void elevatorFromDPad(int pov, double speed) {
+	// TODO: clean this up so it is easier to understand
+
 	if (pov != -1 && pov < 270 && pov > 90) {
-	    if (botomLimit.get())
+	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(0);
 	    else
 		elevatorSpark.set(0);
 	} else if (pov != -1) {
-	    if (topLimit.get())
+	    if (upperElevatorLimitSwitch.get())
 		elevatorSpark.set(-1 * speed);
 	    else {
-		// double currentTime = timer.get();
-		// while (timer.get() < currentTime + .1 && !previousState) {
-		// elevatorSpark.set(-1 * speed);
-		// }
 		elevatorSpark.set(-.2);
 	    }
 	} else {
-	    if (botomLimit.get())
+	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(-.2);
 	    else
 		elevatorSpark.set(0);
 	}
-	previousState = botomLimit.get();
+	previousState = lowerElevatorLimitSwitch.get();
+	previousState = lowerElevatorLimitSwitch.get();
     }
 
     /**
@@ -95,11 +94,11 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void setHeight(int ticks) {
 	if (elevatorEncoder.get() < ticks) {
-	    while (elevatorEncoder.get() < ticks && botomLimit.get() && topLimit.get()) {
+	    while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get() && upperElevatorLimitSwitch.get()) {
 		elevatorSpark.set(1);
 	    }
 	} else {
-	    while (elevatorEncoder.get() > ticks && botomLimit.get() && topLimit.get()) {
+	    while (elevatorEncoder.get() > ticks && lowerElevatorLimitSwitch.get() && upperElevatorLimitSwitch.get()) {
 		elevatorSpark.set(-1);
 	    }
 	}

@@ -39,6 +39,5 @@ public class ArmsSubsystem extends Subsystem {
      */
     public void setArms(DoubleSolenoid.Value position) {
 	arms.set(position);
-	// arms.set(position);
     }
 }

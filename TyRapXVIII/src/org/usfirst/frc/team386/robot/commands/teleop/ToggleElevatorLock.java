@@ -1,7 +1,6 @@
 package org.usfirst.frc.team386.robot.commands.teleop;
 
 import org.usfirst.frc.team386.robot.Robot;
-import org.usfirst.frc.team386.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -17,8 +16,7 @@ public class ToggleElevatorLock extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	if (Robot.oi.manipulator.getRawButton(RobotMap.prepForClimbButton2))
-	    Robot.elevatorSubsystem.toggleElevatorLock();
+	Robot.elevatorSubsystem.toggleElevatorLock();
     }
 
 }

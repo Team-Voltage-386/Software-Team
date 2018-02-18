@@ -163,7 +163,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
-    new SetElevator(0).start();
+	new SetElevator(0).start();
 	Scheduler.getInstance().removeAll();
     }
 

@@ -28,6 +28,7 @@ public class RobotMap {
 
     // DIO (Digital IO)
     public static int lowerElevatorLimitSwitch = 0; // digital input
+    public static int upperElevatorLimitSwitch = 4;
     public static int elevatorEncoderA = 1; // encoder
     public static int elevatorEncoderB = 2; // encoder
     public static int rearPingChannel = 5; // ultrasonic
@@ -46,7 +47,8 @@ public class RobotMap {
     public static int latchForwardChannel = 2; // solenoid
     public static int latchReverseChannel = 3; // solenoid
 
-    public static int chainBreaker = 6; // solenoid // waiting on electrical for these three
+    public static int chainBreakerIn = 6; // solenoid // waiting on electrical for these three
+    public static int chainBreakerOut = 7;
     public static int armsForwardChannel = 4; // solenoid
     public static int armsReverseChannel = 5; // solenoid
 
@@ -60,8 +62,8 @@ public class RobotMap {
     public static int manipRightTriggerAxis = 3;
     public static int manipRightJoystickVertical = 5;
     public static int manipLeftJoystickVertical = 1;
-    public static int elevatorToExchange = 2;
-    public static int toggleElevatorLockButton = 1;
+    // public static int elevatorToExchange = 2;
+    public static int toggleElevatorLockButton = 2;
     public static int autoCubeIntakeButton = 3;
     public static int climbButton = 4;
     public static int prepForClimbButton1 = 8;

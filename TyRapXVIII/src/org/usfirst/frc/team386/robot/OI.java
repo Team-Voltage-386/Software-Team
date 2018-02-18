@@ -31,11 +31,12 @@ public class OI {
 
     // manipulator buttons
     public Button driveToCubeButton = new JoystickButton(xboxControl, RobotMap.driveToCubeButton);
-    public Button arcadeDriveElevatorToExchangeButton = new JoystickButton(manipulator, RobotMap.elevatorToExchange);
+    // public Button arcadeDriveElevatorToExchangeButton = new
+    // JoystickButton(manipulator, RobotMap.elevatorToExchange);
     public Button arcadeDriveToggerElevatorLock = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton1);
-    public Button shiftArmsButton = new JoystickButton(manipulator, 10);
+    public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
 
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
