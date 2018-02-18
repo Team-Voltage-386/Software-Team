@@ -49,7 +49,7 @@ public class DriveSubsystem extends Subsystem {
 
     private static final int NO_TIMEOUT = 0;
 
-    public static double speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
+    public static double speedMultiplier = BOOST_SPEED_MULTIPLIER;
 
     WPI_TalonSRX frontLeft = new WPI_TalonSRX(RobotMap.leftPrimaryDriveMotor);
     WPI_TalonSRX frontRight = new WPI_TalonSRX(RobotMap.rightPrimaryDriveMotor);

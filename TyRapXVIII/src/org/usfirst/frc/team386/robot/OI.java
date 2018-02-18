@@ -42,8 +42,8 @@ public class OI {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
 	// tankDriveShiftButton.whenPressed(new GearShift());
 
-	arcadeDriveBoostButton.whenPressed(new BoostStart());
-	arcadeDriveBoostButton.whenReleased(new BoostStop());
+	arcadeDriveBoostButton.whenPressed(new BoostStop());
+	arcadeDriveBoostButton.whenReleased(new BoostStart());
 
 	// tankDriveBoostButton.whenPressed(new BoostStart());
 	// tankDriveBoostButton.whenReleased(new BoostStop());

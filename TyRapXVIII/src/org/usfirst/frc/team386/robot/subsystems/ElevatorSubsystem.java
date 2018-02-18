@@ -46,8 +46,8 @@ public class ElevatorSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putBoolean("DIO0", lowerElevatorLimitSwitch.get());
-	SmartDashboard.putBoolean("DIO4", upperElevatorLimitSwitch.get());
+	SmartDashboard.putBoolean("Lower elevator limit switch", lowerElevatorLimitSwitch.get());
+	SmartDashboard.putBoolean("Upper elevator limit switch", upperElevatorLimitSwitch.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
 	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(UNLOCKED));
 	SmartDashboard.putBoolean("Chain break", chainBreaker.get().equals(UNLOCKED));
