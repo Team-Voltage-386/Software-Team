@@ -62,6 +62,8 @@ public class ElevatorSubsystem extends Subsystem {
      *            The speed at which the elevator moves
      */
     public void elevatorFromDPad(int pov, double speed) {
+	// TODO: clean this up so it is easier to understand
+
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(0);
