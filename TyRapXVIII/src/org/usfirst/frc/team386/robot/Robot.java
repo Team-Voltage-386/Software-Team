@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCube;
+import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
@@ -162,6 +163,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void disabledInit() {
+    new SetElevator(0).start();
 	Scheduler.getInstance().removeAll();
     }
 
