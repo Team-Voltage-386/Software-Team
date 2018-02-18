@@ -7,7 +7,7 @@
 #define PIN 6 //DIO pin used for control of LEDs
 
 int LEDmode;
-int NumPixels = 150; // Number of pixels in LED strip
+int NumPixels = 60; // Number of pixels in LED strip
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NumPixels, PIN, NEO_GRB + NEO_KHZ800);  //Create NeoPixel object.  Constructor accepts number of pixels, DIO pi, and LED type.  More info on that can be found in the Adafruit tutorial.
 
@@ -23,7 +23,7 @@ void setup()  //Arduino Init loop.
 void loop()
 {
    Wire.onReceive(dataReceived); //Looks for data send over I2C, begins when any is detected, no matter the size. 
-   RunLEDs(LED); //If data is received, this function passes that information to the RunLEDs method.
+   RunLEDs(LEDmode); //If data is received, this function passes that information to the RunLEDs method.
 }
 
 void dataReceived(int howMany)   //Method started by data on the bus.  
@@ -39,38 +39,43 @@ void dataReceived(int howMany)   //Method started by data on the bus.
     }
 
   } 
-  
-//  switch(LED)
-//  {
-//    case "DISABLED":
-//      LEDmode = 1;
-//      break;  
-//    case "AUTO":
-//       LEDmode = 2;
-//      break;     
-//    case "TELEOP":
-//      LEDmode = 3;
-//      break; 
-//    default:
-//      LEDmode = 0;
-//  }
+
+  if (LED == "DISABLED") //The string that is passed.  This is written in the Java code. 
+  {
+    LEDmode = 1;  //Assign a number to the LEDmode.  This is passed to the Run LEDs function after this method ends. 
+  } 
+  else if (LED == "AUTO") 
+  {
+    LEDmode = 2;
+  } 
+  else if (LED == "TELEOP") 
+  {
+    LEDmode = 3;
+  } 
+  else 
+  {
+    LEDmode = 0;  //Diagnostic else statment.  If no I2C data is being passed, or if you are reading it incorrectly, this is useful.
+  }
 }
 
 void RunLEDs(int mode) //This is passed the LEDmode object from the previous method.  
 {
   switch(mode)
   {
-  case "DISABLED":
-    colorWipe(strip.Color(0, 255, 0), 20); // Green for disabled 
-    break;
-  case "AUTO":
-    colorWipe(strip.Color(0, 0, 255), 20); // Blue for autonomous
-    break;
-  case "TELEOP":
-    colorWipe(strip.Color(255, 0, 0), 20); // Red for teleop
-    break;
-  default:
-    doubleTheaterChase(strip.Color(255, 255, 0), strip.Color(0, 0, 255), 100);  
+    case '0':
+      colorWipeColumns(strip.Color(125, 125, 125), 20);
+      break;
+    case '1':
+      colorWipeColumns(strip.Color(0, 255, 0), 20); // Green for disabled 
+      break;
+    case '2':
+      colorWipeColumns(strip.Color(0, 0, 255), 20); // Blue for autonomous
+      break;
+    case '3':
+      colorWipeColumns(strip.Color(255, 0, 0), 20); // Red for teleop
+      break;
+    default:
+      doubleTheaterChase(strip.Color(255, 255, 0), strip.Color(0, 0, 255), 150);  
   }
 }
 
@@ -81,6 +86,17 @@ void colorWipe(uint32_t c, uint8_t wait)
   for(uint16_t i=0; i<strip.numPixels(); i++) 
   {
     strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+
+void colorWipeColumns(uint32_t c, uint8_t wait) 
+{
+  for(uint16_t i=0; i<= strip.numPixels()/2; i++) 
+  {
+    strip.setPixelColor(i, c);
+    strip.setPixelColor(i+29, c);
     strip.show();
     delay(wait);
   }
