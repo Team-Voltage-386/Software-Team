@@ -35,8 +35,9 @@ public class OI {
     public Button arcadeDriveToggerElevatorLock = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton1);
-    public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
+    public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.shiftArmsButton);
 
+    // RobotMap.toggleElevatorLockButton
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
 	// tankDriveShiftButton.whenPressed(new GearShift());

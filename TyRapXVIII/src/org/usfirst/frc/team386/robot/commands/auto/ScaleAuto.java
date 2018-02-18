@@ -76,7 +76,7 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease());
+	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -95,7 +95,7 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnLeft(90));
 	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease());
+	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -110,7 +110,7 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnLeft(90));
 	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease());
+	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -129,7 +129,7 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(558)); // measured in mm
 	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease());
+	    addSequential(new CubeRelease(1));
 	}
     }
 }

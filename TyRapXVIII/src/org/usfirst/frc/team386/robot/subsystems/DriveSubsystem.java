@@ -39,7 +39,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-    public static final double FAST_AUTO_MODE_SPEED = 0.9;
+    public static final double FAST_AUTO_MODE_SPEED = 0.75;// .9
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
     public boolean isGoingUpRamp = false;
@@ -128,7 +128,7 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
 	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
-
+	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
     }
 
@@ -369,8 +369,8 @@ public class DriveSubsystem extends Subsystem {
      */
     void turnWithPid(double angle, int direction) {
 	// shift(HIGH_GEAR);
-	double tolerance = 1, speedThreshold = 30;
-	double KP = -.1, KD = -.01;
+	double tolerance = 2, speedThreshold = 15;
+	double KP = -.2, KD = -.05;
 	gyro.reset();
 	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > speedThreshold)
 		&& RobotState.isEnabled()) {
@@ -378,18 +378,18 @@ public class DriveSubsystem extends Subsystem {
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
 	    SmartDashboard.putNumber("Value", value);
-	    if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
-		frontLeft.set(value);
-		frontRight.set(value);
-	    } else {
-		if (value > 0) {
-		    frontLeft.set(.3);
-		    frontRight.set(.3);
-		} else {
-		    frontLeft.set(-.3);
-		    frontRight.set(-.3);
-		}
-	    }
+	    // if (Math.abs(value) > .35 || derivative > speedThreshold) {
+	    frontLeft.set(value);
+	    frontRight.set(value);
+	    // } else {
+	    // if (value > 0) {
+	    // frontLeft.set(.35);
+	    // frontRight.set(.35);
+	    // } else {
+	    // frontLeft.set(-.35);
+	    // frontRight.set(-.35);
+	    // }
+	    // }
 	    SmartDashboard.putNumber("proportional", KP * error);
 	    SmartDashboard.putNumber("derivative", KD * derivative);
 	    SmartDashboard.putNumber("Gyro", gyro.getAngle());

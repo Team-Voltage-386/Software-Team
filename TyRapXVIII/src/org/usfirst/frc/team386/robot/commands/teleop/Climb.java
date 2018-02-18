@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CubeWithTrigger extends Command {
+public class Climb extends Command {
 
-    public CubeWithTrigger() {
-	requires(Robot.cubeSubsystem);
+    public Climb() {
+	requires(Robot.elevatorSubsystem);
     }
 
     // Called just before this Command runs the first time
@@ -20,15 +20,12 @@ public class CubeWithTrigger extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.cubeSubsystem.runCombined(
-		Robot.oi.manipulator.getRawAxis(RobotMap.manipLeftTriggerAxis)
-			- Robot.oi.manipulator.getRawAxis(RobotMap.manipRightTriggerAxis),
-		Robot.oi.manipulator.getRawAxis(5), Robot.oi.manipulator.getRawAxis(1));
+	Robot.elevatorSubsystem.climb();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-	return false;
+	return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton);
     }
 
     // Called once after isFinished returns true
