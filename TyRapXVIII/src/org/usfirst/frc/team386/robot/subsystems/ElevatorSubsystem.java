@@ -44,6 +44,8 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putBoolean("DIO0", lowerElevatorLimitSwitch.get());
 	SmartDashboard.putBoolean("DIO4", upperElevatorLimitSwitch.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
+	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(UNLOCKED));
+	SmartDashboard.putBoolean("Chain break", chainBreaker.get().equals(UNLOCKED));
     }
 
     // Put methods for controlling this subsystem
@@ -63,7 +65,6 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void elevatorFromDPad(int pov, double speed) {
 	// TODO: clean this up so it is easier to understand
-
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(0);
@@ -81,8 +82,6 @@ public class ElevatorSubsystem extends Subsystem {
 	    else
 		elevatorSpark.set(0);
 	}
-	previousState = lowerElevatorLimitSwitch.get();
-	previousState = lowerElevatorLimitSwitch.get();
     }
 
     /**
