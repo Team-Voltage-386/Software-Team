@@ -21,7 +21,7 @@ public class CubeManual extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.cubeSubsystem.run(Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(2));
+	Robot.cubeSubsystem.run(-1 * Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(3));
     }
 
     // Make this return true when this Command no longer needs to run execute()

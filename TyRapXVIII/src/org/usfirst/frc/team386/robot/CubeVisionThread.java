@@ -50,7 +50,7 @@ public class CubeVisionThread extends Thread {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
+	// SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
     }
 
     /**
@@ -185,8 +185,12 @@ public class CubeVisionThread extends Thread {
      * @return The number of pixels the cube is off center
      */
     public int getError() {
-	if (rectChoice >= 0 && rects.size() > 0) {
-	    return (int) (160 - rects.get(rectChoice).center.x);
+	if (rectChoice >= 0 && rects.size() > 0 && rects.get(rectChoice) != null) {
+	    try {
+		return (int) (160 - rects.get(rectChoice).center.x);
+	    } catch (NullPointerException e) {
+		return Integer.MAX_VALUE;
+	    }
 	} else {
 	    return 0;
 	}

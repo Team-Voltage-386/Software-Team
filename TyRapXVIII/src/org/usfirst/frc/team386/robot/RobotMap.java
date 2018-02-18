@@ -62,6 +62,6 @@ public class RobotMap {
 
     // Drive buttons
     public static int shiftButton = 5;
-    public static int boostButton = 8;
+    public static int boostButton = 6;
     public static int driveToCubeButton = 3;
 }

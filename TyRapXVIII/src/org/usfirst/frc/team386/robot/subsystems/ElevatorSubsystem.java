@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,7 +26,7 @@ public class ElevatorSubsystem extends Subsystem {
     Spark elevatorSpark = new Spark(RobotMap.elevatorSparks);
     Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
 
-    Solenoid chainBreaker = new Solenoid(RobotMap.chainBreaker);
+    DoubleSolenoid chainBreaker = new DoubleSolenoid(6, 7);
 
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
     DigitalInput dio0 = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
@@ -38,6 +38,8 @@ public class ElevatorSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
+	SmartDashboard.putBoolean("DIO0", dio0.get());
+	SmartDashboard.putBoolean("DIO4", dio4.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
     }
 
@@ -56,17 +58,32 @@ public class ElevatorSubsystem extends Subsystem {
      * @param speed
      *            The speed at which the elevator moves
      */
+    Timer timer = new Timer();
+    boolean previousState = false;
+
     public void elevatorFromDPad(int pov, double speed) {
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (dio0.get())
-		elevatorSpark.set(speed);
+		elevatorSpark.set(0);
 	    else
 		elevatorSpark.set(0);
-	} else if (pov != -1 && dio4.get()) {
-	    elevatorSpark.set(-1 * speed);
+	} else if (pov != -1) {
+	    if (dio4.get())
+		elevatorSpark.set(-1 * speed);
+	    else {
+		// double currentTime = timer.get();
+		// while (timer.get() < currentTime + .1 && !previousState) {
+		// elevatorSpark.set(-1 * speed);
+		// }
+		elevatorSpark.set(-.2);
+	    }
 	} else {
-	    elevatorSpark.set(0);
+	    if (dio0.get())
+		elevatorSpark.set(-.2);
+	    else
+		elevatorSpark.set(0);
 	}
+	previousState = dio0.get();
     }
 
     /**
@@ -119,7 +136,7 @@ public class ElevatorSubsystem extends Subsystem {
      * chain can only be reconnected by a human.
      */
     public void breakChain() {
-	chainBreaker.set(true);
+	chainBreaker.set(DoubleSolenoid.Value.kReverse);
     }
 
 }

@@ -4,10 +4,11 @@ import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
+import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
-import org.usfirst.frc.team386.robot.commands.teleop.ToggleElevatorLock;
 import org.usfirst.frc.team386.robot.commands.teleop.PrepForClimb;
+import org.usfirst.frc.team386.robot.commands.teleop.ToggleElevatorLock;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -35,6 +36,7 @@ public class OI {
     public Button arcadeDriveToggerElevatorLock = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton);
+    public Button shiftArmsButton = new JoystickButton(manipulator, 10);
 
     public OI() {
 	arcadeDriveShiftButton.whenPressed(new GearShift());
@@ -54,5 +56,6 @@ public class OI {
 	autoCubeIntakeButton.whenPressed(new CubeWithUltrasonics());
 
 	prepForClimbButton.whenPressed(new PrepForClimb());
+	shiftArmsButton.whenPressed(new ShiftArms());
     }
 }
