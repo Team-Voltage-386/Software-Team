@@ -19,7 +19,6 @@ import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.TiltSubsystem;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -109,7 +108,7 @@ public class Robot extends IterativeRobot {
 	oi = new OI();
 	gameData = new GameData();
 	cubeVision.start();
-	elevatorSubsystem.lock(DoubleSolenoid.Value.kReverse);
+
 	initializeDashboard();
     }
 

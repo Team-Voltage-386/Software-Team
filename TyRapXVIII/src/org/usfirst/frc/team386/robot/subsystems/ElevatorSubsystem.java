@@ -35,6 +35,11 @@ public class ElevatorSubsystem extends Subsystem {
     Timer timer = new Timer();
     boolean previousState = false;
 
+    public ElevatorSubsystem() {
+	super();
+	lock(LOCKED);
+    }
+
     /**
      * Update the smart dashboard with diagnostics values.
      */
