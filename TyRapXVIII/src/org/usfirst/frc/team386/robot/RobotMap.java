@@ -54,6 +54,10 @@ public class RobotMap {
     public static int driverPort = 0;
     public static int manipulatorPort = 1;
 
+    // Drive axis
+    public static int driveSpeedAxis = 1;
+    public static int driveTurnAxis = 4;
+
     // Manipulator Buttons
     public static int elevatorToExchange = 2;
     public static int toggleElevatorLockButton = 1;
