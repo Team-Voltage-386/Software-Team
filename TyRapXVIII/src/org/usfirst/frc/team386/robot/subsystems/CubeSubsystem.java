@@ -65,14 +65,14 @@ public class CubeSubsystem extends Subsystem {
     public void runWithUltrasonics(double speed) {
 	double difference = ultraCenter.getInches() - ultraEdge.getInches();
 	if (difference > 2) {
-	    left.set(-1 * speed);
-	    right.set(-1 * speed);
-	} else if (-2 < difference) {
 	    left.set(speed);
 	    right.set(speed);
-	} else if (difference < -2 || difference < 2) {
+	} else if (-2 < difference) {
 	    left.set(-1 * speed);
-	    right.set(speed);
+	    right.set(-1 * speed);
+	} else if (difference < -2 || difference < 2) {
+	    left.set(speed);
+	    right.set(-1 * speed);
 	}
     }
 }
