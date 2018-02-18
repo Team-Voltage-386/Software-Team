@@ -3,10 +3,8 @@ package org.usfirst.frc.team386.robot.subsystems;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
-import org.usfirst.frc.team386.robot.commands.teleop.TankDrive;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
@@ -76,7 +74,6 @@ public class DriveSubsystem extends Subsystem {
     // RobotMap.rightDriveEncoderChannelB);
 
     public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
-    public PigeonIMU pigeon = new PigeonIMU(0);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
     // public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel,
     // RobotMap.frontEchoChannel);
@@ -131,7 +128,7 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
 	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
-	SmartDashboard.putNumber("Pitch", pitch());
+
 	// SmartDashboard.putBoolean("DIO0", dio0.get());
 	// SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
 	// SmartDashboard.putNumber("One ultra", oneUltra.getInches());
@@ -175,20 +172,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void stopBoost() {
 	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
-    }
-
-    /**
-     * Set the drive mode.
-     * 
-     * @param arcadeMode
-     *            If true, then use arcade mode, otherwise use tank mode.
-     */
-    public void setDriveMode(boolean arcadeMode) {
-	if (arcadeMode) {
-	    setDefaultCommand(new ArcadeDrive());
-	} else {
-	    setDefaultCommand(new TankDrive());
-	}
     }
 
     /**
@@ -303,6 +286,12 @@ public class DriveSubsystem extends Subsystem {
 	driveToCube = null;
     }
 
+    /**
+     * Drive towards the cube using error adjustment values from the cube vision
+     * thread.
+     * 
+     * WARNING: this method will not stop unless you disable the robot!
+     */
     public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
 	    drive.arcadeDrive(.75, Robot.cubeVision.getError() * -.005);
@@ -512,26 +501,5 @@ public class DriveSubsystem extends Subsystem {
 	} else {
 	    return in * in;
 	}
-    }
-
-    public void tiltPrevention() {
-	SmartDashboard.putString("Robot tilt", "nuetral");
-	if (pitch() > 10 /* && elevator is up */) {
-	    SmartDashboard.putString("Robot tilt", "positive");
-	    while (pitch() > 5) {
-		drive.tankDrive(-(.5), -(.5));
-	    }
-	} else if (pitch() < -10 /* && elevator is up */) {
-	    SmartDashboard.putString("Robot tilt", "negative");
-	    while (pitch() < -5) {
-		drive.tankDrive((.5), (.5));
-	    }
-	}
-    }
-
-    public double pitch() {
-	double[] pig = new double[3];
-	pigeon.getYawPitchRoll(pig);
-	return pig[1];
     }
 }

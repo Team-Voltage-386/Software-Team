@@ -8,6 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class GameData {
 
+    // Game data configurations
+    public static final String LLL = "LLL";
+    public static final String LRL = "LRL";
+    public static final String RRR = "RRR";
+    public static final String RLR = "RLR";
+
     private String gameData;
 
     /**
@@ -26,7 +32,7 @@ public class GameData {
      * @return True if the switch is left.
      */
     public boolean isSwitchLeft() {
-	return gameData.equals(Robot.LLL) || gameData.equals(Robot.LRL);
+	return gameData.equals(LLL) || gameData.equals(LRL);
     }
 
     /**
@@ -35,7 +41,7 @@ public class GameData {
      * @return True if the switch is left.
      */
     public boolean isSwitchRight() {
-	return gameData.equals(Robot.RRR) || gameData.equals(Robot.RLR);
+	return gameData.equals(RRR) || gameData.equals(RLR);
     }
 
     /**
@@ -44,7 +50,7 @@ public class GameData {
      * @return True if the scale is left
      */
     public boolean isScaleLeft() {
-	return gameData.equals(Robot.LLL) || gameData.equals(Robot.RLR);
+	return gameData.equals(LLL) || gameData.equals(RLR);
     }
 
     /**
@@ -53,6 +59,6 @@ public class GameData {
      * @return True if the scale is right
      */
     public boolean isScaleRight() {
-	return gameData.equals(Robot.RRR) || gameData.equals(Robot.LRL);
+	return gameData.equals(RRR) || gameData.equals(LRL);
     }
 }
