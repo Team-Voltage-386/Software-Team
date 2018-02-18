@@ -2,7 +2,7 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.AnalogUltrasonic;
 import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.commands.teleop.CubeManual;
+import org.usfirst.frc.team386.robot.commands.teleop.CubeWithTrigger;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -33,7 +33,8 @@ public class CubeSubsystem extends Subsystem {
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
-	setDefaultCommand(new CubeManual());
+	// setDefaultCommand(new CubeManual());
+	setDefaultCommand(new CubeWithTrigger());
     }
 
     public void stop() {
@@ -46,17 +47,32 @@ public class CubeSubsystem extends Subsystem {
 	right.set(rightSpeed);
     }
 
-    public void runWithUltrasonics() {
+    public void symetricalCube(double speed) {
+	left.set(-1 * speed);
+	right.set(speed);
+    }
+
+    public void runCombined(double mainSpeed, double leftSpeed, double rightSpeed) {
+	if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1) {
+	    left.set(-1 * mainSpeed);
+	    right.set(mainSpeed);
+	} else {
+	    left.set(-1 * leftSpeed);
+	    right.set(rightSpeed);
+	}
+    }
+
+    public void runWithUltrasonics(double speed) {
 	double difference = ultraCenter.getInches() - ultraEdge.getInches();
 	if (difference > 2) {
-	    left.set(SmartDashboard.getNumber("left fast", .5));
-	    right.set(SmartDashboard.getNumber("right slow", -.5));
+	    left.set(-1 * speed);
+	    right.set(-1 * speed);
 	} else if (-2 < difference) {
-	    left.set(SmartDashboard.getNumber("left slow", -.5));
-	    right.set(SmartDashboard.getNumber("right fast", .5));
+	    left.set(speed);
+	    right.set(speed);
 	} else if (difference < -2 || difference < 2) {
-	    left.set(SmartDashboard.getNumber("left fast", .5));
-	    right.set(SmartDashboard.getNumber("right fast", .5));
+	    left.set(-1 * speed);
+	    right.set(speed);
 	}
     }
 }

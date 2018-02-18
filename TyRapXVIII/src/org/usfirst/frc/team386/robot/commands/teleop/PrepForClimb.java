@@ -1,5 +1,7 @@
 package org.usfirst.frc.team386.robot.commands.teleop;
 
+import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -18,7 +20,8 @@ public class PrepForClimb extends InstantCommand {
     }
 
     protected void initialize() {
-	if (DriverStation.getInstance().getMatchTime() < 30) {
+	if (DriverStation.getInstance().getMatchTime() < 30
+		&& Robot.oi.manipulator.getRawButton(RobotMap.prepForClimbButton2)) {
 	    new ExecuteSteps().start();
 	} else {
 	    SmartDashboard.putString("prepClimbErrors", "Error: climb is only allowed with 30 seconds of game end");

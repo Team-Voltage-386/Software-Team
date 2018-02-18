@@ -29,8 +29,8 @@ public class ElevatorSubsystem extends Subsystem {
     DoubleSolenoid chainBreaker = new DoubleSolenoid(6, 7);
 
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
-    DigitalInput dio0 = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
-    DigitalInput dio4 = new DigitalInput(4);
+    DigitalInput botomLimit = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
+    DigitalInput topLimit = new DigitalInput(4);
 
     /**
      * Update the smart dashboard with diagnostics values.
@@ -38,8 +38,8 @@ public class ElevatorSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putBoolean("DIO0", dio0.get());
-	SmartDashboard.putBoolean("DIO4", dio4.get());
+	SmartDashboard.putBoolean("DIO0", botomLimit.get());
+	SmartDashboard.putBoolean("DIO4", topLimit.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
     }
 
@@ -63,12 +63,12 @@ public class ElevatorSubsystem extends Subsystem {
 
     public void elevatorFromDPad(int pov, double speed) {
 	if (pov != -1 && pov < 270 && pov > 90) {
-	    if (dio0.get())
+	    if (botomLimit.get())
 		elevatorSpark.set(0);
 	    else
 		elevatorSpark.set(0);
 	} else if (pov != -1) {
-	    if (dio4.get())
+	    if (topLimit.get())
 		elevatorSpark.set(-1 * speed);
 	    else {
 		// double currentTime = timer.get();
@@ -78,12 +78,12 @@ public class ElevatorSubsystem extends Subsystem {
 		elevatorSpark.set(-.2);
 	    }
 	} else {
-	    if (dio0.get())
+	    if (botomLimit.get())
 		elevatorSpark.set(-.2);
 	    else
 		elevatorSpark.set(0);
 	}
-	previousState = dio0.get();
+	previousState = botomLimit.get();
     }
 
     /**
@@ -95,11 +95,11 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void setHeight(int ticks) {
 	if (elevatorEncoder.get() < ticks) {
-	    while (elevatorEncoder.get() < ticks) {
+	    while (elevatorEncoder.get() < ticks && botomLimit.get() && topLimit.get()) {
 		elevatorSpark.set(1);
 	    }
 	} else {
-	    while (elevatorEncoder.get() > ticks) {
+	    while (elevatorEncoder.get() > ticks && botomLimit.get() && topLimit.get()) {
 		elevatorSpark.set(-1);
 	    }
 	}

@@ -65,7 +65,7 @@ public class DriveSubsystem extends Subsystem {
 
     Compressor compressor = new Compressor(RobotMap.compressor);
 
-    DoubleSolenoid solenoid = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
+    DoubleSolenoid gearShifter = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
     // Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA,
@@ -109,7 +109,7 @@ public class DriveSubsystem extends Subsystem {
 	rearUltrasonic.setAutomaticMode(true);
 	// frontUltrasonic.setAutomaticMode(true);
 
-	solenoid.set(LOW_GEAR);
+	gearShifter.set(LOW_GEAR);
 	timer.start();
     }
 
@@ -129,11 +129,7 @@ public class DriveSubsystem extends Subsystem {
 	// SmartDashboard.putNumber(Robot.LEFT_ENCODER_RIO, leftEncoder.get());
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 
-	// SmartDashboard.putBoolean("DIO0", dio0.get());
-	// SmartDashboard.putNumber("zero ultra", zeroUltra.getInches());
-	// SmartDashboard.putNumber("One ultra", oneUltra.getInches());
-	// SmartDashboard.putNumber("Elevator output",
-	// Math.cos(Math.toRadians(Robot.oi.xboxControl.getPOV(0))));
+	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
     }
 
     /**
@@ -189,7 +185,7 @@ public class DriveSubsystem extends Subsystem {
      * Shift gears. This method will shift to the opposite of the current gear.
      */
     public void shift() {
-	if (solenoid.get() == HIGH_GEAR) {
+	if (gearShifter.get() == HIGH_GEAR) {
 	    shift(LOW_GEAR);
 	} else {
 	    shift(HIGH_GEAR);
@@ -197,13 +193,13 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Sift the solenoid specifically to either low or high gear.
+     * Sift the gearShifter specifically to either low or high gear.
      * 
      * @param gear
      *            LOW_GEAR or HIGH_GEAR
      */
     public void shift(Value gear) {
-	solenoid.set(gear);
+	gearShifter.set(gear);
     }
 
     /**

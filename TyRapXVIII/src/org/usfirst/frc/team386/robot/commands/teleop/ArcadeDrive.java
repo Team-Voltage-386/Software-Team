@@ -1,6 +1,7 @@
 package org.usfirst.frc.team386.robot.commands.teleop;
 
 import org.usfirst.frc.team386.robot.Robot;
+import org.usfirst.frc.team386.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -22,7 +23,8 @@ public class ArcadeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-	Robot.driveSubsystem.driveArcade(Robot.oi.xboxControl.getRawAxis(1), Robot.oi.xboxControl.getRawAxis(4));
+	Robot.driveSubsystem.driveArcade(Robot.oi.xboxControl.getRawAxis(RobotMap.driveLeftJoystickVertical),
+		Robot.oi.xboxControl.getRawAxis(RobotMap.driveRightJoystickHorizontal));
     }
 
     // Make this return true when this Command no longer needs to run execute()

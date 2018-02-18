@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.BoostStart;
 import org.usfirst.frc.team386.robot.commands.BoostStop;
 import org.usfirst.frc.team386.robot.commands.GearShift;
-import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCube;
@@ -35,7 +34,7 @@ public class OI {
     public Button arcadeDriveElevatorToExchangeButton = new JoystickButton(manipulator, RobotMap.elevatorToExchange);
     public Button arcadeDriveToggerElevatorLock = new JoystickButton(manipulator, RobotMap.toggleElevatorLockButton);
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
-    public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton);
+    public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton1);
     public Button shiftArmsButton = new JoystickButton(manipulator, 10);
 
     public OI() {
@@ -50,7 +49,7 @@ public class OI {
 
 	driveToCubeButton.whenPressed(new DriveToCube());
 
-	arcadeDriveElevatorToExchangeButton.whenPressed(new SetElevator(200));
+	// arcadeDriveElevatorToExchangeButton.whenPressed(new SetElevator(-200));
 	arcadeDriveToggerElevatorLock.whenPressed(new ToggleElevatorLock());
 
 	autoCubeIntakeButton.whenPressed(new CubeWithUltrasonics());
