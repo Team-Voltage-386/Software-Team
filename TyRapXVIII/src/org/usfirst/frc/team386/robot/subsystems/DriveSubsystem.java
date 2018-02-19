@@ -239,6 +239,10 @@ public class DriveSubsystem extends Subsystem {
 	timer.reset();
     }
 
+    public void resetGyro() {
+	gyro.reset();
+    }
+
     public void driveWithVision(double speed) {
 	time = timer.get();
 	double error = (Robot.cubeVision.getError());
