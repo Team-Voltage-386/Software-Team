@@ -310,17 +310,13 @@ public class DriveSubsystem extends Subsystem {
      *            The distance from the wall is in millimeters.
      */
     public void moveDistanceFromWall(double distanceFromWall, boolean goingForward) {
-	gyro.reset();
-	resetEncoders();
-
-	if (rearUltrasonic.getRangeMM() > distanceFromWall) {
-	    arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
-	    updateDiagnostics();
-	} else {
+	if (goingForward) {
 	    arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
 	    updateDiagnostics();
+	} else {
+	    arcadeDriveStraight(-1 * SLOW_AUTO_MODE_SPEED);
+	    updateDiagnostics();
 	}
-	// stop();
     }
 
     /**

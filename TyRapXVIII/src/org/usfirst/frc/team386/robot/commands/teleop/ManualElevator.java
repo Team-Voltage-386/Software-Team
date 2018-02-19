@@ -21,7 +21,8 @@ public class ManualElevator extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 	Robot.elevatorSubsystem.elevatorFromDPad(Robot.oi.manipulator.getPOV(0),
-		SmartDashboard.getNumber("Elevator Speed", 0));
+		SmartDashboard.getNumber("Elevator Speed", 0), SmartDashboard.getNumber("ELevator speed down", 0),
+		SmartDashboard.getNumber("Elevator nuetral speed", 0));
     }
 
     // Make this return true when this Command no longer needs to run execute()

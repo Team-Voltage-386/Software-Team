@@ -144,6 +144,8 @@ public class Robot extends IterativeRobot {
 
 	// Configuration fields
 	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .65);
+	SmartDashboard.putNumber("ELevator speed down", .25);
+	SmartDashboard.putNumber("Elevator nuetral speed", .2);
 
 	// Diagnostic data
 	updateDiagnostics();

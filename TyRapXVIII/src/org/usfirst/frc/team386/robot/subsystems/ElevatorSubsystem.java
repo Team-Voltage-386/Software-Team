@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ManualElevator;
 
@@ -48,7 +49,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void stopElevator() {
-	elevatorSpark.set(-.2);
+	elevatorSpark.set(SmartDashboard.getNumber("Elevator nuetral speed", 0));
     }
 
     /**
@@ -85,23 +86,23 @@ public class ElevatorSubsystem extends Subsystem {
      * @param speed
      *            The speed at which the elevator moves
      */
-    public void elevatorFromDPad(int pov, double speed) {
+    public void elevatorFromDPad(int pov, double speedUp, double speedDown, double nuetralSpeed) {
 	// TODO: clean this up so it is easier to understand
 	SmartDashboard.putString("Running", "True");
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
-		elevatorSpark.set(.25);
+		elevatorSpark.set(-1 * speedDown);
 	    else
 		elevatorSpark.set(0);
 	} else if (pov != -1) {
 	    if (upperElevatorLimitSwitch.get())
-		elevatorSpark.set(-1 * speed);
+		elevatorSpark.set(speedUp);
 	    else {
-		elevatorSpark.set(-.2);
+		elevatorSpark.set(nuetralSpeed);
 	    }
 	} else {
 	    if (lowerElevatorLimitSwitch.get())
-		elevatorSpark.set(-.2);
+		elevatorSpark.set(nuetralSpeed);
 	    else
 		elevatorSpark.set(0);
 	}
@@ -119,11 +120,11 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putString("Setting", "nuetral");
 	if (down) {
 	    SmartDashboard.putString("Setting", "Down");
-	    elevatorSpark.set(.25);
+	    elevatorSpark.set(-1 * SmartDashboard.getNumber("Elevator speed down", 0));
 	    // }
 	} else {
 	    SmartDashboard.putString("Setting", "Up");
-	    elevatorSpark.set(-.65);
+	    elevatorSpark.set(SmartDashboard.getNumber(Robot.ELEVATOR_SPEED_LABEL, 0));
 	}
     }
 
