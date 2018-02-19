@@ -13,6 +13,7 @@ import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
 import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+import org.usfirst.frc.team386.robot.commands.teleop.BreakChain;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCubeTeleop;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
@@ -159,6 +160,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Reset elevator", new SetElevator(0));
 	SmartDashboard.putData("Shift arms", new ShiftArms());
 	SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
+	SmartDashboard.putData("Latch chain", new BreakChain());
 
     }
 
@@ -242,9 +244,9 @@ public class Robot extends IterativeRobot {
 	updateDiagnostics();
 	Scheduler.getInstance().run();
 
-	if (!driveSubsystem.linesensor.get()) {
-	    timesSeenWhiteLine = timesSeenWhiteLine + 1;
-	}
+	// if (!driveSubsystem.linesensor.get()) {
+	// timesSeenWhiteLine = timesSeenWhiteLine + 1;
+	// }
     }
 
     /**

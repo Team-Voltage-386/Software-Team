@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -32,7 +31,8 @@ public class ElevatorSubsystem extends Subsystem {
     DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
     public DigitalInput lowerElevatorLimitSwitch = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
     public DigitalInput upperElevatorLimitSwitch = new DigitalInput(RobotMap.upperElevatorLimitSwitch);
-
+    public DigitalInput switchLimitSwitch = new DigitalInput(RobotMap.switchLimitSwitch);
+    public DigitalInput latchLimitSwitch = new DigitalInput(RobotMap.latchLimitSwitch);
     Timer timer = new Timer();
     boolean previousState = false;
 
@@ -40,6 +40,7 @@ public class ElevatorSubsystem extends Subsystem {
 	super();
 	lock(LOCKED);
 	elevatorEncoder.reset();
+	chainBreaker.set(DoubleSolenoid.Value.kForward);
     }
 
     public void resetEncoder() {
@@ -57,6 +58,8 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
 	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(UNLOCKED));
 	SmartDashboard.putBoolean("Chain break", chainBreaker.get().equals(UNLOCKED));
+	SmartDashboard.putBoolean("Switch limit switch", switchLimitSwitch.get());
+	SmartDashboard.putBoolean("Latch limit switch", latchLimitSwitch.get());
     }
 
     // Put methods for controlling this subsystem
@@ -80,6 +83,7 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void elevatorFromDPad(int pov, double speed) {
 	// TODO: clean this up so it is easier to understand
+	SmartDashboard.putString("Running", "True");
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(.25);
@@ -107,9 +111,9 @@ public class ElevatorSubsystem extends Subsystem {
      *            The encoder ticks
      */
 
-    public void setHeight(int ticks) {
+    public void setHeight(int ticks, boolean down) {
 	SmartDashboard.putString("Setting", "nuetral");
-	if (elevatorEncoder.get() < ticks && RobotState.isEnabled()) {
+	if (down) {
 	    // while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get()) {
 	    SmartDashboard.putString("Setting", "Down");
 	    elevatorSpark.set(.25);
@@ -155,7 +159,10 @@ public class ElevatorSubsystem extends Subsystem {
      * chain can only be reconnected by a human.
      */
     public void breakChain() {
-	chainBreaker.set(DoubleSolenoid.Value.kReverse);
+	if (chainBreaker.get() == DoubleSolenoid.Value.kForward)
+	    chainBreaker.set(DoubleSolenoid.Value.kReverse);
+	else
+	    chainBreaker.set(DoubleSolenoid.Value.kForward);
     }
 
 }

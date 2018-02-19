@@ -33,7 +33,8 @@ public class RobotMap {
     public static int elevatorEncoderB = 2; // encoder
     public static int rearPingChannel = 5; // ultrasonic
     public static int rearEchoChannel = 6; // ultrasonic
-    public static int lineSensorChannel = 7; // digital input
+    public static int switchLimitSwitch = 7; // digital input
+    public static int latchLimitSwitch = 8;
 
     // Analog In
     public static int cubeUltrasonicCenter = 0; // ultrasonic

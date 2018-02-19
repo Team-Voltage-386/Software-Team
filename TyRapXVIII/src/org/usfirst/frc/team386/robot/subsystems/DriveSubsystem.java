@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.RobotState;
@@ -73,7 +72,8 @@ public class DriveSubsystem extends Subsystem {
     // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
     // RobotMap.rightDriveEncoderChannelB);
 
-    public DigitalInput linesensor = new DigitalInput(RobotMap.lineSensorChannel);
+    // public DigitalInput linesensor = new
+    // DigitalInput(RobotMap.lineSensorChannel);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
     // public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel,
     // RobotMap.frontEchoChannel);
@@ -83,7 +83,7 @@ public class DriveSubsystem extends Subsystem {
 
     Timer timer = new Timer();
 
-    ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     // private DriveToCube driveToCube;
 
@@ -120,7 +120,7 @@ public class DriveSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
+	// SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
 	// SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC,
 	// frontUltrasonic.getRangeMM());
@@ -141,7 +141,7 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	drive.arcadeDrive(adjustSpeed(xSpeed), deadBand(zRotation, DEAD_BAND_LIMIT));
+	drive.arcadeDrive(squareKeepSign(adjustSpeed(xSpeed)), squareKeepSign(deadBand(zRotation, DEAD_BAND_LIMIT)));
     }
 
     /**
@@ -233,7 +233,7 @@ public class DriveSubsystem extends Subsystem {
      */
     double KP = -.0075, KD = -.1, KI = -.001;
     public double previousTime = 0, time, integral = 0;
-    double previousError = Robot.cubeVision.getError();
+    double previousError = 0;
 
     public void resetTime() {
 	timer.reset();
@@ -326,7 +326,7 @@ public class DriveSubsystem extends Subsystem {
 	    updateDiagnostics();
 	    // }
 	}
-	stop();
+	// stop();
     }
 
     /**
@@ -349,7 +349,7 @@ public class DriveSubsystem extends Subsystem {
 	    arcadeDriveStraight(speed);
 	    updateDiagnostics();
 	}
-	stop();
+	// stop();
     }
 
     /**
@@ -358,13 +358,13 @@ public class DriveSubsystem extends Subsystem {
      * WARNING! If no line is sensed calling this method will drive forward
      * indefinitely.
      */
-    public void driveForwardToLine() {
-	while (linesensor.get() && RobotState.isEnabled()) {
-	    arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
-	    updateDiagnostics();
-	}
-	stop();
-    }
+    // public void driveForwardToLine() {
+    // while (linesensor.get() && RobotState.isEnabled()) {
+    // arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
+    // updateDiagnostics();
+    // }
+    // stop();
+    // }
 
     /**
      * Turn the given angle and direction with a PID feedback loop.
@@ -386,24 +386,24 @@ public class DriveSubsystem extends Subsystem {
 	double derivative = gyro.getRate();
 	double value = KP * error + KD * derivative;
 	SmartDashboard.putNumber("Value", value);
-	if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
-	    frontLeft.set(value);
-	    frontRight.set(value);
-	} else {
-	    if (value > 0) {
-		frontLeft.set(.3);
-		frontRight.set(.3);
-	    } else {
-		frontLeft.set(-.3);
-		frontRight.set(-.3);
-	    }
-	}
+	// if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
+	// frontLeft.set(value);
+	// frontRight.set(value);
+	// } else {
+	// if (value > 0) {
+	// frontLeft.set(.3);
+	// frontRight.set(.3);
+	// } else {
+	// frontLeft.set(-.3);
+	// frontRight.set(-.3);
+	// }
+	// }
 	SmartDashboard.putNumber("proportional", KP * error);
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	// }
 	SmartDashboard.putString("Using pid", "true");
-	stop();
+	// stop();
     }
 
     public boolean pidTurnDone() {
@@ -411,8 +411,8 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.1;
-	KD = -.01;
+	KP = -.3;
+	KD = -.05;
 	tolerance = 1;
 	speedThreshold = 30;
 	gyro.reset();

@@ -28,7 +28,7 @@ public class DriveToCubeTeleop extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
 	// This should return false as long as the button is pushed.
-	return !(Robot.oi.xboxControl.getRawButton(RobotMap.driveToCubeButton)) && RobotState.isEnabled();
+	return !Robot.oi.xboxControl.getRawButton(RobotMap.driveToCubeButton) || !RobotState.isEnabled();
     }
 
     // Called once after isFinished returns true

@@ -37,7 +37,8 @@ public class DriveForward extends Command {
 
     // Called once when the command executes
     protected void initialize() {
-
+	Robot.driveSubsystem.gyro.reset();
+	Robot.driveSubsystem.resetEncoders();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class DriveForward extends Command {
 
     @Override
     public boolean isFinished() {
-	return !(Math.abs(Robot.driveSubsystem.getLeftEncoder() - ticksRequired) < 5) && RobotState.isEnabled();
+	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > ticksRequired) || !RobotState.isEnabled();
     }
 
 }

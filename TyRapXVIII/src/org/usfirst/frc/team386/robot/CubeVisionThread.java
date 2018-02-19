@@ -63,7 +63,7 @@ public class CubeVisionThread extends Thread {
 	camera.setExposureManual(33);
 	camera.setWhiteBalanceManual(10);
 	// camera.setWhiteBalanceManual(value);
-	camera.setFPS(10);
+	camera.setFPS(7);
 	CvSink cvSink = CameraServer.getInstance().getVideo();
 	HSVOutputStream = CameraServer.getInstance().putVideo("Colors", resolutionWidth, resolutionHeight);
 	rectOutputStream = CameraServer.getInstance().putVideo("Rectangles", resolutionWidth, resolutionHeight);

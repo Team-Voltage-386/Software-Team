@@ -19,21 +19,29 @@ public class SetElevator extends Command {
 	ticks = ticksIn;
     }
 
+    boolean goingDown = false;
+
     // Called once when the command executes
     protected void initialize() {
-
+	if (ticks < Robot.elevatorSubsystem.elevatorEncoder.get()) {
+	    goingDown = false;
+	} else {
+	    goingDown = true;
+	}
     }
 
     @Override
     protected void execute() {
-	Robot.elevatorSubsystem.setHeight(ticks);
+	Robot.elevatorSubsystem.setHeight(ticks, goingDown);
     }
 
     @Override
     protected boolean isFinished() {
-	return (Robot.elevatorSubsystem.elevatorEncoder.get() < ticks
-		|| Robot.elevatorSubsystem.lowerElevatorLimitSwitch.get()
-		|| Robot.elevatorSubsystem.upperElevatorLimitSwitch.get()) && RobotState.isEnabled();
+	if (!goingDown)
+	    return (Robot.elevatorSubsystem.elevatorEncoder.get() < ticks
+		    || !Robot.elevatorSubsystem.upperElevatorLimitSwitch.get()) || !RobotState.isEnabled();
+	else
+	    return ((Robot.elevatorSubsystem.elevatorEncoder.get() > ticks)
+		    || !Robot.elevatorSubsystem.lowerElevatorLimitSwitch.get()) || !RobotState.isEnabled();
     }
-
 }
