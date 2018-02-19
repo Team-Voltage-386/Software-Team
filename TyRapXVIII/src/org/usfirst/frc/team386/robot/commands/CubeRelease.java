@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class CubeRelease extends Command {
+    public static final double MOTOR_SPEED = -0.5;
+
     Timer timer = new Timer();
     double time;
 
@@ -25,7 +27,7 @@ public class CubeRelease extends Command {
     }
 
     protected void execute() {
-	Robot.cubeSubsystem.symetricalCube(-.5);
+	Robot.cubeSubsystem.symetricalCube(MOTOR_SPEED);
     }
 
     @Override
