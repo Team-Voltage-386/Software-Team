@@ -175,13 +175,9 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRight extends CommandGroup {
 
 	CenterSwitchAutoRight() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveForward(9));
-	    addSequential(new TurnRight(45));
-	    addSequential(new DriveForward(50));
-	    addSequential(new TurnLeft(45));
-	    addSequential(new DriveForward(6));
+	    addSequential(new CenterSwitchAutoRightDrive());
 	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 	}
@@ -192,7 +188,11 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoRightDrive extends CommandGroup {
 	CenterSwitchAutoRightDrive() {
-
+	    addSequential(new DriveForward(9));
+	    addSequential(new TurnRight(45));
+	    addSequential(new DriveForward(50));
+	    addSequential(new TurnLeft(45));
+	    addSequential(new DriveForward(6));
 	}
     }
 }
