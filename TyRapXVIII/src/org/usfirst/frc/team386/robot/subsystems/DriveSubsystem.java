@@ -130,6 +130,8 @@ public class DriveSubsystem extends Subsystem {
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
+	if (this.getCurrentCommand() != null)
+	    SmartDashboard.putString("Active drive command", this.getCurrentCommand().getName());
     }
 
     /**
@@ -374,9 +376,8 @@ public class DriveSubsystem extends Subsystem {
 	double error = (gyro.getAngle() - (direction * angle));
 	double derivative = gyro.getRate();
 	double value = KP * error + KD * derivative;
+	drive.arcadeDrive(0, value, false);
 	SmartDashboard.putNumber("Value", value);
-	frontLeft.set(value);
-	frontRight.set(value);
 	SmartDashboard.putNumber("proportional", KP * error);
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());

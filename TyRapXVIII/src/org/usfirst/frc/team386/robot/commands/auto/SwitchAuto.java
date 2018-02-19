@@ -6,9 +6,7 @@ import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.SetArms;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
-import org.usfirst.frc.team386.robot.commands.TurnLeftWithoutPid;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
-import org.usfirst.frc.team386.robot.commands.TurnRightWithoutPid;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -164,9 +162,9 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoLeftDrive extends CommandGroup {
 	CenterSwitchAutoLeftDrive() {
 	    addSequential(new DriveForward(9));// 12
-	    addSequential(new TurnLeftWithoutPid(45));
+	    addSequential(new TurnLeft(45));
 	    addSequential(new DriveForward(50)); // 60
-	    addSequential(new TurnRightWithoutPid(45));
+	    addSequential(new TurnRight(45));
 	    addSequential(new DriveForward(6)); // 9
 	}
     }
@@ -179,7 +177,11 @@ public class SwitchAuto extends InstantCommand {
 	CenterSwitchAutoRight() {
 	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new CenterSwitchAutoRightDrive());
+	    addSequential(new DriveForward(9));
+	    addSequential(new TurnRight(45));
+	    addSequential(new DriveForward(50));
+	    addSequential(new TurnLeft(45));
+	    addSequential(new DriveForward(6));
 	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 	}
@@ -190,11 +192,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoRightDrive extends CommandGroup {
 	CenterSwitchAutoRightDrive() {
-	    addSequential(new DriveForward(9));
-	    addSequential(new TurnRightWithoutPid(45));
-	    addSequential(new DriveForward(50));
-	    addSequential(new TurnLeftWithoutPid(45));
-	    addSequential(new DriveForward(6));
+
 	}
     }
 }
