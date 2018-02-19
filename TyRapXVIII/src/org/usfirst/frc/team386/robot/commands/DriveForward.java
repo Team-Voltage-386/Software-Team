@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -48,7 +47,7 @@ public class DriveForward extends Command {
 
     @Override
     public boolean isFinished() {
-	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > Math.abs(ticksRequired)) || !RobotState.isEnabled();
+	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > Math.abs(ticksRequired));
     }
 
 }

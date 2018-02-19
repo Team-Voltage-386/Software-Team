@@ -2,7 +2,6 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -30,7 +29,7 @@ public class TiltBack extends Command {
 
     @Override
     protected boolean isFinished() {
-	return (Robot.tiltSubsystem.pitch() < Robot.tiltSubsystem.pitchLeeway / 2) || !RobotState.isEnabled();
+	return (Robot.tiltSubsystem.pitch() < Robot.tiltSubsystem.pitchLeeway / 2);
     }
 
 }

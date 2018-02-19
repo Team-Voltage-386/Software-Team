@@ -120,8 +120,7 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putString("Setting", "nuetral");
 	if (down) {
 	    SmartDashboard.putString("Setting", "Down");
-	    elevatorSpark.set(-1 * SmartDashboard.getNumber("Elevator speed down", 0));
-	    // }
+	    elevatorSpark.set(-1 * SmartDashboard.getNumber("ELevator speed down", 0));
 	} else {
 	    SmartDashboard.putString("Setting", "Up");
 	    elevatorSpark.set(SmartDashboard.getNumber(Robot.ELEVATOR_SPEED_LABEL, 0));

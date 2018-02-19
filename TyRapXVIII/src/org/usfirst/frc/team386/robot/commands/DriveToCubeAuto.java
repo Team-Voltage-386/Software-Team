@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.commands;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -23,6 +22,6 @@ public class DriveToCubeAuto extends Command {
 
     @Override
     public boolean isFinished() {
-	return (Robot.cubeSubsystem.hasCube()) || !RobotState.isEnabled();
+	return (Robot.cubeSubsystem.hasCube());
     }
 }

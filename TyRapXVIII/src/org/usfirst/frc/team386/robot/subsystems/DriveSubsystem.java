@@ -401,14 +401,14 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public boolean pidTurnDone() {
-	return (Math.abs(direction * gyro.getAngle() - angle) > tolerance && Math.abs(gyro.getRate()) > speedThreshold);
+	return (Math.abs(direction * gyro.getAngle() - angle) < tolerance && Math.abs(gyro.getRate()) < speedThreshold);
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.3;
+	KP = -.2;
 	KD = -.05;
 	tolerance = 1;
-	speedThreshold = 30;
+	speedThreshold = 15;
 	gyro.reset();
 	this.direction = direction;
 	this.angle = angle;

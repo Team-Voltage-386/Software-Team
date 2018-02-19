@@ -2,7 +2,6 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -29,7 +28,7 @@ public class TurnRight extends Command {
 
     @Override
     protected boolean isFinished() {
-	return Robot.driveSubsystem.pidTurnDone() || !RobotState.isEnabled();
+	return Robot.driveSubsystem.pidTurnDone();
     }
 
 }
