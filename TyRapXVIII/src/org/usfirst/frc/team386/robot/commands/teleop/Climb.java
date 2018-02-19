@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.commands.teleop;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
+import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,7 +24,7 @@ public class Climb extends Command {
     protected void execute() {
 	Robot.elevatorSubsystem.climb();
 	if (!Robot.elevatorSubsystem.latchLimitSwitch.get()) {
-	    Robot.elevatorSubsystem.toggleElevatorLock();
+	    Robot.elevatorSubsystem.lock(ElevatorSubsystem.LOCKED);
 	}
     }
 

@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ElevatorSubsystem extends Subsystem {
     public static final String ELEVATOR_ENCODER_VALUE = "Elevator encoder value";
 
-    public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kForward;
-    public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value LOCKED = DoubleSolenoid.Value.kForward;
+    public static final DoubleSolenoid.Value UNLOCKED = DoubleSolenoid.Value.kReverse;
 
     Spark elevatorSpark = new Spark(RobotMap.elevatorSparks);
     public Encoder elevatorEncoder = new Encoder(RobotMap.elevatorEncoderA, RobotMap.elevatorEncoderB);
@@ -39,7 +39,7 @@ public class ElevatorSubsystem extends Subsystem {
 
     public ElevatorSubsystem() {
 	super();
-	lock(LOCKED);
+	lock(UNLOCKED);
 	elevatorEncoder.reset();
 	chainBreaker.set(DoubleSolenoid.Value.kForward);
     }
@@ -61,7 +61,7 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putBoolean("Lower elevator limit switch", lowerElevatorLimitSwitch.get());
 	SmartDashboard.putBoolean("Upper elevator limit switch", upperElevatorLimitSwitch.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
-	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(UNLOCKED));
+	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(LOCKED));
 	SmartDashboard.putBoolean("Chain break", chainBreaker.get().equals(UNLOCKED));
 	SmartDashboard.putBoolean("Switch limit switch", switchLimitSwitch.get());
 	SmartDashboard.putBoolean("Latch limit switch", latchLimitSwitch.get());
