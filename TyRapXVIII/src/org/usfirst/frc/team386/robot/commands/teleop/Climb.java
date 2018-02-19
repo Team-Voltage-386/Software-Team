@@ -23,7 +23,7 @@ public class Climb extends Command {
     protected void execute() {
 	Robot.elevatorSubsystem.climb();
 	if (!Robot.elevatorSubsystem.latchLimitSwitch.get()) {
-	    new FangDeploy().start();
+	    Robot.elevatorSubsystem.toggleElevatorLock();
 	}
     }
 
