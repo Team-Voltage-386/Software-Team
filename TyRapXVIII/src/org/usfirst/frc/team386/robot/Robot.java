@@ -8,6 +8,7 @@ import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.Stop;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
+import org.usfirst.frc.team386.robot.commands.TurnLeftWithoutPid;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
@@ -109,7 +110,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	gameData = new GameData();
-	cubeVision.start();
+	// cubeVision.start();
 
 	initializeDashboard();
     }
@@ -155,6 +156,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
+	SmartDashboard.putData("Left 45", new TurnLeft(45));
+	SmartDashboard.putData("Right 45", new TurnRight(45));
 	SmartDashboard.putData(STOP_LABEL, new Stop());
 	SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
 	SmartDashboard.putData(DRIVE_TO_CUBE, new DriveToCubeTeleop());
@@ -163,7 +166,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Shift arms", new ShiftArms());
 	SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
 	SmartDashboard.putData("Latch chain", new BreakChain());
-
+	SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
     }
 
     /**

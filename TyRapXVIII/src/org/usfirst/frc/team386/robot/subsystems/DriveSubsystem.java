@@ -371,35 +371,17 @@ public class DriveSubsystem extends Subsystem {
     double tolerance, speedThreshold, direction, angle;
 
     public void turnWithPid() {
-	// shift(HIGH_GEAR);
-
-	// while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance ||
-	// Math.abs(gyro.getRate()) > speedThreshold)
-	// && RobotState.isEnabled()) {
 	double error = (gyro.getAngle() - (direction * angle));
 	double derivative = gyro.getRate();
 	double value = KP * error + KD * derivative;
 	SmartDashboard.putNumber("Value", value);
-	// if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
 	frontLeft.set(value);
 	frontRight.set(value);
-	// } else {
-	// if (value > 0) {
-	// frontLeft.set(.3);
-	// frontRight.set(.3);
-	// } else {
-	// frontLeft.set(-.3);
-	// frontRight.set(-.3);
-	// }
-	// }
 	SmartDashboard.putNumber("proportional", KP * error);
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putNumber("front left motor speed", frontLeft.get());
 	SmartDashboard.putNumber("front right motor speed", frontRight.get());
-	// }
-	// SmartDashboard.putString("Using pid", "true");
-	// stop();
     }
 
     public boolean pidTurnDone() {
@@ -408,7 +390,7 @@ public class DriveSubsystem extends Subsystem {
 
     public void resetPidTurn(double angle, int direction) {
 	KP = -.2;
-	KD = -.05;
+	KD = -.025;
 	tolerance = 1;
 	speedThreshold = 15;
 	gyro.reset();
@@ -419,17 +401,11 @@ public class DriveSubsystem extends Subsystem {
     /**
      * Turn the given angle and direction with no PID feedback loop.
      * 
-     * @param angle
-     *            The angle to turn
      * @param direction
      *            -1 (LEFT), 1 (RIGHT)
      */
-    void turnWithoutPid(double angle, int direction) {
-	gyro.reset();
-	while ((int) Math.abs(gyro.getAngle()) < angle && RobotState.isEnabled()) {
-	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
-	}
-	stop();
+    public void turnWithoutPid(int direction) {
+	drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
     }
 
     /**
