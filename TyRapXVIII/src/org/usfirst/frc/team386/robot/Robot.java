@@ -143,7 +143,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
 	// Configuration fields
-	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .65);
+	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .9);
 	SmartDashboard.putNumber("ELevator speed down", .25);
 	SmartDashboard.putNumber("Elevator nuetral speed", .15);
 

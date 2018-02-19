@@ -75,7 +75,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void climb() {
-	elevatorSpark.set(1);
+	elevatorSpark.set(-1);
     }
 
     /**

@@ -395,6 +395,8 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber("proportional", KP * error);
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	SmartDashboard.putNumber("front left motor speed", frontLeft.get());
+	SmartDashboard.putNumber("front right motor speed", frontRight.get());
 	// }
 	// SmartDashboard.putString("Using pid", "true");
 	// stop();
