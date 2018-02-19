@@ -4,7 +4,6 @@ import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -12,12 +11,15 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class Climb extends Command {
 
+    private boolean stop = false;
+
     public Climb() {
 	requires(Robot.elevatorSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+	this.stop = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -25,12 +27,18 @@ public class Climb extends Command {
 	Robot.elevatorSubsystem.climb();
 	if (!Robot.elevatorSubsystem.latchLimitSwitch.get()) {
 	    Robot.elevatorSubsystem.lock(ElevatorSubsystem.LOCKED);
+	    Robot.elevatorSubsystem.stopDefaultCommand();
+	    this.stop = true;
 	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-	return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton) && RobotState.isEnabled();
+	if (stop) {
+	    return true;
+	} else {
+	    return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton);
+	}
     }
 
     // Called once after isFinished returns true
