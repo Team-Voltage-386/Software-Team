@@ -47,6 +47,10 @@ public class ElevatorSubsystem extends Subsystem {
 	elevatorEncoder.reset();
     }
 
+    public void stopElevator() {
+	elevatorSpark.set(-.2);
+    }
+
     /**
      * Update the smart dashboard with diagnostics values.
      */
@@ -114,18 +118,13 @@ public class ElevatorSubsystem extends Subsystem {
     public void setHeight(int ticks, boolean down) {
 	SmartDashboard.putString("Setting", "nuetral");
 	if (down) {
-	    // while (elevatorEncoder.get() < ticks && lowerElevatorLimitSwitch.get()) {
 	    SmartDashboard.putString("Setting", "Down");
 	    elevatorSpark.set(.25);
 	    // }
 	} else {
-	    // while (elevatorEncoder.get() > ticks && upperElevatorLimitSwitch.get() &&
-	    // RobotState.isEnabled()) {
 	    SmartDashboard.putString("Setting", "Up");
 	    elevatorSpark.set(-.65);
-	    // }
 	}
-	elevatorSpark.set(-.2);
     }
 
     /**

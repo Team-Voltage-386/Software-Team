@@ -44,4 +44,9 @@ public class SetElevator extends Command {
 	    return ((Robot.elevatorSubsystem.elevatorEncoder.get() > ticks)
 		    || !Robot.elevatorSubsystem.lowerElevatorLimitSwitch.get()) || !RobotState.isEnabled();
     }
+
+    @Override
+    protected void end() {
+	Robot.elevatorSubsystem.stopElevator();
+    }
 }

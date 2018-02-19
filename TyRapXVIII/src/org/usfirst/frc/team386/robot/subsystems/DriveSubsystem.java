@@ -309,22 +309,16 @@ public class DriveSubsystem extends Subsystem {
      * @param distanceFromWall
      *            The distance from the wall is in millimeters.
      */
-    public void moveDistanceFromWall(double distanceFromWall) {
+    public void moveDistanceFromWall(double distanceFromWall, boolean goingForward) {
 	gyro.reset();
 	resetEncoders();
 
 	if (rearUltrasonic.getRangeMM() > distanceFromWall) {
-	    // while ((rearUltrasonic.getRangeMM()) > distanceFromWall &&
-	    // RobotState.isEnabled()) {
 	    arcadeDriveStraight(-SLOW_AUTO_MODE_SPEED);
 	    updateDiagnostics();
-	    // }
 	} else {
-	    // while ((rearUltrasonic.getRangeMM()) < distanceFromWall &&
-	    // RobotState.isEnabled()) {
 	    arcadeDriveStraight(SLOW_AUTO_MODE_SPEED);
 	    updateDiagnostics();
-	    // }
 	}
 	// stop();
     }
@@ -387,8 +381,8 @@ public class DriveSubsystem extends Subsystem {
 	double value = KP * error + KD * derivative;
 	SmartDashboard.putNumber("Value", value);
 	// if (Math.abs(value) > .3 || derivative > speedThreshold * 2) {
-	// frontLeft.set(value);
-	// frontRight.set(value);
+	frontLeft.set(value);
+	frontRight.set(value);
 	// } else {
 	// if (value > 0) {
 	// frontLeft.set(.3);
@@ -402,7 +396,7 @@ public class DriveSubsystem extends Subsystem {
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	// }
-	SmartDashboard.putString("Using pid", "true");
+	// SmartDashboard.putString("Using pid", "true");
 	// stop();
     }
 

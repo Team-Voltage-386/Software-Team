@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveDistanceFromWall extends Command {
 
     private double distanceFromWall;
+    private boolean goingForward;
 
     /**
      * The distance from the wall, in millimeters.
@@ -27,17 +28,20 @@ public class DriveDistanceFromWall extends Command {
 
     // Called once when the command executes
     protected void initialize() {
-
+	goingForward = Robot.driveSubsystem.rearUltrasonic.getRangeMM() < distanceFromWall;
     }
 
     @Override
     protected void execute() {
-	Robot.driveSubsystem.moveDistanceFromWall(distanceFromWall);
+	Robot.driveSubsystem.moveDistanceFromWall(distanceFromWall, goingForward);
     }
 
     @Override
     protected boolean isFinished() {
-	return !((Robot.driveSubsystem.rearUltrasonic.getRangeMM() - distanceFromWall) < 5) || !RobotState.isEnabled();
+	if (goingForward)
+	    return (Robot.driveSubsystem.rearUltrasonic.getRangeMM() > distanceFromWall) || !RobotState.isEnabled();
+	else
+	    return (Robot.driveSubsystem.rearUltrasonic.getRangeMM() < distanceFromWall) || !RobotState.isEnabled();
     }
 
 }
