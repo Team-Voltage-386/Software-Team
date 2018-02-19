@@ -432,6 +432,61 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
+     * Turn the given angle and direction with a PID feedback loop.
+     * 
+     * @param angle
+     *            The angle to turn
+     * @param direction
+     *            -1 (LEFT), 1 (RIGHT)
+     */
+    void oldTurnWithPid(double angle, int direction) {
+	// shift(HIGH_GEAR);
+	double tolerance = 2, speedThreshold = 15;
+	double KP = -.2, KD = -.05;
+	gyro.reset();
+	while ((Math.abs(direction * gyro.getAngle() - angle) > tolerance || Math.abs(gyro.getRate()) > speedThreshold)
+		&& RobotState.isEnabled()) {
+	    double error = (gyro.getAngle() - (direction * angle));
+	    double derivative = gyro.getRate();
+	    double value = KP * error + KD * derivative;
+	    SmartDashboard.putNumber("Value", value);
+	    // if (Math.abs(value) > .35 || derivative > speedThreshold) {
+	    frontLeft.set(value);
+	    frontRight.set(value);
+	    // } else {
+	    // if (value > 0) {
+	    // frontLeft.set(.35);
+	    // frontRight.set(.35);
+	    // } else {
+	    // frontLeft.set(-.35);
+	    // frontRight.set(-.35);
+	    // }
+	    // }
+	    SmartDashboard.putNumber("proportional", KP * error);
+	    SmartDashboard.putNumber("derivative", KD * derivative);
+	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	}
+	SmartDashboard.putString("Using pid", "true");
+	stop();
+    }
+
+    /**
+     * Turn the given angle and direction with no PID feedback loop.
+     * 
+     * @param angle
+     *            The angle to turn
+     * @param direction
+     *            -1 (LEFT), 1 (RIGHT)
+     */
+    void oldTurnWithoutPid(double angle, int direction) {
+	gyro.reset();
+	while ((int) Math.abs(gyro.getAngle()) < angle && RobotState.isEnabled()) {
+	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
+	}
+	stop();
+    }
+
+    /**
      * Drives straight with help from gyro.
      * 
      * @param speed
