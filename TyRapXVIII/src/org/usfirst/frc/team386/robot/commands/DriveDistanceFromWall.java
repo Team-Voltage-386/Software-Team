@@ -37,7 +37,7 @@ public class DriveDistanceFromWall extends Command {
 
     @Override
     protected boolean isFinished() {
-	return !((Robot.driveSubsystem.rearUltrasonic.getRangeMM() - distanceFromWall) < 5 || RobotState.isEnabled());
+	return !((Robot.driveSubsystem.rearUltrasonic.getRangeMM() - distanceFromWall) < 5) && RobotState.isEnabled();
     }
 
 }

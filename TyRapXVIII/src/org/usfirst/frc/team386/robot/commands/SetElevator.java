@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.commands;
 
 import org.usfirst.frc.team386.robot.Robot;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -32,7 +33,7 @@ public class SetElevator extends Command {
     protected boolean isFinished() {
 	return (Robot.elevatorSubsystem.elevatorEncoder.get() < ticks
 		|| Robot.elevatorSubsystem.lowerElevatorLimitSwitch.get()
-		|| Robot.elevatorSubsystem.upperElevatorLimitSwitch.get());
+		|| Robot.elevatorSubsystem.upperElevatorLimitSwitch.get()) && RobotState.isEnabled();
     }
 
 }

@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
+import org.usfirst.frc.team386.robot.commands.teleop.Climb;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithUltrasonics;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveToCubeTeleop;
 import org.usfirst.frc.team386.robot.commands.teleop.PrepForClimb;
@@ -36,6 +37,7 @@ public class OI {
     public Button autoCubeIntakeButton = new JoystickButton(manipulator, RobotMap.autoCubeIntakeButton);
     public Button prepForClimbButton = new JoystickButton(manipulator, RobotMap.prepForClimbButton1);
     public Button shiftArmsButton = new JoystickButton(manipulator, RobotMap.shiftArmsButton);
+    public Button climbButton = new JoystickButton(manipulator, RobotMap.climbButton);
 
     // RobotMap.toggleElevatorLockButton
     public OI() {
@@ -57,5 +59,6 @@ public class OI {
 
 	prepForClimbButton.whenPressed(new PrepForClimb());
 	shiftArmsButton.whenPressed(new ShiftArms());
+	climbButton.whenPressed(new Climb());
     }
 }

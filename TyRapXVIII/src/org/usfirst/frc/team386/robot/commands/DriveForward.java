@@ -47,7 +47,7 @@ public class DriveForward extends Command {
 
     @Override
     public boolean isFinished() {
-	return !(Math.abs(Robot.driveSubsystem.getLeftEncoder()) < ticksRequired || RobotState.isEnabled());
+	return !(Math.abs(Robot.driveSubsystem.getLeftEncoder() - ticksRequired) < 5) && RobotState.isEnabled();
     }
 
 }

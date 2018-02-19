@@ -19,7 +19,6 @@ public class DriveForwardToLine extends Command {
     // Called once when the command executes
     protected void initialize() {
 	Robot.driveSubsystem.arcadeDriveStraight(DriveSubsystem.FAST_AUTO_MODE_SPEED);
-	;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class DriveForwardToLine extends Command {
 
     @Override
     protected boolean isFinished() {
-	return !(Robot.driveSubsystem.linesensor.get() || RobotState.isEnabled());
+	return !(Robot.driveSubsystem.linesensor.get()) && RobotState.isEnabled();
     }
 
 }

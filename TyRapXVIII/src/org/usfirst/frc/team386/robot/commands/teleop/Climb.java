@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot.commands.teleop;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -25,7 +26,7 @@ public class Climb extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-	return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton);
+	return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton) && RobotState.isEnabled();
     }
 
     // Called once after isFinished returns true

@@ -30,8 +30,7 @@ public class TiltBack extends Command {
 
     @Override
     protected boolean isFinished() {
-	// TODO Auto-generated method stub
-	return !(Robot.tiltSubsystem.pitch() > Robot.tiltSubsystem.pitchLeeway / 2 || RobotState.isEnabled());
+	return !(Robot.tiltSubsystem.pitch() > Robot.tiltSubsystem.pitchLeeway / 2) && RobotState.isEnabled();
     }
 
 }

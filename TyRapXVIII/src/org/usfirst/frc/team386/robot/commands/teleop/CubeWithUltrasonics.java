@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot.commands.teleop;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,7 +27,7 @@ public class CubeWithUltrasonics extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-	return !Robot.oi.manipulator.getRawButton(RobotMap.autoCubeIntakeButton);
+	return !Robot.oi.manipulator.getRawButton(RobotMap.autoCubeIntakeButton) && RobotState.isEnabled();
     }
 
     // Called once after isFinished returns true

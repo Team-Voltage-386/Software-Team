@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot.commands.teleop;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -27,7 +28,7 @@ public class DriveToCubeTeleop extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
 	// This should return false as long as the button is pushed.
-	return !(Robot.oi.xboxControl.getRawButton(RobotMap.driveToCubeButton));
+	return !(Robot.oi.xboxControl.getRawButton(RobotMap.driveToCubeButton)) && RobotState.isEnabled();
     }
 
     // Called once after isFinished returns true
