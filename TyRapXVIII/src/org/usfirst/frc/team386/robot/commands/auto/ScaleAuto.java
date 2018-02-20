@@ -2,10 +2,12 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.CubeSuck;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
 import org.usfirst.frc.team386.robot.commands.SetArms;
+import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
@@ -83,12 +85,15 @@ public class ScaleAuto extends InstantCommand {
     class LeftScaleAutoLeft extends CommandGroup {
 
 	LeftScaleAutoLeft() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new DriveForward(292));
+
+	    addSequential(new DriveForward(282));
+	    addParallel(new CubeSuck(5));
 	    addSequential(new TurnRight(90));
-	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new ElevatorRaise());
+	    addSequential(new DriveDistanceFromWall(750)); // measured in mm
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new SetElevator(-1800));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
 	}
     }
 
@@ -117,12 +122,14 @@ public class ScaleAuto extends InstantCommand {
     class RightScaleAutoRight extends CommandGroup {
 
 	RightScaleAutoRight() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new DriveForward(292));
+	    addSequential(new DriveForward(282));
+	    addParallel(new CubeSuck(5));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new ElevatorRaise());
+	    addSequential(new DriveDistanceFromWall(750)); // measured in mm
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new SetElevator(-1800));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
 	}
     }
 

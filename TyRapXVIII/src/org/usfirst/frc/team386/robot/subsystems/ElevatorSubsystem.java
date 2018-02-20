@@ -164,4 +164,9 @@ public class ElevatorSubsystem extends Subsystem {
 	    chainBreaker.set(DoubleSolenoid.Value.kForward);
     }
 
+    public void stop() {
+	setDefaultCommand(null);
+	elevatorSpark.set(0);
+    }
+
 }

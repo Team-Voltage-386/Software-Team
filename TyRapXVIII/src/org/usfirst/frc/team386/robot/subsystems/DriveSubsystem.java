@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * used in both autonomous or teleoperated mode.
  */
 public class DriveSubsystem extends Subsystem {
-    public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kForward;
-    public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kForward;
 
     public static final double GYRO_COMPENSATION = -0.07;
     public static final double GYRO_TURNING_SPEED = .6;
@@ -38,7 +38,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
-    public static final double FAST_AUTO_MODE_SPEED = 0.75;// .9
+    public static final double FAST_AUTO_MODE_SPEED = 0.9;// .75
     public static final double SLOW_AUTO_MODE_SPEED = 0.5;
 
     public boolean isGoingUpRamp = false;
@@ -268,9 +268,12 @@ public class DriveSubsystem extends Subsystem {
 	previousTime = 0;
 	integral = 0;
 	previousError = Robot.cubeVision.getError();
-	KP = -.0075;
-	KD = -.1;
-	KI = -.001;
+	KP = SmartDashboard.getNumber("P", -.01);
+	;
+	KD = SmartDashboard.getNumber("D", -.01);
+	;
+	KI = SmartDashboard.getNumber("I", -.0);
+	;
     }
 
     /**
@@ -376,13 +379,17 @@ public class DriveSubsystem extends Subsystem {
 	double error = (gyro.getAngle() - (direction * angle));
 	double derivative = gyro.getRate();
 	double value = KP * error + KD * derivative;
-	drive.arcadeDrive(0, value, false);
+	if (value > .75)
+	    value = .75;
+	else if (value < -.75)
+	    value = -.75;
+	turn(value);
 	SmartDashboard.putNumber("Value", value);
 	SmartDashboard.putNumber("proportional", KP * error);
 	SmartDashboard.putNumber("derivative", KD * derivative);
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
-	SmartDashboard.putNumber("front left motor speed", frontLeft.get());
-	SmartDashboard.putNumber("front right motor speed", frontRight.get());
+	// SmartDashboard.putNumber("front left motor speed", frontLeft.get());
+	// SmartDashboard.putNumber("front right motor speed", frontRight.get());
     }
 
     public boolean pidTurnDone() {
@@ -390,10 +397,10 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.2;
-	KD = -.025;
-	tolerance = 1;
-	speedThreshold = 15;
+	KP = -.15;
+	KD = -.05;
+	tolerance = 2;
+	speedThreshold = 30;
 	gyro.reset();
 	this.direction = direction;
 	this.angle = angle;
@@ -407,6 +414,10 @@ public class DriveSubsystem extends Subsystem {
      */
     public void turnWithoutPid(int direction) {
 	drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
+    }
+
+    public void turn(double speed) {
+	drive.arcadeDrive(0, speed, false);
     }
 
     /**

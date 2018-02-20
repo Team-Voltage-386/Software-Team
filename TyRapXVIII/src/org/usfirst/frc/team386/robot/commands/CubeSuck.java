@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CubeRelease extends Command {
-    public static final double MOTOR_SPEED = -.8;
+public class CubeSuck extends Command {
+    public static final double MOTOR_SPEED = .5;
 
     Timer timer = new Timer();
     double time;
 
-    public CubeRelease(double timeIn) {
+    public CubeSuck(double timeIn) {
 	// Use requires() here to declare subsystem dependencies
 	this.time = timeIn;
 

@@ -110,7 +110,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	gameData = new GameData();
-	// cubeVision.start();
+	cubeVision.start();
 
 	initializeDashboard();
     }
@@ -145,7 +145,7 @@ public class Robot extends IterativeRobot {
 
 	// Configuration fields
 	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .9);
-	SmartDashboard.putNumber("ELevator speed down", .25);
+	SmartDashboard.putNumber("ELevator speed down", .75);
 	SmartDashboard.putNumber("Elevator nuetral speed", .15);
 
 	// Diagnostic data
@@ -167,6 +167,9 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
 	SmartDashboard.putData("Latch chain", new BreakChain());
 	SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
+	SmartDashboard.putNumber("P", -.01);
+	SmartDashboard.putNumber("D", -.01);
+	SmartDashboard.putNumber("I", -.0);
     }
 
     /**
