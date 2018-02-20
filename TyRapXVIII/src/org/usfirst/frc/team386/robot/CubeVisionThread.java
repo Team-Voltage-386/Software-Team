@@ -53,6 +53,8 @@ public class CubeVisionThread extends Thread {
 	// SmartDashboard.putNumber(Robot.VISION_ERROR, getError());
     }
 
+    public static final int FPS = 7;
+
     /**
      * Run the vision thread.
      */
@@ -61,9 +63,9 @@ public class CubeVisionThread extends Thread {
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setResolution(resolutionWidth, resolutionHeight);
 	camera.setExposureManual(33);
-	camera.setWhiteBalanceManual(10);
+	// camera.setWhiteBalanceManual(10);
 	// camera.setWhiteBalanceManual(value);
-	camera.setFPS(7);
+	camera.setFPS(FPS);
 	CvSink cvSink = CameraServer.getInstance().getVideo();
 	HSVOutputStream = CameraServer.getInstance().putVideo("Colors", resolutionWidth, resolutionHeight);
 	rectOutputStream = CameraServer.getInstance().putVideo("Rectangles", resolutionWidth, resolutionHeight);
@@ -117,13 +119,13 @@ public class CubeVisionThread extends Thread {
 	    Imgproc.Canny(grey, edges, 100, 200);
 
 	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
-	    HSVOutputStream.putFrame(edges);
+
 	    Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
 	    // new Size(20, 20)));
 
 	    Core.bitwise_not(edges, edges);
 	    Core.bitwise_and(mat, edges, mat);
-
+	    HSVOutputStream.putFrame(edges);
 	    finalContours.clear();
 	    Imgproc.findContours(mat, finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 	    rects.clear();

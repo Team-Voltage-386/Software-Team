@@ -31,4 +31,10 @@ public class TurnRight extends Command {
 	return Robot.driveSubsystem.pidTurnDone();
     }
 
+    @Override
+    protected void end() {
+	Robot.driveSubsystem.resetEncoders();
+	Robot.driveSubsystem.resetGyro();
+    }
+
 }
