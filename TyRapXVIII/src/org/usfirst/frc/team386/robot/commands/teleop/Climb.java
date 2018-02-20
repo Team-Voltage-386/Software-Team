@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Climb extends Command {
     private boolean stop = false;
 
+    private boolean stop = false;
+
     public Climb() {
 	requires(Robot.elevatorSubsystem);
 	stop = false;
@@ -19,6 +21,7 @@ public class Climb extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+	this.stop = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,14 +30,27 @@ public class Climb extends Command {
 	    Robot.elevatorSubsystem.climb();
 	if (!Robot.elevatorSubsystem.latchLimitSwitch.get()) {
 	    Robot.elevatorSubsystem.lock(ElevatorSubsystem.LOCKED);
+<<<<<<< HEAD
 	    stop = true;
 	    Robot.elevatorSubsystem.stop();
+=======
+	    Robot.elevatorSubsystem.stopDefaultCommand();
+	    this.stop = true;
+>>>>>>> 34daa1d4b41ec27300b648999aa1da403aa56345
 	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+<<<<<<< HEAD
 	return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton);
+=======
+	if (stop) {
+	    return true;
+	} else {
+	    return !Robot.oi.manipulator.getRawButton(RobotMap.climbButton);
+	}
+>>>>>>> 34daa1d4b41ec27300b648999aa1da403aa56345
     }
 
     // Called once after isFinished returns true

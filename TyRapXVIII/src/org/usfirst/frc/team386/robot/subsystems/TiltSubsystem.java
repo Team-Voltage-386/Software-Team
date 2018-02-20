@@ -2,7 +2,6 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.commands.TiltDetection;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -55,7 +54,7 @@ public class TiltSubsystem extends Subsystem {
 
     @Override
     public void initDefaultCommand() {
-	setDefaultCommand(new TiltDetection());
+	// setDefaultCommand(new TiltDetection());
     }
 
     /**

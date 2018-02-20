@@ -74,8 +74,12 @@ public class ElevatorSubsystem extends Subsystem {
 	setDefaultCommand(new ManualElevator());
     }
 
+    public void stopDefaultCommand() {
+	setDefaultCommand(null);
+    }
+
     public void climb() {
-	elevatorSpark.set(-1);
+	elevatorSpark.set(-1.0);
     }
 
     /**
