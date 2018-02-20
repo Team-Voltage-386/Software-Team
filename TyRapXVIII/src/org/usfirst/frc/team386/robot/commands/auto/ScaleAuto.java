@@ -103,13 +103,14 @@ public class ScaleAuto extends InstantCommand {
     class LeftScaleAutoRight extends CommandGroup {
 
 	LeftScaleAutoRight() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+
 	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveForward(216, 1));
 	    addSequential(new TurnLeft(90));
 	    addSequential(new DriveForward(50, .7));
 	    addSequential(new TurnLeft(90));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
 	    addSequential(new ElevatorRaise());
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
@@ -139,16 +140,17 @@ public class ScaleAuto extends InstantCommand {
     class RightScaleAutoLeft extends CommandGroup {
 
 	RightScaleAutoLeft() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+
 	    addSequential(new DriveForward(208));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new DriveForward(216));
+	    addSequential(new DriveForward(200));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveForward(50));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new ElevatorRaise());
-	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    // addSequential(new SetElevator(-1800));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
 }

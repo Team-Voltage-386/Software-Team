@@ -4,6 +4,7 @@ package org.usfirst.frc.team386.robot;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
+import org.usfirst.frc.team386.robot.commands.DriveToCubeAuto;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
 import org.usfirst.frc.team386.robot.commands.Stop;
@@ -167,6 +168,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
 	SmartDashboard.putData("Latch chain", new BreakChain());
 	SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
+	SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto());
 	SmartDashboard.putNumber("P", -.01);
 	SmartDashboard.putNumber("D", -.01);
 	SmartDashboard.putNumber("I", -.0);

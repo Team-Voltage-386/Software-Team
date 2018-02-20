@@ -50,4 +50,10 @@ public class DriveForward extends Command {
 	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > Math.abs(ticksRequired));
     }
 
+    @Override
+    protected void end() {
+	Robot.driveSubsystem.resetGyro();
+	Robot.driveSubsystem.resetEncoders();
+    }
+
 }

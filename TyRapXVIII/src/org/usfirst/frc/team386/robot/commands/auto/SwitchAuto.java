@@ -86,11 +86,12 @@ public class SwitchAuto extends InstantCommand {
     class LeftSwitchAutoLeft extends CommandGroup {
 
 	LeftSwitchAutoLeft() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new DriveForward(140));
+
+	    addSequential(new DriveForward(110));
 	    addSequential(new TurnRight(90));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveForward(18, 0.3));
+	    addSequential(new DriveForward(10));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -118,9 +119,10 @@ public class SwitchAuto extends InstantCommand {
     class RightSwitchAutoRight extends CommandGroup {
 
 	RightSwitchAutoRight() {
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new DriveForward(140));
+
+	    addSequential(new DriveForward(110));
 	    addSequential(new TurnLeft(90));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    addSequential(new DriveForward(10));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
@@ -181,8 +183,6 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRight extends CommandGroup {
 
 	CenterSwitchAutoRight() {
-<<<<<<< HEAD
-
 	    addSequential(new DriveForward(12));
 	    addSequential(new TurnRight(45));
 	    addSequential(new DriveForward(60));
@@ -193,12 +193,10 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new DriveForward(25));
 	    addSequential(new DriveSeconds(1));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
-=======
 	    addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    addSequential(new CenterSwitchAutoRightDrive());
 	    addSequential(new CubeRelease(1));
->>>>>>> 34daa1d4b41ec27300b648999aa1da403aa56345
 	    addSequential(new DriveForward(12, -.75));
 	}
     }

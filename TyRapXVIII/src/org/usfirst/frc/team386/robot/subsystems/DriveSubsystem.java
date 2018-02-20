@@ -397,10 +397,10 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.15;
+	KP = -.1;
 	KD = -.05;
 	tolerance = 2;
-	speedThreshold = 30;
+	speedThreshold = 20;
 	gyro.reset();
 	this.direction = direction;
 	this.angle = angle;

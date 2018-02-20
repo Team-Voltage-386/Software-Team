@@ -17,7 +17,7 @@ public class DriveToCubeAuto extends Command {
     }
 
     protected void execute() {
-	Robot.driveSubsystem.driveWithVision(DriveSubsystem.SLOW_AUTO_MODE_SPEED);
+	Robot.driveSubsystem.driveWithVision(-DriveSubsystem.SLOW_AUTO_MODE_SPEED);
     }
 
     @Override
