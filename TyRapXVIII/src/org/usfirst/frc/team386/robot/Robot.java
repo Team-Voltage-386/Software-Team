@@ -100,8 +100,6 @@ public class Robot extends IterativeRobot {
     public static SendableChooser<Boolean> chooserCrossSide = new SendableChooser<>();
 
     Command autonomousCommand;// = new Stop()
-    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    int timesSeenWhiteLine = 0;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -241,9 +239,6 @@ public class Robot extends IterativeRobot {
 	if (autonomousCommand != null) {
 	    autonomousCommand.cancel();
 	}
-
-	timesSeenWhiteLine = 0;
-
     }
 
     /**
@@ -253,10 +248,6 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
 	updateDiagnostics();
 	Scheduler.getInstance().run();
-
-	// if (!driveSubsystem.linesensor.get()) {
-	// timesSeenWhiteLine = timesSeenWhiteLine + 1;
-	// }
     }
 
     /**
@@ -268,7 +259,5 @@ public class Robot extends IterativeRobot {
 	cubeSubsystem.updateDiagnostics();
 	tiltSubsystem.updateDiagnostics();
 	cubeVision.updateDiagnostics();
-
-	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
     }
 }

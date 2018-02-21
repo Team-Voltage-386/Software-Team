@@ -29,7 +29,7 @@ public class Climb extends Command {
 	if (!Robot.elevatorSubsystem.latchLimitSwitch.get()) {
 	    Robot.elevatorSubsystem.lock(ElevatorSubsystem.LOCKED);
 	    stop = true;
-	    Robot.elevatorSubsystem.stop();
+	    Robot.elevatorSubsystem.stopSubsystem();
 	}
     }
 
