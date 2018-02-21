@@ -1,6 +1,5 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
-import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ManualElevator;
 
@@ -36,12 +35,13 @@ public class ElevatorSubsystem extends Subsystem {
     public DigitalInput latchLimitSwitch = new DigitalInput(RobotMap.latchLimitSwitch);
     Timer timer = new Timer();
     boolean previousState = false;
+    public static final double SPEED_UP = .9, SPEED_DOWN = -.75, SPEED_NUETRAL = .15, CLIMB_SPEED = -1;
 
     public ElevatorSubsystem() {
 	super();
 	lock(UNLOCKED);
 	elevatorEncoder.reset();
-	chainBreaker.set(DoubleSolenoid.Value.kForward);
+	chainBreaker.set(LOCKED);
     }
 
     public void resetEncoder() {
@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void stopElevator() {
-	elevatorSpark.set(SmartDashboard.getNumber("Elevator nuetral speed", 0));
+	elevatorSpark.set(SPEED_NUETRAL);
     }
 
     /**
@@ -79,7 +79,7 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     public void climb() {
-	elevatorSpark.set(-1.0);
+	elevatorSpark.set(CLIMB_SPEED);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ElevatorSubsystem extends Subsystem {
 	SmartDashboard.putString("Running", "True");
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
-		elevatorSpark.set(-1 * speedDown);
+		elevatorSpark.set(speedDown);
 	    else
 		elevatorSpark.set(0);
 	} else if (pov != -1) {
@@ -121,13 +121,12 @@ public class ElevatorSubsystem extends Subsystem {
      */
 
     public void setHeight(int ticks, boolean down) {
-	SmartDashboard.putString("Setting", "nuetral");
 	if (down) {
 	    SmartDashboard.putString("Setting", "Down");
-	    elevatorSpark.set(-1 * SmartDashboard.getNumber("ELevator speed down", 0));
+	    elevatorSpark.set(SPEED_DOWN);
 	} else {
 	    SmartDashboard.putString("Setting", "Up");
-	    elevatorSpark.set(SmartDashboard.getNumber(Robot.ELEVATOR_SPEED_LABEL, 0));
+	    elevatorSpark.set(SPEED_UP);
 	}
     }
 
@@ -162,13 +161,13 @@ public class ElevatorSubsystem extends Subsystem {
      * chain can only be reconnected by a human.
      */
     public void breakChain() {
-	if (chainBreaker.get() == DoubleSolenoid.Value.kForward)
-	    chainBreaker.set(DoubleSolenoid.Value.kReverse);
+	if (chainBreaker.get() == LOCKED)
+	    chainBreaker.set(UNLOCKED);
 	else
-	    chainBreaker.set(DoubleSolenoid.Value.kForward);
+	    chainBreaker.set(LOCKED);
     }
 
-    public void stop() {
+    public void stopSubsystem() {
 	setDefaultCommand(null);
 	elevatorSpark.set(0);
     }

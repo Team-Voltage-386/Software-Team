@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.CubeVisionThread;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.ArcadeDrive;
@@ -245,11 +246,13 @@ public class DriveSubsystem extends Subsystem {
 	gyro.reset();
     }
 
+    double derivative;
+
     public void driveWithVision(double speed) {
-	time = timer.get();
 	double error = (Robot.cubeVision.getError());
-	double derivative = (error - previousError) / (time - previousTime);
-	integral += error * (time - previousTime);
+	if (error == previousError)
+	    derivative = (error - previousError) / (CubeVisionThread.FPS);
+	integral += error * (CubeVisionThread.FPS);
 	double value = KP * error + KD * derivative + KI * integral;
 	drive.arcadeDrive(-1 * speed, value);
 	updateDiagnostics();
@@ -264,16 +267,13 @@ public class DriveSubsystem extends Subsystem {
      * Prepare to drive to the cube with computer vision assistance in teleop mode.
      */
     public void prepareDriveToCube() {
-	timer.reset();
 	previousTime = 0;
 	integral = 0;
 	previousError = Robot.cubeVision.getError();
+	derivative = 0;
 	KP = SmartDashboard.getNumber("P", -.01);
-	;
 	KD = SmartDashboard.getNumber("D", -.01);
-	;
 	KI = SmartDashboard.getNumber("I", -.0);
-	;
     }
 
     /**
