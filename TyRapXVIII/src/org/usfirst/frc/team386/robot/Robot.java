@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
-import org.usfirst.frc.team386.robot.commands.DriveForwardToLine;
 import org.usfirst.frc.team386.robot.commands.DriveToCubeAuto;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.ShiftArms;
@@ -144,6 +143,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Start Position", chooserPosition);
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
+	/*
 	// Configuration fields
 	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .9);
 	SmartDashboard.putNumber("ELevator speed down", .75);
@@ -153,8 +153,8 @@ public class Robot extends IterativeRobot {
 	updateDiagnostics();
 
 	// Command buttons for one-time execution
+	
 	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.6));
-	SmartDashboard.putData(DRIVE_TO_LINE_LABEL, new DriveForwardToLine());
 	SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	SmartDashboard.putData("Left 45", new TurnLeft(45));
@@ -172,7 +172,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putNumber("P", -.01);
 	SmartDashboard.putNumber("D", -.01);
 	SmartDashboard.putNumber("I", -.0);
-    }
+    */}
 
     /**
      * This function is called once each time the robot enters Disabled mode. You

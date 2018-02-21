@@ -5,7 +5,6 @@ import org.usfirst.frc.team386.robot.commands.CubeRelease;
 import org.usfirst.frc.team386.robot.commands.CubeSuck;
 import org.usfirst.frc.team386.robot.commands.DriveDistanceFromWall;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
-import org.usfirst.frc.team386.robot.commands.ElevatorRaise;
 import org.usfirst.frc.team386.robot.commands.SetArms;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
@@ -112,7 +111,7 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnLeft(90));
 	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new ElevatorRaise());
+	    // addSequential(new SetElevator(-1800));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
