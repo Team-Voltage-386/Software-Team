@@ -24,7 +24,6 @@ public class RobotMap {
     public static int rightCubeIntakeMotor = 3; // spark
 
     // CAN bus
-    public static int pigeon = 0; // pigeonimu
 
     // DIO (Digital IO)
     public static int lowerElevatorLimitSwitch = 0; // digital input

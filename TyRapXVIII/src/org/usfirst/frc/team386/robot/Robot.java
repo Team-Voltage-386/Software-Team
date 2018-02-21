@@ -20,7 +20,6 @@ import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.ElevatorSubsystem;
-import org.usfirst.frc.team386.robot.subsystems.TiltSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -40,7 +39,6 @@ public class Robot extends IterativeRobot {
     public static final CubeSubsystem cubeSubsystem = new CubeSubsystem();
     public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    public static final TiltSubsystem tiltSubsystem = new TiltSubsystem();
     public static final ArmsSubsystem armsSubsystem = new ArmsSubsystem();
 
     public static final CubeVisionThread cubeVision = new CubeVisionThread();
@@ -266,7 +264,6 @@ public class Robot extends IterativeRobot {
 	driveSubsystem.updateDiagnostics();
 	elevatorSubsystem.updateDiagnostics();
 	cubeSubsystem.updateDiagnostics();
-//	tiltSubsystem.updateDiagnostics();
 	cubeVision.updateDiagnostics();
 
 	SmartDashboard.putNumber(TIMES_SEEN_WHITE_LINE, timesSeenWhiteLine);
