@@ -124,13 +124,11 @@ public class Robot extends IterativeRobot {
 	chooserMode.addObject(SWITCH, new SwitchAuto());
 	chooserMode.addObject(SCALE, new ScaleAuto());
 	chooserMode.addObject(AUTO_LINE, new AutoLine());
-	// chooserMode.addObject("Rock", new MartianRock());
 	// chooserMode.setName("Choose Mode");
 
 	chooserPosition.addDefault("Center", CENTER);
 	chooserPosition.addObject("Left", LEFT);
 	chooserPosition.addObject("Right", RIGHT);
-	// chooserPosition.addObject("Center", CENTER);
 
 	chooserCrossSide.addDefault("Allow crossing", YES);
 	// chooserCrossSide.addObject("Yes", yes);
@@ -143,12 +141,12 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
 
 	// Configuration fields
-	SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .9);
-	SmartDashboard.putNumber("ELevator speed down", .75);
-	SmartDashboard.putNumber("Elevator nuetral speed", .15);
+	// SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL, .9);
+	// SmartDashboard.putNumber("ELevator speed down", .75);
+	// SmartDashboard.putNumber("Elevator nuetral speed", .15);
 
 	// Diagnostic data
-	updateDiagnostics();
+	// updateDiagnostics();
 
 	// Command buttons for one-time execution
 	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60, 0.6));
@@ -211,7 +209,6 @@ public class Robot extends IterativeRobot {
 	driveSubsystem.resetEncoders();
 	elevatorSubsystem.resetEncoder();
 	// schedule the autonomous command
-
 	if (autonomousCommand != null) {
 	    SmartDashboard.putString("i", "nit");
 	    autonomousCommand.start();
@@ -223,7 +220,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	updateDiagnostics();
+	// updateDiagnostics();
 	Scheduler.getInstance().run();
     }
 
@@ -246,7 +243,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-	updateDiagnostics();
+	// updateDiagnostics();
 	Scheduler.getInstance().run();
     }
 
