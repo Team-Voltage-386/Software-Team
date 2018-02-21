@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * The TiltSubsystem monitors the tilt values from the Pigeon IMU and attempts
  * to auto-correct by driving in the appropriate direction.
  */
+
 public class TiltSubsystem extends Subsystem {
 
     /**
@@ -23,6 +24,7 @@ public class TiltSubsystem extends Subsystem {
     /**
      * Label for current robot tilt correction.
      */
+
     public static final String ROBOT_TILT = "Robot tilt";
 
     /**
