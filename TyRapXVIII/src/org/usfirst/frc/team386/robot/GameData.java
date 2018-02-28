@@ -14,7 +14,7 @@ public class GameData {
     public static final String RRR = "RRR";
     public static final String RLR = "RLR";
 
-    private String gameData;
+    private String gameData = "";
 
     /**
      * Read game data from the driver station and save it for later use.
@@ -22,7 +22,8 @@ public class GameData {
      * Will also put the game data string into the dashboard for debugging purposes.
      */
     public void readGameData() {
-	gameData = DriverStation.getInstance().getGameSpecificMessage();
+	while (gameData.length() < 3)
+	    gameData = DriverStation.getInstance().getGameSpecificMessage();
 	SmartDashboard.putString(Robot.GAME_DATA, gameData);
     }
 
