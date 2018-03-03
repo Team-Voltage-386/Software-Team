@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 	oi = new OI();
 	// cubeVision.start();
-	SmartDashboard.putNumber("defaultSpeed", .001);
+	// SmartDashboard.putNumber("defaultSpeed", .03);
 	SmartDashboard.putNumber("proportion", 1);
 	initializeDashboard();
     }
