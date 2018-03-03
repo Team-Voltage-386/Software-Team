@@ -23,8 +23,7 @@ public class CubeWithTrigger extends Command {
 	Robot.cubeSubsystem.runCombined(
 		Robot.oi.manipulator.getRawAxis(RobotMap.manipLeftTriggerAxis)
 			- Robot.oi.manipulator.getRawAxis(RobotMap.manipRightTriggerAxis),
-		Robot.oi.manipulator.getRawAxis(RobotMap.manipLeftJoystickVertical),
-		Robot.oi.manipulator.getRawAxis(RobotMap.manipRightJoystickVertical));
+		Robot.oi.manipulator.getRawAxis(1), Robot.oi.manipulator.getRawAxis(5));
     }
 
     // Make this return true when this Command no longer needs to run execute()
