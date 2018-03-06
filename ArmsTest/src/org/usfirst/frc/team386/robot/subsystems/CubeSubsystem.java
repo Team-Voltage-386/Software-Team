@@ -1,5 +1,6 @@
 package org.usfirst.frc.team386.robot.subsystems;
 
+import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -21,10 +22,23 @@ public class CubeSubsystem extends Subsystem {
     WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightCubeIntakeMotor);
 
     public CubeSubsystem() {
-	left.configContinuousCurrentLimit(3, 50);
-	right.configContinuousCurrentLimit(3, 50);
-	left.enableCurrentLimit(true);
-	right.enableCurrentLimit(true);
+
+	final int kPeakCurrentAmps = 7; /* threshold to trigger current limit */
+	final int kPeakTimeMs = 0; /* how long after Peak current to trigger current limit */
+	final int kContinCurrentAmps = 4; /* hold current after limit is triggered */
+
+	left.configPeakCurrentLimit(kPeakCurrentAmps, 10);
+	left.configPeakCurrentDuration(kPeakTimeMs, 10); /* this is a necessary call to avoid errata. */
+	left.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	left.enableCurrentLimit(true); /* honor initial setting */
+
+	right.configPeakCurrentLimit(kPeakCurrentAmps, 10);
+	right.configPeakCurrentDuration(kPeakTimeMs, 10); /* this is a necessary call to avoid errata. */
+	right.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	right.enableCurrentLimit(true); /* honor initial setting */
+
+	// left.configClosedloopRamp(.1, 100);
+	// right.configClosedloopRamp(.1, 100);
     }
 
     /**
@@ -33,6 +47,8 @@ public class CubeSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
+	SmartDashboard.putNumber("Right motor value", right.get());
+	SmartDashboard.putNumber("Left motor value", left.get());
     }
 
     public void initDefaultCommand() {
@@ -58,15 +74,25 @@ public class CubeSubsystem extends Subsystem {
 
     public void runCombined(double mainSpeed, double leftSpeed, double rightSpeed) {
 	if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1 && Math.abs(mainSpeed) < .1) {
-	    left.set(SmartDashboard.getNumber("defaultSpeed", 0));
-	    right.set(-1 * SmartDashboard.getNumber("proportion", 1) * SmartDashboard.getNumber("defaultSpeed", 0));
+	    left.set(.4);// * SmartDashboard.getNumber("proportion", 1)
+			 // SmartDashboard.getNumber("defaultSpeed", 0)
+	    right.set(-1 * .4);
+	    SmartDashboard.putString("Status", "default");
 	} else if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1) {
 	    left.set(mainSpeed);
-	    right.set(-1 * mainSpeed);
+	    right.set(-1 * mainSpeed);// -1*
+	    SmartDashboard.putString("Status", "triggers");
+	    SmartDashboard.putNumber("mainSpeed", mainSpeed);
+	} else if (Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
+	    left.set(-1);
+	    right.set(1);
 	} else {
+	    SmartDashboard.putNumber("leftSpeed", leftSpeed);
+	    SmartDashboard.putNumber("rightSpeed", rightSpeed);
 	    left.set(leftSpeed);
 	    right.set(-1 * rightSpeed);
+	    SmartDashboard.putString("Status", "joy");
 	}
-    }
 
+    }
 }
