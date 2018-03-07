@@ -103,11 +103,11 @@ public class SwitchAuto extends InstantCommand {
 
 	LeftSwitchAutoRight() {
 
-	    addSequential(new DriveForward(200));
+	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnRight(90));
-	    addSequential(new DriveForward(183));
-	    addSequential(new TurnRight(90));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new DriveForward(216, 1));
+	    // addSequential(new TurnRight(90));
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
@@ -137,12 +137,12 @@ public class SwitchAuto extends InstantCommand {
 
 	RightSwitchAutoLeft() {
 
-	    addSequential(new DriveForward(200));
+	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new DriveForward(183));
-	    addSequential(new TurnLeft(90));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new DriveForward(216, 1));
+	    // addSequential(new TurnLeft(90));
+	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}

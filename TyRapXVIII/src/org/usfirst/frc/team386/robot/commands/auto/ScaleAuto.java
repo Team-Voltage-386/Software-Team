@@ -109,10 +109,11 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnLeft(90));
 	    addSequential(new DriveForward(50, .7));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
+	    // mm
 	    // addSequential(new SetElevator(-1800));
-	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
 

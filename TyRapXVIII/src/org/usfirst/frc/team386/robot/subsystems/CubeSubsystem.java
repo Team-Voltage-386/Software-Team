@@ -81,11 +81,11 @@ public class CubeSubsystem extends Subsystem {
 	    left.set(.4);// * SmartDashboard.getNumber("proportion", 1)
 			 // SmartDashboard.getNumber("defaultSpeed", 0)
 	    right.set(-1 * .4);
-	    SmartDashboard.putString("Status", "default");
+	    // SmartDashboard.putString("Status", "default");
 	} else if (Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
 	    left.set(halfSpeedEject);
 	    right.set(-1 * halfSpeedEject);
-	    SmartDashboard.putString("Status", "eject");
+	    // SmartDashboard.putString("Status", "eject");
 	} else if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1) {
 	    left.set(mainSpeed);
 	    right.set(-1 * mainSpeed);// -1*

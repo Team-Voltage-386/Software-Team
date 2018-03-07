@@ -92,7 +92,7 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void elevatorFromDPad(int pov, double speedUp, double speedDown, double nuetralSpeed) {
 	// TODO: clean this up so it is easier to understand
-	SmartDashboard.putString("Running", "True");
+	// SmartDashboard.putString("Running", "True");
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(speedDown);
