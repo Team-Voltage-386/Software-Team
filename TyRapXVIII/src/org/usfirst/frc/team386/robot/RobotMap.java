@@ -20,11 +20,10 @@ public class RobotMap {
 
     // PWM
     public static int elevatorSparks = 0; // spark
-    public static int leftCubeIntakeMotor = 4; // spark (2). currently using sparks
-    public static int rightCubeIntakeMotor = 5; // spark (3). currently using sparks
+    public static int leftCubeIntakeMotor = 2; // spark
+    public static int rightCubeIntakeMotor = 3; // spark
 
     // CAN bus
-    public static int pigeon = 0; // pigeonimu
 
     // DIO (Digital IO)
     public static int lowerElevatorLimitSwitch = 0; // digital input
@@ -70,7 +69,6 @@ public class RobotMap {
     public static int prepForClimbButton1 = 8;
     public static int prepForClimbButton2 = 9;
     public static int shiftArmsButton = 1;
-    public static int halfSpeedEject = 6;
 
     // Drive buttons
     public static int driveLeftJoystickVertical = 1;

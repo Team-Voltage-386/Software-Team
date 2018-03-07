@@ -2,7 +2,6 @@ package org.usfirst.frc.team386.robot.subsystems;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
-import org.usfirst.frc.team386.robot.commands.CubeWithTrigger;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -17,6 +16,8 @@ public class CubeSubsystem extends Subsystem {
     public static final String POV_NUMBER_LABEL = "POV value";
     public static final String CUBE_CONTROL_LABEL = "Cube Control";
     final static double halfSpeedEject = -.3;
+    // Spark left = new Spark(RobotMap.leftCubeIntakeMotor);
+    // Spark right = new Spark(RobotMap.rightCubeIntakeMotor);
     WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftCubeIntakeMotor);
     WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightCubeIntakeMotor);
 
@@ -52,8 +53,8 @@ public class CubeSubsystem extends Subsystem {
 
     public void initDefaultCommand() {
 	// Set the default command for a subsystem here.
-	// SmartDashboard.putNumber("defaultSpeed", 0);
-	setDefaultCommand(new CubeWithTrigger());
+	SmartDashboard.putNumber("defaultSpeed", 0);
+	setDefaultCommand(new org.usfirst.frc.team386.robot.commands.CubeWithTrigger());
     }
 
     public void stop() {
