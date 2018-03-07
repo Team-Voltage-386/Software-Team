@@ -13,12 +13,6 @@
 	<widget field="Allow Cross Side?" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="311" y="19"/>
 	</widget>
-	<widget field="Status" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="155" y="193"/>
-	</widget>
-	<widget field="Running" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="148" y="171"/>
-	</widget>
 </dashboard>
 <live-window>
 	<widget field="DriveSubsystem" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
@@ -129,4 +123,6 @@
 		<height>698</height>
 	</widget>
 </live-window>
+	<hidden field="Status"/>
+	<hidden field="Running"/>
 </xml>
