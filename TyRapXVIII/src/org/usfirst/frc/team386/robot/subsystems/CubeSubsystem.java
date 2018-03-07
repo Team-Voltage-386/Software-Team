@@ -89,14 +89,14 @@ public class CubeSubsystem extends Subsystem {
 	} else if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1) {
 	    left.set(mainSpeed);
 	    right.set(-1 * mainSpeed);// -1*
-	    SmartDashboard.putString("Status", "triggers");
-	    SmartDashboard.putNumber("mainSpeed", mainSpeed);
+	    // SmartDashboard.putString("Status", "triggers");
+	    // SmartDashboard.putNumber("mainSpeed", mainSpeed);
 	} else {
-	    SmartDashboard.putNumber("leftSpeed", leftSpeed);
-	    SmartDashboard.putNumber("rightSpeed", rightSpeed);
+	    // SmartDashboard.putNumber("leftSpeed", leftSpeed);
+	    // SmartDashboard.putNumber("rightSpeed", rightSpeed);
 	    left.set(leftSpeed);
 	    right.set(-1 * rightSpeed);
-	    SmartDashboard.putString("Status", "joy");
+	    // SmartDashboard.putString("Status", "joy");
 	}
     }
 
