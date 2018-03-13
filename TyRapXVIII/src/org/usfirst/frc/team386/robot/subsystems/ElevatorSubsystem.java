@@ -60,11 +60,12 @@ public class ElevatorSubsystem extends Subsystem {
 	// teleop modes.
 	SmartDashboard.putBoolean("Lower elevator limit switch", lowerElevatorLimitSwitch.get());
 	SmartDashboard.putBoolean("Upper elevator limit switch", upperElevatorLimitSwitch.get());
-	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
-	SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(LOCKED));
-	SmartDashboard.putBoolean("Chain break", chainBreaker.get().equals(UNLOCKED));
-	SmartDashboard.putBoolean("Switch limit switch", switchLimitSwitch.get());
-	SmartDashboard.putBoolean("Latch limit switch", latchLimitSwitch.get());
+	// SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
+	// SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(LOCKED));
+	// SmartDashboard.putBoolean("Chain break",
+	// chainBreaker.get().equals(UNLOCKED));
+	// SmartDashboard.putBoolean("Switch limit switch", switchLimitSwitch.get());
+	// SmartDashboard.putBoolean("Latch limit switch", latchLimitSwitch.get());
     }
 
     // Put methods for controlling this subsystem
