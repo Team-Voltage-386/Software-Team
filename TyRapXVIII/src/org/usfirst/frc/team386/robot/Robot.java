@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
 import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+import org.usfirst.frc.team386.robot.commands.teleop.BreakChain;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.CubeSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
@@ -125,7 +126,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Auto Mode", chooserMode);
 	SmartDashboard.putData("Start Position", chooserPosition);
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
-
+	SmartDashboard.putBoolean("Enable processing", false);
 	/*
 	 * // Configuration fields // SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL,
 	 * .9); // SmartDashboard.putNumber("ELevator speed down", .75); //
@@ -147,7 +148,9 @@ public class Robot extends IterativeRobot {
 	 * SmartDashboard.putData("Reset elevator", new SetElevator(0));
 	 * SmartDashboard.putData("Shift arms", new ShiftArms());
 	 * SmartDashboard.putData("Drive back", new DriveForward(12, -.75));
-	 * SmartDashboard.putData("Latch chain", new BreakChain());
+	 */
+	SmartDashboard.putData("Latch chain", new BreakChain());
+	/*
 	 * SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
 	 * SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto());
 	 * SmartDashboard.putNumber("P", -.01); SmartDashboard.putNumber("D", -.01);
@@ -194,7 +197,7 @@ public class Robot extends IterativeRobot {
 	elevatorSubsystem.resetEncoder();
 	// schedule the autonomous command
 	if (autonomousCommand != null) {
-	    SmartDashboard.putString("i", "nit");
+	    // SmartDashboard.putString("i", "nit");
 	    autonomousCommand.start();
 	}
     }
@@ -227,7 +230,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-	// updateDiagnostics();
+	updateDiagnostics();
 	Scheduler.getInstance().run();
     }
 
@@ -235,9 +238,9 @@ public class Robot extends IterativeRobot {
      * Renders a collection of diagnostic data to the smart dashboard.
      */
     private void updateDiagnostics() {
-	driveSubsystem.updateDiagnostics();
+	// driveSubsystem.updateDiagnostics();
 	elevatorSubsystem.updateDiagnostics();
-	cubeSubsystem.updateDiagnostics();
-	cubeVision.updateDiagnostics();
+	// cubeSubsystem.updateDiagnostics();
+	// cubeVision.updateDiagnostics();
     }
 }
