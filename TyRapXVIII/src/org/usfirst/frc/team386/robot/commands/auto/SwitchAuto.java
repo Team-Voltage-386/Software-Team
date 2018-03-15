@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Autonomous mode for winning the switch.
@@ -24,6 +25,7 @@ public class SwitchAuto extends InstantCommand {
      * The elevator encoder tick height for switch firing.
      */
     public static final int ELEVATOR_SWITCH_HEIGHT = -600; // possibly -540
+    public static ScaleAuto scaleAutos = new ScaleAuto();
 
     /**
      * The amount of time to run the motors when releasing the cube.
@@ -36,7 +38,9 @@ public class SwitchAuto extends InstantCommand {
 
     // Called once when the command executes
     protected void initialize() {
-	select(Robot.chooserPosition.getSelected()).start();
+	Command chosen = select(Robot.chooserPosition.getSelected());
+	SmartDashboard.putString("Auto mode", chosen.getName());
+	chosen.start();
     }
 
     /**
@@ -47,37 +51,39 @@ public class SwitchAuto extends InstantCommand {
      * @return The Command to start
      */
     private Command select(String position) {
-	Command command = null;
 	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		command = new LeftSwitchAutoLeft();
+		return new LeftSwitchAutoLeft();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
-		    command = new LeftSwitchAutoRight();
+		    return new LeftSwitchAutoRight();
+		} else if (Robot.gameData.isScaleLeft()) {
+		    return scaleAutos.getRightScaleAutoRight();
 		} else {
-		    command = new AutoLine();
+		    return new AutoLine();
 		}
 	    }
 	} else if (position.equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isSwitchRight()) {
-		command = new RightSwitchAutoRight();
+		return new RightSwitchAutoRight();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
-		    command = new RightSwitchAutoLeft();
+		    return new RightSwitchAutoLeft();
+		} else if (Robot.gameData.isScaleRight()) {
+		    return scaleAutos.getRightScaleAutoRight();
 		} else {
-		    command = new AutoLine();
+		    return new AutoLine();
 		}
 	    }
 	} else if (position.equals(Robot.CENTER)) {
 	    if (Robot.gameData.isSwitchLeft()) {
-		command = new CenterSwitchAutoLeft();
+		return new CenterSwitchAutoLeft();
 	    } else {
-		command = new CenterSwitchAutoRight();
+		return new CenterSwitchAutoRight();
 	    }
 	} else {
 	    throw new IllegalArgumentException("Unsupported position: " + position);
 	}
-	return command;
     }
 
     /**
@@ -89,9 +95,9 @@ public class SwitchAuto extends InstantCommand {
 
 	    addSequential(new DriveForward(110));
 	    addSequential(new TurnRight(90));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveForward(10));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -103,11 +109,11 @@ public class SwitchAuto extends InstantCommand {
 
 	LeftSwitchAutoRight() {
 
-	    addSequential(new DriveForward(200));
+	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnRight(90));
-	    addSequential(new DriveForward(183));
-	    addSequential(new TurnRight(90));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new DriveForward(216, 1));
+	    // addSequential(new TurnRight(90));
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
@@ -123,9 +129,9 @@ public class SwitchAuto extends InstantCommand {
 
 	    addSequential(new DriveForward(110));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveForward(10));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -137,12 +143,12 @@ public class SwitchAuto extends InstantCommand {
 
 	RightSwitchAutoLeft() {
 
-	    addSequential(new DriveForward(200));
+	    addSequential(new DriveForward(208, 1));
 	    addSequential(new TurnLeft(90));
-	    addSequential(new DriveForward(183));
-	    addSequential(new TurnLeft(90));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new DriveForward(216, 1));
+	    // addSequential(new TurnLeft(90));
+	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
@@ -170,8 +176,8 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(45));
 	    addSequential(new DriveForward(60)); // 60
 	    addSequential(new TurnRight(45));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25)); // 9
 	    addSequential(new DriveSeconds(1));
@@ -213,5 +219,13 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(45));
 	    addSequential(new DriveForward(6));
 	}
+    }
+
+    public Command getLeftSwitchAutoLeft() {
+	return new LeftSwitchAutoLeft();
+    }
+
+    public Command getRightSwitchAutoRight() {
+	return new RightSwitchAutoRight();
     }
 }

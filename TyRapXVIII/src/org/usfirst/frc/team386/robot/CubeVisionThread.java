@@ -62,13 +62,13 @@ public class CubeVisionThread extends Thread {
     public void run() {
 	UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setResolution(resolutionWidth, resolutionHeight);
-	camera.setExposureManual(33);
+	camera.setExposureAuto();
 	// camera.setWhiteBalanceManual(10);
 	// camera.setWhiteBalanceManual(value);
-	camera.setFPS(FPS);
+	camera.setFPS(30);
 	CvSink cvSink = CameraServer.getInstance().getVideo();
-	HSVOutputStream = CameraServer.getInstance().putVideo("Colors", resolutionWidth, resolutionHeight);
-	rectOutputStream = CameraServer.getInstance().putVideo("Rectangles", resolutionWidth, resolutionHeight);
+	HSVOutputStream = CameraServer.getInstance().putVideo("Edges", resolutionWidth, resolutionHeight);
+	rectOutputStream = CameraServer.getInstance().putVideo("Final", resolutionWidth, resolutionHeight);
 	cvSink.grabFrame(mat);
 	Mat base = new Mat();
 	Mat mat = new Mat();
@@ -81,84 +81,98 @@ public class CubeVisionThread extends Thread {
 	Size erodeSize = new Size(10, 10);
 	Size dilateSize = new Size(10, 10);
 	Size edgeDilateSize = new Size(4, 4);
-
+	boolean previousState = true;
 	while (!Thread.interrupted()) {
-
-	    cvSink.grabFrame(base);
-
-	    // SmartDashboard.putString("image", image.toString());
-	    // base.copyTo(mat);
-	    Imgproc.blur(base, mat, blurSize);
-	    // Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
-	    // Size(20, 20));
-	    // Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
-	    // Size(20, 20));
-
-	    Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-	    /*
-	     * SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
-	     * SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
-	     * SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
-	     */
-	    Core.inRange(mat, colorStart, colorEnd, mat);
-	    // Imgproc.dilate(mat, mat, dilateElement);
-	    // Imgproc.erode(mat, mat, erodeElement);
-
-	    // for (int r = 0; r < base.rows(); r++) {
-	    // for (int c = 0; c < base.cols(); c++) {
-	    // if (mat.get(r, c)[0] == 0) {
-	    // base.put(r, c, new double[] { 0, 0, 0 });
-	    // }
-	    // }
-	    // }
-	    Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, erodeSize));
-	    Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
-
-	    Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
-	    // Core.multiply(grey, new Scalar(3), grey);
-	    Imgproc.Canny(grey, edges, 100, 200);
-
-	    Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
-
-	    Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
-	    // new Size(20, 20)));
-
-	    Core.bitwise_not(edges, edges);
-	    Core.bitwise_and(mat, edges, mat);
-	    HSVOutputStream.putFrame(edges);
-	    finalContours.clear();
-	    Imgproc.findContours(mat, finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-	    rects.clear();
-	    for (int i = 0; i < finalContours.size(); i++) {
-		RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(finalContours.get(i).toArray()));
-		if (rect.size.height > 10 && rect.size.width > 10 /*
-								   * && rect.size.width / rect.size.height > .6 &&
-								   * rect.size.width / rect.size.height < 1.5
-								   */ && rect.angle < 10)
-		    rects.add(rect);
-	    }
-	    double closest = -1;
-	    int smallestI = 0;
-	    for (int i = 0; i < rects.size(); i++) {
-		if (rects.get(i).size.height * rects.get(i).size.height < closest) {
-		    closest = rects.get(i).size.height * rects.get(i).size.height;
-		    smallestI = i;
+	    boolean state = SmartDashboard.getBoolean("Enable processing", false);
+	    if (state) {
+		if (!previousState) {
+		    camera.setFPS(FPS);
+		    camera.setExposureManual(33);
 		}
-	    }
-	    rectChoice = smallestI;
-	    SmartDashboard.putNumber("Rects", smallestI);
-	    for (int i = 0; i < rects.size(); i++) {
-		Point[] vertices = new Point[4];
-		rects.get(i).points(vertices);
-		MatOfPoint points = new MatOfPoint(vertices);
-		if (i != smallestI)
-		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 5);
-		else
-		    Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
-	    }
-	    rectOutputStream.putFrame(base);
+		cvSink.grabFrame(base);
 
-	    Thread.yield();
+		// SmartDashboard.putString("image", image.toString());
+		// base.copyTo(mat);
+		Imgproc.blur(base, mat, blurSize);
+		// Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
+		// Size(20, 20));
+		// Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
+		// Size(20, 20));
+
+		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
+		/*
+		 * SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
+		 * SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
+		 * SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
+		 */
+		Core.inRange(mat, colorStart, colorEnd, mat);
+		// Imgproc.dilate(mat, mat, dilateElement);
+		// Imgproc.erode(mat, mat, erodeElement);
+
+		// for (int r = 0; r < base.rows(); r++) {
+		// for (int c = 0; c < base.cols(); c++) {
+		// if (mat.get(r, c)[0] == 0) {
+		// base.put(r, c, new double[] { 0, 0, 0 });
+		// }
+		// }
+		// }
+		Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, erodeSize));
+		Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
+
+		Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
+		// Core.multiply(grey, new Scalar(3), grey);
+		Imgproc.Canny(grey, edges, 100, 200);
+
+		Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
+
+		Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
+		// new Size(20, 20)));
+
+		Core.bitwise_not(edges, edges);
+		Core.bitwise_and(mat, edges, mat);
+		HSVOutputStream.putFrame(edges);
+		finalContours.clear();
+		Imgproc.findContours(mat, finalContours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		rects.clear();
+		for (int i = 0; i < finalContours.size(); i++) {
+		    RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(finalContours.get(i).toArray()));
+		    if (rect.size.height > 10 && rect.size.width > 10 /*
+								       * && rect.size.width / rect.size.height > .6 &&
+								       * rect.size.width / rect.size.height < 1.5
+								       */ && rect.angle < 10)
+			rects.add(rect);
+		}
+		double closest = -1;
+		int smallestI = 0;
+		for (int i = 0; i < rects.size(); i++) {
+		    if (rects.get(i).size.height * rects.get(i).size.height < closest) {
+			closest = rects.get(i).size.height * rects.get(i).size.height;
+			smallestI = i;
+		    }
+		}
+		rectChoice = smallestI;
+		SmartDashboard.putNumber("Rects", smallestI);
+		for (int i = 0; i < rects.size(); i++) {
+		    Point[] vertices = new Point[4];
+		    rects.get(i).points(vertices);
+		    MatOfPoint points = new MatOfPoint(vertices);
+		    if (i != smallestI)
+			Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 5);
+		    else
+			Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(0, 255, 0), 5);
+		}
+		rectOutputStream.putFrame(base);
+
+		Thread.yield();
+	    } else {
+		if (previousState) {
+		    camera.setFPS(30);
+		    camera.setExposureAuto();
+		}
+		cvSink.grabFrame(base);
+		rectOutputStream.putFrame(base);
+	    }
+	    previousState = state;
 	    // try {
 	    // sleep(50);
 	    // } catch (InterruptedException e) {
