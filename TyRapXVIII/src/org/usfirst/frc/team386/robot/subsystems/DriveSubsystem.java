@@ -48,9 +48,9 @@ public class DriveSubsystem extends Subsystem {
     public static final int RIGHT = 1;
 
     private static final int NO_TIMEOUT = 0;
-    final int kPeakCurrentAmps = 25; /* threshold to trigger current limit */
+    final int kPeakCurrentAmps = 35; /* threshold to trigger current limit */
     final int kPeakTimeMs = 0; /* how long after Peak current to trigger current limit */
-    final int kContinCurrentAmps = 15; /* hold current after limit is triggered */
+    final int kContinCurrentAmps = 25; /* hold current after limit is triggered */
 
     public static double speedMultiplier = BOOST_SPEED_MULTIPLIER;
 
@@ -532,6 +532,10 @@ public class DriveSubsystem extends Subsystem {
      *            The limit
      * @return 0 or the speed if the input is greater than the limit
      */
+    public void highGearTurn() {
+		// TODO Auto-generated method stub
+		
+	}
     private double deadBand(double in, double limit) {
 	if (Math.abs(in) < limit) {
 	    return 0;
@@ -577,4 +581,6 @@ public class DriveSubsystem extends Subsystem {
     public double getRightEncoder() {
 	return frontRight.getSelectedSensorPosition(0);
     }
+
+	
 }

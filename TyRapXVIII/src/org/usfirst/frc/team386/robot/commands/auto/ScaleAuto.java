@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Autonomous mode for winning the scale.
  */
 public class ScaleAuto extends InstantCommand {
-
+	
+	public static final int ELEVATOR_SCALE_HEIGHT = -1800; // possibly -540
+	public static final int ELEVATOR_SWITCH_HEIGHT = -600;
     /**
      * The amount of time to run the motors when releasing the cube.
      */
@@ -97,8 +99,9 @@ public class ScaleAuto extends InstantCommand {
 	    addParallel(new CubeSuck(5));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new SetElevator(-1800));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	    addSequential(new SetElevator(0));
 	}
@@ -135,8 +138,9 @@ public class ScaleAuto extends InstantCommand {
 	    addParallel(new CubeSuck(5));
 	    addSequential(new TurnLeft(90));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addSequential(new SetElevator(-1800));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	    addSequential(new SetElevator(0));
 	}
@@ -148,6 +152,10 @@ public class ScaleAuto extends InstantCommand {
     class RightScaleAutoLeft extends CommandGroup {
 
 	RightScaleAutoLeft() {
+		//COMMMENTS 
+		//COMMMENTS
+		//ADD MORE COMMENTS UNDER PAIN OF SARCASM
+		
 
 	    addSequential(new DriveForward(208));
 	    addSequential(new TurnLeft(90));
