@@ -18,7 +18,7 @@ public class HighGearTurn extends Command{
 
 	    // Called once when the command executes
 	    protected void initialize() {
-	    //Robot.driveSubsystem.shift(HIGH_GEAR);
+	    //Robot.driveSubsystem.shift(FAST_GEAR);
 		Robot.driveSubsystem.resetPidTurn(angle, -1);
 		timer.reset();
 	    }

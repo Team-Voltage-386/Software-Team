@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  * For teleop use, use the empty constructor (i.e. attach the GearShift command
  * to a button to allow the driver to shift gears up or down as needed).
  * 
- * For autonomous use, use the constructor with either DriveSubsystem.LOW_GEAR
- * for low gear, or DriveSubsystem.HIGH_GEAR for high gear.
+ * For autonomous use, use the constructor with either DriveSubsystem.SLOW_GEAR
+ * for low gear, or DriveSubsystem.FAST_GEAR for high gear.
  */
 public class GearShift extends InstantCommand {
 

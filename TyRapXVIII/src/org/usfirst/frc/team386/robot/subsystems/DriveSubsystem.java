@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * used in both autonomous or teleoperated mode.
  */
 public class DriveSubsystem extends Subsystem {
-    public static final DoubleSolenoid.Value LOW_GEAR = DoubleSolenoid.Value.kReverse;
-    public static final DoubleSolenoid.Value HIGH_GEAR = DoubleSolenoid.Value.kForward;
-
+    public static final DoubleSolenoid.Value SLOW_GEAR = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value FAST_GEAR = DoubleSolenoid.Value.kForward;
+    
     public static final double GYRO_COMPENSATION = -0.07;
     public static final double GYRO_TURNING_SPEED = .6;
 
@@ -71,6 +71,7 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid gearShifter = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
+    public final boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
     // Encoder leftEncoder = new Encoder(RobotMap.leftDriveEncoderChannelA,
     // RobotMap.leftDriveEncoderChannelB, true);
     // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
@@ -123,7 +124,7 @@ public class DriveSubsystem extends Subsystem {
 	rearUltrasonic.setAutomaticMode(true);
 	// frontUltrasonic.setAutomaticMode(true);
 
-	gearShifter.set(LOW_GEAR);
+	gearShifter.set(SLOW_GEAR);
 	timer.start();
     }
 
@@ -201,10 +202,10 @@ public class DriveSubsystem extends Subsystem {
      * Shift gears. This method will shift to the opposite of the current gear.
      */
     public void shift() {
-	if (gearShifter.get() == HIGH_GEAR) {
-	    shift(LOW_GEAR);
+	if (gearShifter.get() == FAST_GEAR) {
+	    shift(SLOW_GEAR);
 	} else {
-	    shift(HIGH_GEAR);
+	    shift(FAST_GEAR);
 	}
     }
 
@@ -212,7 +213,7 @@ public class DriveSubsystem extends Subsystem {
      * Sift the gearShifter specifically to either low or high gear.
      * 
      * @param gear
-     *            LOW_GEAR or HIGH_GEAR
+     *            SLOW_GEAR or FAST_GEAR
      */
     public void shift(Value gear) {
 	gearShifter.set(gear);
@@ -464,7 +465,7 @@ public class DriveSubsystem extends Subsystem {
      *            -1 (LEFT), 1 (RIGHT)
      */
     void oldTurnWithPid(double angle, int direction) {
-	// shift(HIGH_GEAR);
+	// shift(FAST_GEAR);
 	double tolerance = 2, speedThreshold = 15;
 	double KP = -.2, KD = -.05;
 	gyro.reset();
