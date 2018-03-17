@@ -36,6 +36,11 @@ public class CubeVisionThread extends Thread {
     public List<MatOfPoint> finalContours = new ArrayList<>();
     public CvSource HSVOutputStream, rectOutputStream;
     int rectChoice;
+    public SelectorType selectionMethod = SelectorType.bottom;
+
+    public enum SelectorType {
+	rightmost, leftmost, bottom;
+    }
 
     public CubeVisionThread() {
 
@@ -142,16 +147,46 @@ public class CubeVisionThread extends Thread {
 								       */ && rect.angle < 10)
 			rects.add(rect);
 		}
-		double closest = -1;
+
 		int smallestI = 0;
-		for (int i = 0; i < rects.size(); i++) {
-		    if (rects.get(i).size.height * rects.get(i).size.height < closest) {
-			closest = rects.get(i).size.height * rects.get(i).size.height;
-			smallestI = i;
+		// This bit was what used to be here
+		// for (int i = 0; i < rects.size(); i++) {
+		// if (rects.get(i).size.height * rects.get(i).size.height < closest) {
+		// closest = rects.get(i).size.height * rects.get(i).size.height;
+		// smallestI = i;
+		// }
+		// }
+		switch (selectionMethod) {
+		case bottom: {
+		    double closest = Integer.MAX_VALUE;
+		    for (int i = 0; i < rects.size(); i++) {
+			if (rects.get(i).center.y < closest) {
+			    closest = rects.get(i).center.y;
+			    smallestI = i;
+			}
 		    }
 		}
-		rectChoice = smallestI;
-		SmartDashboard.putNumber("Rects", smallestI);
+		case rightmost: {
+		    double closest = Integer.MIN_VALUE;
+		    for (int i = 0; i < rects.size(); i++) {
+			if (rects.get(i).center.x > closest) {
+			    closest = rects.get(i).center.x;
+			    smallestI = i;
+			}
+		    }
+		}
+		case leftmost: {
+		    double closest = Integer.MAX_VALUE;
+		    for (int i = 0; i < rects.size(); i++) {
+			if (rects.get(i).center.x < closest) {
+			    closest = rects.get(i).center.x;
+			    smallestI = i;
+			}
+		    }
+		}
+		default:
+		}
+
 		for (int i = 0; i < rects.size(); i++) {
 		    Point[] vertices = new Point[4];
 		    rects.get(i).points(vertices);
