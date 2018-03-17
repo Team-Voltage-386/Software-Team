@@ -115,7 +115,7 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new TurnRight(90));
 	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    // addSequential(new DriveForward(42));
+	    // addSequential(ne8w DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }

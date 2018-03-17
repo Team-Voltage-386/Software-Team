@@ -207,7 +207,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	// updateDiagnostics();
+	updateDiagnostics(); // TESTBOT CHANGES
 	Scheduler.getInstance().run();
     }
 
@@ -238,7 +238,7 @@ public class Robot extends IterativeRobot {
      * Renders a collection of diagnostic data to the smart dashboard.
      */
     private void updateDiagnostics() {
-	// driveSubsystem.updateDiagnostics();
+	driveSubsystem.updateDiagnostics();
 	elevatorSubsystem.updateDiagnostics();
 	// cubeSubsystem.updateDiagnostics();
 	// cubeVision.updateDiagnostics();

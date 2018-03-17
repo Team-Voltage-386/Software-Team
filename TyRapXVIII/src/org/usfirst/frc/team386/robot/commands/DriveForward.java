@@ -19,6 +19,7 @@ public class DriveForward extends Command {
      *            The distance in inches
      */
     double ticksRequired;
+    double scaleFactor = .73; // TESTBOT, WILL BE 1 FOR REAL ROBOT
 
     public DriveForward(int distance) {
 	super();
@@ -47,13 +48,15 @@ public class DriveForward extends Command {
 
     @Override
     public boolean isFinished() {
-	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > Math.abs(ticksRequired));
+	return (Math.abs(Robot.driveSubsystem.getLeftEncoder()) > Math.abs(ticksRequired * scaleFactor));
     }
 
     @Override
     protected void end() {
 	Robot.driveSubsystem.resetGyro();
-	Robot.driveSubsystem.resetEncoders();
+	// TESTBOT CHANGES
+	// Robot.driveSubsystem.resetEncoders();
+	// ^^ UNCOMMENT THAT LINE
     }
 
 }

@@ -20,8 +20,8 @@ public class RobotMap {
 
     // PWM
     public static int elevatorSparks = 0; // spark
-    public static int leftCubeIntakeMotor = 6; // spark (2). currently using sparks
-    public static int rightCubeIntakeMotor = 5; // spark (3). currently using sparks
+    public static int leftCubeIntakeMotor = 6;
+    public static int rightCubeIntakeMotor = 5;
 
     // CAN bus
     public static int pigeon = 0; // pigeonimu
@@ -78,5 +78,5 @@ public class RobotMap {
     public static int shiftButton = 5;
     public static int breakTrigger = 3;
     public static int driveToCubeButton = 6;
-    
+
 }

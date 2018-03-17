@@ -5,8 +5,7 @@ import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.RobotMap;
 import org.usfirst.frc.team386.robot.commands.teleop.CubeWithTrigger;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,28 +17,36 @@ public class CubeSubsystem extends Subsystem {
     public static final String POV_NUMBER_LABEL = "POV value";
     public static final String CUBE_CONTROL_LABEL = "Cube Control";
     final static double halfSpeedEject = -.3;
-    WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftCubeIntakeMotor);
-    WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightCubeIntakeMotor);
+    // TESTBOT CHANGES
+    /*
+     * WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftCubeIntakeMotor);
+     * WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightCubeIntakeMotor);
+     */
+    Spark left = new Spark(2);
+    Spark right = new Spark(3);
+    // ^^^^ END OF TESTBOT CHANGES
 
     AnalogUltrasonic ultraCenter = new AnalogUltrasonic(RobotMap.cubeUltrasonicCenter, 1.18, 10.3);
     AnalogUltrasonic ultraEdge = new AnalogUltrasonic(RobotMap.cubeUltrasonicEdge, 1.18, 10.3);
 
     public CubeSubsystem() {
-
-	final int kPeakCurrentAmps = 7; /* threshold to trigger current limit */
-	final int kPeakTimeMs = 0; /* how long after Peak current to trigger current limit */
-	final int kContinCurrentAmps = 4; /* hold current after limit is triggered */
-
-	left.configPeakCurrentLimit(kPeakCurrentAmps, 10);
-	left.configPeakCurrentDuration(kPeakTimeMs, 10); /* this is a necessary call to avoid errata. */
-	left.configContinuousCurrentLimit(kContinCurrentAmps, 10);
-	left.enableCurrentLimit(true); /* honor initial setting */
-
-	right.configPeakCurrentLimit(kPeakCurrentAmps, 10);
-	right.configPeakCurrentDuration(kPeakTimeMs, 10); /* this is a necessary call to avoid errata. */
-	right.configContinuousCurrentLimit(kContinCurrentAmps, 10);
-	right.enableCurrentLimit(true); /* honor initial setting */
-
+	// TESTBOT CHANGES
+	/*
+	 * final int kPeakCurrentAmps = 7; // threshold to trigger current limit final
+	 * int kPeakTimeMs = 0; // how long after Peak current to trigger current limit
+	 * final int kContinCurrentAmps = 4; // hold current after limit is triggered
+	 * 
+	 * left.configPeakCurrentLimit(kPeakCurrentAmps, 10);
+	 * left.configPeakCurrentDuration(kPeakTimeMs, 10); // this is a necessary call
+	 * to avoid errata. left.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	 * left.enableCurrentLimit(true); // honor initial setting
+	 * 
+	 * right.configPeakCurrentLimit(kPeakCurrentAmps, 10);
+	 * right.configPeakCurrentDuration(kPeakTimeMs, 10); // this is a necessary call
+	 * to avoid errata. right.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	 * right.enableCurrentLimit(true); // honor initial setting
+	 */
+	// ^^ END OF TESTBOT CHANGESs
 	// left.configClosedloopRamp(.1, 100);
 	// right.configClosedloopRamp(.1, 100);
     }
