@@ -186,7 +186,7 @@ public class CubeVisionThread extends Thread {
 		}
 		default:
 		}
-
+		rectChoice = smallestI;
 		for (int i = 0; i < rects.size(); i++) {
 		    Point[] vertices = new Point[4];
 		    rects.get(i).points(vertices);
