@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team386.robot;
 
+import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
@@ -135,8 +136,9 @@ public class Robot extends IterativeRobot {
 	 * // Diagnostic data // updateDiagnostics();
 	 * 
 	 * // Command buttons for one-time execution
-	 * 
-	 * SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60,
+	 */
+	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(200));
+	/*
 	 * 0.6)); SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	 * SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
 	 * SmartDashboard.putData("Left 45", new TurnLeft(45));

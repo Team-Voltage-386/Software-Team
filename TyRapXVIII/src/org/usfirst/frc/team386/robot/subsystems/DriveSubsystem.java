@@ -126,7 +126,7 @@ public class DriveSubsystem extends Subsystem {
 	rearUltrasonic.setAutomaticMode(true);
 	// frontUltrasonic.setAutomaticMode(true);
 
-	gearShifter.set(SLOW_GEAR);
+	gearShifter.set(FAST_GEAR);
 	timer.start();
     }
 
@@ -139,6 +139,7 @@ public class DriveSubsystem extends Subsystem {
 	// teleop modes.
 	// SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
+	SmartDashboard.putBoolean("Shifter", DoubleSolenoid.Value.kForward == gearShifter.get());
 	// SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC,
 	// frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
@@ -588,6 +589,10 @@ public class DriveSubsystem extends Subsystem {
 
     public double getRightEncoder() {
 	return frontRight.getSelectedSensorPosition(0);
+    }
+
+    public DoubleSolenoid.Value getGearState() {
+	return gearShifter.get();
     }
 
 }
