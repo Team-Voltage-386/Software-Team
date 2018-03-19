@@ -72,7 +72,7 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid gearShifter = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public final boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
+    public boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
     // TESTBOT CHANGE!!!
     Encoder leftEncoder = new Encoder(3, 9);
     // END OF TESTBOT CHANGE!!
