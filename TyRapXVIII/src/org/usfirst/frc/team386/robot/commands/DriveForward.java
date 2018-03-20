@@ -19,20 +19,16 @@ public class DriveForward extends Command {
      * @param distance
      *            The distance in inches
      */
-    double ticksRequired; // the number of encoder ticks indicating how far to drive
-    double distance; // the distance in inches
-    // scaleFactor is used because the TESTBOT has different encoders than the real
-    // bot
+    double ticksRequired;
+    double distance;
     double scaleFactor = .73; // TESTBOT, WILL BE 1 FOR REAL ROBOT
-
-    double fastGearMultiplier = .75; // used to reduce the ticks to travel since fast gear overshoots the goal
+    double fastGearMultiplier = .75;
 
     public DriveForward(int distance) {
 	super();
 	requires(Robot.driveSubsystem);
 	this.speed = DriveSubsystem.FAST_AUTO_MODE_SPEED;
-	// the next line isn't needed as ticksRequired is recalculated in initialize
-	// ticksRequired = 6.36 * distance * 4;
+	ticksRequired = 6.36 * distance * 4;
 	this.distance = distance * scaleFactor;
     }
 
@@ -40,8 +36,7 @@ public class DriveForward extends Command {
 	super();
 	requires(Robot.driveSubsystem);
 	this.speed = speed;
-	// the next line isn't needed as ticksRequired is recalculated in initialize
-	// ticksRequired = 6.36 * distance * 4;
+	ticksRequired = 6.36 * distance * 4;
 	this.distance = distance * scaleFactor;
     }
 
@@ -50,11 +45,9 @@ public class DriveForward extends Command {
 
 	Robot.driveSubsystem.resetGyro();
 	Robot.driveSubsystem.resetEncoders();
-	// reduce the required distance traveled when driving in fast gear because of
-	// overshoot
-	if (Robot.driveSubsystem.getGearState() == DriveSubsystem.FAST_GEAR) {
+	if (Robot.driveSubsystem.getGearState() == DriveSubsystem.FAST_GEAR)
 	    ticksRequired = fastGearMultiplier * 6.36 * distance * 4;
-	} else {
+	else {
 	    ticksRequired = 6.36 * distance * 4;
 	}
 	SmartDashboard.putNumber("ticks required", ticksRequired);
