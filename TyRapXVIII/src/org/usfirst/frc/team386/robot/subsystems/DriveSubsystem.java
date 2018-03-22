@@ -269,7 +269,7 @@ public class DriveSubsystem extends Subsystem {
 
     public void driveWithVision(double speed) {
 	double error = (Robot.cubeVision.getError());
-	if (error == previousError)
+	if (error != previousError)
 	    derivative = (error - previousError) / (CubeVisionThread.FPS);
 	integral += error * (CubeVisionThread.FPS);
 	double value = KP * error + KD * derivative + KI * integral;

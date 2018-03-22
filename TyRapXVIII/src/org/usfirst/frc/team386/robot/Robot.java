@@ -2,6 +2,7 @@
 package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForward;
+import org.usfirst.frc.team386.robot.commands.DriveToCubeAuto;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
@@ -154,10 +155,12 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Latch chain", new BreakChain());
 	/*
 	 * SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
-	 * SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto());
-	 * SmartDashboard.putNumber("P", -.01); SmartDashboard.putNumber("D", -.01);
-	 * SmartDashboard.putNumber("I", -.0);
-	 */}
+	 */
+	SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom));
+	SmartDashboard.putNumber("P", -.005);
+	SmartDashboard.putNumber("D", -.05);
+	SmartDashboard.putNumber("I", -.0);
+    }
 
     /**
      * This function is called once each time the robot enters Disabled mode. You

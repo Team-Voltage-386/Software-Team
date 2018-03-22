@@ -1,8 +1,10 @@
 package org.usfirst.frc.team386.robot.commands;
 
+import org.usfirst.frc.team386.robot.CubeVisionThread;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -10,10 +12,18 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveToCubeAuto extends Command {
 
-    public DriveToCubeAuto() {
+    CubeVisionThread.SelectorType type;
+
+    public DriveToCubeAuto(CubeVisionThread.SelectorType type) {
 	super();
 	requires(Robot.driveSubsystem);
 	Robot.driveSubsystem.prepareDriveToCube();
+	this.type = type;
+    }
+
+    @Override
+    protected void initialize() {
+	// Robot.cubeVision.setSelectionMethod(type);
     }
 
     protected void execute() {
@@ -22,6 +32,12 @@ public class DriveToCubeAuto extends Command {
 
     @Override
     public boolean isFinished() {
-	return (Robot.cubeSubsystem.hasCube());
+	return !RobotState.isEnabled();
+	// return (Robot.cubeSubsystem.hasCube());
+    }
+
+    @Override
+    protected void end() {
+	Robot.cubeVision.setSelectionMethod(CubeVisionThread.SelectorType.bottom);
     }
 }
