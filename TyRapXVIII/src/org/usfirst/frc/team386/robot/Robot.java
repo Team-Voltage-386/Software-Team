@@ -213,6 +213,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
 	updateDiagnostics(); // TESTBOT CHANGES
+	SmartDashboard.putNumber()
 	Scheduler.getInstance().run();
     }
 
