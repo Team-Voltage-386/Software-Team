@@ -17,6 +17,7 @@ public class CubeSubsystem extends Subsystem {
     public static final String POV_NUMBER_LABEL = "POV value";
     public static final String CUBE_CONTROL_LABEL = "Cube Control";
     final static double halfSpeedEject = -.3;
+    public final double DEFAULT_SPEED = 0;// 0
     // TESTBOT CHANGES
     /*
      * WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftCubeIntakeMotor);
@@ -85,9 +86,9 @@ public class CubeSubsystem extends Subsystem {
     public void runCombined(double mainSpeed, double leftSpeed, double rightSpeed) {
 	if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1 && Math.abs(mainSpeed) < .1
 		&& !Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
-	    left.set(.4);// * SmartDashboard.getNumber("proportion", 1)
-			 // SmartDashboard.getNumber("defaultSpeed", 0)
-	    right.set(-1 * .4);
+	    left.set(DEFAULT_SPEED);// * SmartDashboard.getNumber("proportion", 1)
+	    // SmartDashboard.getNumber("defaultSpeed", 0)
+	    right.set(-1 * DEFAULT_SPEED);
 	    // SmartDashboard.putString("Status", "default");
 	} else if (Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
 	    left.set(halfSpeedEject);

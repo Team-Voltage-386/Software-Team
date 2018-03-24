@@ -35,7 +35,8 @@ public class ElevatorSubsystem extends Subsystem {
     public DigitalInput latchLimitSwitch = new DigitalInput(RobotMap.latchLimitSwitch);
     Timer timer = new Timer();
     boolean previousState = false;
-    public static final double SPEED_UP = .9, SPEED_DOWN = -.75, SPEED_NUETRAL = .15, CLIMB_SPEED = -1;
+    public static final double SPEED_UP = -1 * .9, SPEED_DOWN = -1 * -.75, SPEED_NUETRAL = -1 * .15, CLIMB_SPEED = -1; // TESTBOT
+														       // negative
 
     public ElevatorSubsystem() {
 	super();
@@ -60,7 +61,7 @@ public class ElevatorSubsystem extends Subsystem {
 	// teleop modes.
 	SmartDashboard.putBoolean("Lower elevator limit switch", lowerElevatorLimitSwitch.get());
 	SmartDashboard.putBoolean("Upper elevator limit switch", upperElevatorLimitSwitch.get());
-	// SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
+	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
 	// SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(LOCKED));
 	// SmartDashboard.putBoolean("Chain break",
 	// chainBreaker.get().equals(UNLOCKED));

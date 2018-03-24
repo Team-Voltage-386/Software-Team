@@ -254,6 +254,8 @@ public class DriveSubsystem extends Subsystem {
      * state for PID control.
      */
     double KP = -.0075, KD = -.1, KI = -.001;
+    double KPCubeVision = -.0075, KDCubeVision = -.1, KICubeVision = -.001;
+
     public double previousTime = 0, time, integral = 0;
     double previousError = 0;
 
@@ -272,14 +274,15 @@ public class DriveSubsystem extends Subsystem {
 	if (error != previousError)
 	    derivative = (error - previousError) / (CubeVisionThread.FPS);
 	integral += error * (CubeVisionThread.FPS);
-	double value = KP * error + KD * derivative + KI * integral;
+	double value = KPCubeVision * error + KDCubeVision * derivative + KICubeVision * integral;
 	drive.arcadeDrive(-1 * speed, value);
 	updateDiagnostics();
-	previousTime = time;
+	// previousTime = time;
 	previousError = error;
-	SmartDashboard.putNumber("proportional", KP * error);
-	SmartDashboard.putNumber("derivative", KD * derivative);
-	SmartDashboard.putNumber("integral", KI * integral);
+	SmartDashboard.putNumber("Error", error);
+	SmartDashboard.putNumber("proportional", KPCubeVision);
+	SmartDashboard.putNumber("derivative", KDCubeVision);
+	SmartDashboard.putNumber("integral", KICubeVision * integral);
     }
 
     /**
@@ -288,11 +291,12 @@ public class DriveSubsystem extends Subsystem {
     public void prepareDriveToCube() {
 	previousTime = 0;
 	integral = 0;
-	previousError = Robot.cubeVision.getError();
+	previousError = 0;
 	derivative = 0;
-	KP = SmartDashboard.getNumber("P", -.01);
-	KD = SmartDashboard.getNumber("D", -.01);
-	KI = SmartDashboard.getNumber("I", -.0);
+	KPCubeVision = -.005;// SmartDashboard.getNumber("P", -.01);
+	KDCubeVision = -.05;// SmartDashboard.getNumber("D", -.01);
+	KICubeVision = 0;// SmartDashboard.getNumber("I", -.0);
+	SmartDashboard.putString("Reset", "True");
     }
 
     /**

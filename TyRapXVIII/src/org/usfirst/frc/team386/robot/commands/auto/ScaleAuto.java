@@ -13,6 +13,8 @@ import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnLeftWithoutPid;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
+import org.usfirst.frc.team386.robot.commands.TurnRightWithoutPid;
+import org.usfirst.frc.team386.robot.commands.teleop.DriveSeconds;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
@@ -100,15 +102,22 @@ public class ScaleAuto extends InstantCommand {
 
 	LeftScaleAutoLeft() {
 
-	    addSequential(new DriveForward(282));
+	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
+	    addSequential(new DriveForward(400));
 	    addParallel(new CubeSuck(5));
-	    addSequential(new TurnRight(90));
-	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
+	    addSequential(new GearShift());
+	    addSequential(new TurnRight(45));
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
-	    addSequential(new SetElevator(0));
+	    // addSequential(new SetElevator(0));
+	    addSequential(new TurnRightWithoutPid(90));
+	    addParallel(new CubeSuck(2));
+	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
+	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -150,8 +159,12 @@ public class ScaleAuto extends InstantCommand {
 	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	    // addSequential(new SetElevator(0));
-	    addSequential(new TurnLeftWithoutPid(80));
-	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.leftmost));
+	    addSequential(new TurnLeftWithoutPid(90));
+	    addParallel(new CubeSuck(2));
+	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
+	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
 
 	    // addSequential(new DriveForward(282));
 	    // addParallel(new CubeSuck(5));

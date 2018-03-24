@@ -2,6 +2,7 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.CubeSuck;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetArms;
@@ -10,6 +11,7 @@ import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveSeconds;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -24,7 +26,7 @@ public class SwitchAuto extends InstantCommand {
     /**
      * The elevator encoder tick height for switch firing.
      */
-    public static final int ELEVATOR_SWITCH_HEIGHT = -600; // possibly -540
+    public static final int ELEVATOR_SWITCH_HEIGHT = -600; // possibly -540 NEGATIVE
     public static ScaleAuto scaleAutos = new ScaleAuto();
 
     /**
@@ -169,9 +171,39 @@ public class SwitchAuto extends InstantCommand {
 
 	CenterSwitchAutoLeft() {
 
-	    addSequential(new CenterSwitchAutoLeftDrive());
-	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
+	    addSequential(new DriveForward(12));
+
+	    addSequential(new TurnLeft(45));
+	    // addSequential(new GearShift());
+	    addSequential(new DriveForward(60));
+	    // addSequential(new GearShift());
+	    addSequential(new TurnRight(45));
+	    // addSequential(new GearShift());
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));// TESTBOT CHANGE,
+	    // UNCOMMENT THIS LINE FOR REAL BOT
+	    // addSequential(new DriveForward(1));
+	    // addSequential(new DriveForward(25));
+	    addSequential(new DriveSeconds(1));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
+	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new CenterSwitchAutoRightDrive());
+	    addSequential(new CubeRelease(1.5));
 	    addSequential(new DriveForward(12, -.75));
+
+	    // Testbot
+	    addParallel(new SetElevator(0));
+	    addSequential(new TurnRight(75));
+	    addParallel(new CubeSuck(3));
+	    addSequential(new DriveForward(15, .75));
+	    addSequential(new CubeSuck(.5));
+	    addSequential(new DriveForward(15, -.75));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new TurnLeft(75));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -180,20 +212,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoLeftDrive extends CommandGroup {
 	CenterSwitchAutoLeftDrive() {
-	    addSequential(new DriveForward(12));// 12
-	    addSequential(new GearShift());
-	    addSequential(new TurnLeft(45));
-	    addSequential(new GearShift());
-	    addSequential(new DriveForward(60)); // 60
-	    addSequential(new GearShift());
-	    addSequential(new TurnRight(45));
-	    addSequential(new GearShift());
-	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
-	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT)); TESTBOT CHANGE,
-	    // UNCOMMENT CODE FOR REAL BOT
-	    // addSequential(new DriveForward(1));
-	    // addSequential(new DriveForward(25)); // 9
-	    addSequential(new DriveSeconds(1));
+
 	}
     }
 
@@ -203,16 +222,17 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRight extends CommandGroup {
 
 	CenterSwitchAutoRight() {
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
 	    addSequential(new DriveForward(12));
-	    addSequential(new GearShift());
+
 	    addSequential(new TurnRight(45));
-	    addSequential(new GearShift());
+	    // addSequential(new GearShift());
 	    addSequential(new DriveForward(60));
-	    addSequential(new GearShift());
+	    // addSequential(new GearShift());
 	    addSequential(new TurnLeft(45));
-	    addSequential(new GearShift());
+	    // addSequential(new GearShift());
 	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT)); TESTBOT CHANGE,
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));// TESTBOT CHANGE,
 	    // UNCOMMENT THIS LINE FOR REAL BOT
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
@@ -221,8 +241,21 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new CenterSwitchAutoRightDrive());
-	    addSequential(new CubeRelease(1));
+	    addSequential(new CubeRelease(1.5));
 	    addSequential(new DriveForward(12, -.75));
+
+	    // Testbot
+	    addParallel(new SetElevator(0));
+	    addSequential(new TurnLeft(75));
+	    addParallel(new CubeSuck(3));
+	    addSequential(new DriveForward(15, .75));
+	    addSequential(new CubeSuck(.5));
+	    addSequential(new DriveForward(15, -.75));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new TurnRight(75));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
+
 	}
     }
 

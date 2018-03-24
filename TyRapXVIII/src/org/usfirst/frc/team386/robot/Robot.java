@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot;
 
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.DriveToCubeAuto;
+import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.auto.AutoLine;
 import org.usfirst.frc.team386.robot.commands.auto.MartianRock;
 import org.usfirst.frc.team386.robot.commands.auto.ScaleAuto;
@@ -142,7 +143,9 @@ public class Robot extends IterativeRobot {
 	/*
 	 * 0.6)); SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	 * SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
-	 * SmartDashboard.putData("Left 45", new TurnLeft(45));
+	 */
+	SmartDashboard.putData("Left 45", new TurnLeft(45));
+	/*
 	 * SmartDashboard.putData("Right 45", new TurnRight(45));
 	 * SmartDashboard.putData(STOP_LABEL, new Stop());
 	 * SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
@@ -156,10 +159,11 @@ public class Robot extends IterativeRobot {
 	/*
 	 * SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
 	 */
-	SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom));
+	SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 1));
 	SmartDashboard.putNumber("P", -.005);
 	SmartDashboard.putNumber("D", -.05);
 	SmartDashboard.putNumber("I", -.0);
+	SmartDashboard.putString("Override", "Don't override");
     }
 
     /**
@@ -213,7 +217,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
 	updateDiagnostics(); // TESTBOT CHANGES
-	SmartDashboard.putNumber()
+	// SmartDashboard.putNumber()
 	Scheduler.getInstance().run();
     }
 

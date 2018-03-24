@@ -51,11 +51,12 @@ public class DriveForward extends Command {
 	    ticksRequired = 6.36 * distance * 4;
 	}
 	SmartDashboard.putNumber("ticks required", ticksRequired);
-
     }
 
     @Override
     protected void execute() {
+	if (Robot.driveSubsystem.getGearState() == DriveSubsystem.FAST_GEAR)
+	    ticksRequired = fastGearMultiplier * 6.36 * distance * 4;
 	Robot.driveSubsystem.arcadeDriveStraight(speed);
     }
 
