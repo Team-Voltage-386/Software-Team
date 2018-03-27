@@ -35,8 +35,7 @@ public class ElevatorSubsystem extends Subsystem {
     public DigitalInput latchLimitSwitch = new DigitalInput(RobotMap.latchLimitSwitch);
     Timer timer = new Timer();
     boolean previousState = false;
-    public static final double SPEED_UP = -1 * .9, SPEED_DOWN = -1 * -.75, SPEED_NUETRAL = -1 * .15, CLIMB_SPEED = -1; // TESTBOT
-														       // negative
+    public static final double SPEED_UP = .9, SPEED_DOWN = -.75, SPEED_NUETRAL = .15, CLIMB_SPEED = -1;
 
     public ElevatorSubsystem() {
 	super();

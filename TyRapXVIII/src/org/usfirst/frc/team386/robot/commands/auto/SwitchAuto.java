@@ -181,8 +181,7 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnRight(45));
 	    // addSequential(new GearShift());
 	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));// TESTBOT CHANGE,
-	    // UNCOMMENT THIS LINE FOR REAL BOT
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
 	    addSequential(new DriveSeconds(1));
@@ -193,7 +192,6 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 
-	    // Testbot
 	    addParallel(new SetElevator(0));
 	    addSequential(new TurnRight(75));
 	    addParallel(new CubeSuck(3));
@@ -233,8 +231,7 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(45));
 	    // addSequential(new GearShift());
 	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));// TESTBOT CHANGE,
-	    // UNCOMMENT THIS LINE FOR REAL BOT
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
 	    addSequential(new DriveSeconds(1));
@@ -245,7 +242,6 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 
-	    // Testbot
 	    addParallel(new SetElevator(0));
 	    addSequential(new TurnLeft(75));
 	    addParallel(new CubeSuck(3));

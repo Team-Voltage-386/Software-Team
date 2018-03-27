@@ -173,7 +173,6 @@ public class ScaleAuto extends InstantCommand {
     class RightScaleAutoRightWithSwitch extends CommandGroup {
 
 	RightScaleAutoRightWithSwitch() {
-	    // Testbot changes
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
 	    addSequential(new DriveForward(400));
 	    addParallel(new CubeSuck(5));
@@ -207,7 +206,6 @@ public class ScaleAuto extends InstantCommand {
     class RightScaleAutoRight extends CommandGroup {
 
 	RightScaleAutoRight() {
-	    // Testbot changes
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
 	    addSequential(new DriveForward(400));
 	    addParallel(new CubeSuck(5));

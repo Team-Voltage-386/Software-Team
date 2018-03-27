@@ -21,7 +21,7 @@ public class DriveForward extends Command {
      */
     double ticksRequired;
     double distance;
-    double scaleFactor = .73; // TESTBOT, WILL BE 1 FOR REAL ROBOT
+    double scaleFactor = 1;
     double fastGearMultiplier = .75;
 
     public DriveForward(int distance) {
@@ -69,9 +69,7 @@ public class DriveForward extends Command {
     @Override
     protected void end() {
 	Robot.driveSubsystem.resetGyro();
-	// TESTBOT CHANGES
-	// Robot.driveSubsystem.resetEncoders();
-	// ^^ UNCOMMENT THAT LINE
+	Robot.driveSubsystem.resetEncoders();
     }
 
 }

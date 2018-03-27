@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -73,9 +72,7 @@ public class DriveSubsystem extends Subsystem {
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
     public boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
-    // TESTBOT CHANGE!!!
-    Encoder leftEncoder = new Encoder(3, 9);
-    // END OF TESTBOT CHANGE!!
+    // Encoder leftEncoder = new Encoder(3, 9);
     // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
     // RobotMap.rightDriveEncoderChannelB);
 
@@ -144,7 +141,6 @@ public class DriveSubsystem extends Subsystem {
 	// frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber("Left Encoder", leftEncoder.get());// TESTBOT CHANGE!!!
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
@@ -226,9 +222,6 @@ public class DriveSubsystem extends Subsystem {
      * Zero all drive encoders.
      */
     public void resetEncoders() {
-	// TESTBOT CHANGES
-	leftEncoder.reset();
-	// END OF TESTBOT CHANGES
 	// rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
 	frontRight.setSelectedSensorPosition(0, 0, 10);
@@ -585,10 +578,7 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public double getLeftEncoder() {
-	// TESTBOT CHANGES
-	// return frontLeft.getSelectedSensorPosition(0);
-	return leftEncoder.get();
-	// END OF TESTBOT
+	return frontLeft.getSelectedSensorPosition(0);
     }
 
     public double getRightEncoder() {
