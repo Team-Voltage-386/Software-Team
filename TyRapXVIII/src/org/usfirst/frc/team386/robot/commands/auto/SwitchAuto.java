@@ -96,7 +96,7 @@ public class SwitchAuto extends InstantCommand {
 	LeftSwitchAutoLeft() {
 	    addSequential(new GearShift());
 	    addSequential(new DriveForward(110));
-	    addSequential(new GearShift(Robot.driveSubsystem.SLOW_GEAR));
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
 	    addSequential(new TurnRight(90));
 	    addSequential(new GearShift());
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
@@ -190,7 +190,7 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new CenterSwitchAutoRightDrive());
-	    addSequential(new CubeRelease(1.5));
+	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 
 	    // Testbot
@@ -204,6 +204,7 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(75));
 	    addSequential(new DriveSeconds(1));
 	    addSequential(new CubeRelease(1));
+	    addSequential(new DriveForward(12, -.75));
 	}
     }
 
@@ -241,7 +242,7 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new CenterSwitchAutoRightDrive());
-	    addSequential(new CubeRelease(1.5));
+	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 
 	    // Testbot
@@ -255,7 +256,7 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnRight(75));
 	    addSequential(new DriveSeconds(1));
 	    addSequential(new CubeRelease(1));
-
+	    addSequential(new DriveForward(12, -.75));
 	}
     }
 

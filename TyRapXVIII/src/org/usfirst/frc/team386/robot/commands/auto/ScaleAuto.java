@@ -63,7 +63,10 @@ public class ScaleAuto extends InstantCommand {
     private Command select(String position) {
 	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isScaleLeft()) {
-		return new LeftScaleAutoLeft();
+		if (Robot.gameData.isSwitchLeft())
+		    return new LeftScaleAutoLeftWithSwitch();
+		else
+		    return new LeftScaleAutoLeft();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
 		    return new LeftScaleAutoRight();
@@ -75,7 +78,10 @@ public class ScaleAuto extends InstantCommand {
 	    }
 	} else if (position.equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isScaleRight()) {
-		return new RightScaleAutoRight();
+		if (Robot.gameData.isSwitchRight())
+		    return new RightScaleAutoRightWithSwitch();
+		else
+		    return new RightScaleAutoRight();
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
 		    return new RightScaleAutoLeft();
@@ -98,6 +104,29 @@ public class ScaleAuto extends InstantCommand {
     /**
      * Auto mode for left scale starting on the left side.
      */
+    class LeftScaleAutoLeftWithSwitch extends CommandGroup {
+
+	LeftScaleAutoLeftWithSwitch() {
+
+	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
+	    addSequential(new DriveForward(400));
+	    addParallel(new CubeSuck(5));
+	    addSequential(new GearShift());
+	    addSequential(new TurnRight(45));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
+	    addSequential(new TurnRightWithoutPid(90));
+	    addParallel(new CubeSuck(2));
+	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
+	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
+	}
+    }
+
     class LeftScaleAutoLeft extends CommandGroup {
 
 	LeftScaleAutoLeft() {
@@ -108,16 +137,12 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new GearShift());
 	    addSequential(new TurnRight(45));
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
-	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
-	    // addSequential(new SetElevator(0));
+	    addSequential(new SetElevator(0));
 	    addSequential(new TurnRightWithoutPid(90));
 	    addParallel(new CubeSuck(2));
 	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
-	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveSeconds(1));
-	    addSequential(new CubeRelease(1));
 	}
     }
 
@@ -145,6 +170,40 @@ public class ScaleAuto extends InstantCommand {
     /**
      * Auto mode for right scale starting on the right side.
      */
+    class RightScaleAutoRightWithSwitch extends CommandGroup {
+
+	RightScaleAutoRightWithSwitch() {
+	    // Testbot changes
+	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
+	    addSequential(new DriveForward(400));
+	    addParallel(new CubeSuck(5));
+	    addSequential(new GearShift());
+	    addSequential(new TurnLeft(45));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
+	    addSequential(new TurnLeftWithoutPid(90));
+	    addParallel(new CubeSuck(2));
+	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
+	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
+
+	    // addSequential(new DriveForward(282));
+	    // addParallel(new CubeSuck(5));
+	    // addSequential(new TurnLeft(90));
+	    // addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
+	    // mm
+	    // addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new SetElevator(0));
+	}
+    }
+
     class RightScaleAutoRight extends CommandGroup {
 
 	RightScaleAutoRight() {
@@ -156,15 +215,15 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnLeft(45));
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
 	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
-	    // addSequential(new SetElevator(0));
+	    addSequential(new SetElevator(0));
 	    addSequential(new TurnLeftWithoutPid(90));
 	    addParallel(new CubeSuck(2));
 	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
-	    addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveSeconds(1));
-	    addSequential(new CubeRelease(1));
+	    // addSequential(new SetElevator(SwitchAuto.ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new DriveSeconds(1));
+	    // addSequential(new CubeRelease(1));
 
 	    // addSequential(new DriveForward(282));
 	    // addParallel(new CubeSuck(5));
