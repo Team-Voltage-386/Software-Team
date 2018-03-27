@@ -18,7 +18,7 @@ public class CubeSubsystem extends Subsystem {
     public static final String POV_NUMBER_LABEL = "POV value";
     public static final String CUBE_CONTROL_LABEL = "Cube Control";
     final static double halfSpeedEject = -.3;
-    public final double DEFAULT_SPEED = 0;// 0
+    public final double DEFAULT_SPEED = .4;
 
     WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftCubeIntakeMotor);
     WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightCubeIntakeMotor);
@@ -34,12 +34,12 @@ public class CubeSubsystem extends Subsystem {
 
 	left.configPeakCurrentLimit(kPeakCurrentAmps, 10);
 	left.configPeakCurrentDuration(kPeakTimeMs, 10); // this is a necessary call to avoid errata.
-							 // left.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	left.configContinuousCurrentLimit(kContinCurrentAmps, 10);
 	left.enableCurrentLimit(true); // honor initial setting
 
 	right.configPeakCurrentLimit(kPeakCurrentAmps, 10);
 	right.configPeakCurrentDuration(kPeakTimeMs, 10); // this is a necessary callto avoid errata.
-							  // right.configContinuousCurrentLimit(kContinCurrentAmps, 10);
+	right.configContinuousCurrentLimit(kContinCurrentAmps, 10);
 	right.enableCurrentLimit(true); // honor initial setting
 	left.configClosedloopRamp(.1, 100);
 	right.configClosedloopRamp(.1, 100);

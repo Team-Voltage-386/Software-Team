@@ -160,9 +160,9 @@ public class Robot extends IterativeRobot {
 	 * SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
 	 */
 	SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 1));
-	SmartDashboard.putNumber("P", -.005);
-	SmartDashboard.putNumber("D", -.05);
-	SmartDashboard.putNumber("I", -.0);
+	// SmartDashboard.putNumber("P", -.005);
+	// SmartDashboard.putNumber("D", -.05);
+	// SmartDashboard.putNumber("I", -.0);
 	SmartDashboard.putString("Override", "Don't override");
     }
 
@@ -217,7 +217,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
 	// updateDiagnostics();
-	// SmartDashboard.putNumber()
 	Scheduler.getInstance().run();
     }
 
