@@ -139,7 +139,7 @@ public class Robot extends IterativeRobot {
 	 * 
 	 * // Command buttons for one-time execution
 	 */
-	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(200));
+	SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60));
 	/*
 	 * 0.6)); SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	 * SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
