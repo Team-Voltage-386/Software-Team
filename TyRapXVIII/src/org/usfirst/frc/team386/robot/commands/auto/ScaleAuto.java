@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ScaleAuto extends InstantCommand {
 
     public static final int ELEVATOR_SCALE_HEIGHT = -1800; // possibly -540
-    public static final int ELEVATOR_SWITCH_HEIGHT = -600;
+    public static final int ELEVATOR_SWITCH_HEIGHT = -800;
     /**
      * The amount of time to run the motors when releasing the cube.
      */
@@ -63,10 +63,14 @@ public class ScaleAuto extends InstantCommand {
     private Command select(String position) {
 	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isScaleLeft()) {
-		if (Robot.gameData.isSwitchLeft())
-		    return new LeftScaleAutoLeftWithSwitch();
-		else
-		    return new LeftScaleAutoLeft();
+		if (!Robot.oldVersion.getSelected()) {
+		    if (Robot.gameData.isSwitchLeft())
+			return new LeftScaleAutoLeftWithSwitch();
+		    else
+			return new LeftScaleAutoLeft();
+		} else {
+		    return new LeftScaleLeftDeleteLater();
+		}
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
 		    return new LeftScaleAutoRight();
@@ -78,10 +82,14 @@ public class ScaleAuto extends InstantCommand {
 	    }
 	} else if (position.equals(Robot.RIGHT)) {
 	    if (Robot.gameData.isScaleRight()) {
-		if (Robot.gameData.isSwitchRight())
-		    return new RightScaleAutoRightWithSwitch();
-		else
-		    return new RightScaleAutoRight();
+		if (!Robot.oldVersion.getSelected()) {
+		    if (Robot.gameData.isSwitchRight())
+			return new RightScaleAutoRightWithSwitch();
+		    else
+			return new RightScaleAutoRight();
+		} else {
+		    return new RightScaleRightDeleteLater();
+		}
 	    } else {
 		if (Robot.chooserCrossSide.getSelected()) {
 		    return new RightScaleAutoLeft();
@@ -109,7 +117,7 @@ public class ScaleAuto extends InstantCommand {
 	LeftScaleAutoLeftWithSwitch() {
 
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
-	    addSequential(new DriveForward(400));
+	    addSequential(new DriveForward(325));
 	    addParallel(new CubeSuck(5));
 	    addSequential(new GearShift());
 	    addSequential(new TurnRight(45));
@@ -132,7 +140,7 @@ public class ScaleAuto extends InstantCommand {
 	LeftScaleAutoLeft() {
 
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
-	    addSequential(new DriveForward(400));
+	    addSequential(new DriveForward(325));
 	    addParallel(new CubeSuck(5));
 	    addSequential(new GearShift());
 	    addSequential(new TurnRight(45));
@@ -143,6 +151,22 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new TurnRightWithoutPid(90));
 	    addParallel(new CubeSuck(2));
 	    addSequential(new DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 2));// leftMost
+	}
+    }
+
+    class LeftScaleLeftDeleteLater extends CommandGroup {
+	LeftScaleLeftDeleteLater() {
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
+	    addSequential(new DriveForward(282));
+	    addParallel(new CubeSuck(5));
+	    addSequential(new TurnRight(90));
+	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
+
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
 	}
     }
 
@@ -162,6 +186,10 @@ public class ScaleAuto extends InstantCommand {
 	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
 	    // mm
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
 	    // addSequential(new SetElevator(-1800));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
@@ -174,7 +202,7 @@ public class ScaleAuto extends InstantCommand {
 
 	RightScaleAutoRightWithSwitch() {
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
-	    addSequential(new DriveForward(400));
+	    addSequential(new DriveForward(270));
 	    addParallel(new CubeSuck(5));
 	    addSequential(new GearShift());
 	    addSequential(new TurnLeft(45));
@@ -195,6 +223,7 @@ public class ScaleAuto extends InstantCommand {
 	    // addSequential(new TurnLeft(90));
 	    // addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
 	    // mm
+
 	    // addParallel(new SetArms(ArmsSubsystem.LOWERED));
 	    // addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
@@ -207,7 +236,7 @@ public class ScaleAuto extends InstantCommand {
 
 	RightScaleAutoRight() {
 	    addSequential(new GearShift(DriveSubsystem.FAST_GEAR));
-	    addSequential(new DriveForward(400));
+	    addSequential(new DriveForward(325));
 	    addParallel(new CubeSuck(5));
 	    addSequential(new GearShift());
 	    addSequential(new TurnLeft(45));
@@ -236,6 +265,22 @@ public class ScaleAuto extends InstantCommand {
 	}
     }
 
+    class RightScaleRightDeleteLater extends CommandGroup {
+	RightScaleRightDeleteLater() {
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
+	    addSequential(new DriveForward(282));
+	    addParallel(new CubeSuck(5));
+	    addSequential(new TurnLeft(90));
+	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in
+
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
+	}
+    }
+
     /**
      * Auto mode for left scale starting on the right side.
      */
@@ -253,9 +298,10 @@ public class ScaleAuto extends InstantCommand {
 	    addSequential(new DriveForward(50));
 	    addSequential(new TurnRight(90));
 	    addSequential(new DriveDistanceFromWall(DISTANCE_FROM_WALL)); // measured in mm
-	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    // addSequential(new SetElevator(-1800));
-	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new SetElevator(ELEVATOR_SCALE_HEIGHT));
+	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new SetElevator(0));
 	}
     }
 

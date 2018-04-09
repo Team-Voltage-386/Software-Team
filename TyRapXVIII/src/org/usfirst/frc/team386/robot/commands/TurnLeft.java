@@ -4,7 +4,6 @@ import org.usfirst.frc.team386.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turn left some angle. The angle is specified in the constructor.
@@ -29,7 +28,7 @@ public class TurnLeft extends Command {
 
     @Override
     protected void execute() {
-	SmartDashboard.putNumber("Time elapsed", timer.get() - previousTime);
+	// SmartDashboard.putNumber("Time elapsed", timer.get() - previousTime);
 	previousTime = timer.get();
 	Robot.driveSubsystem.turnWithPid();
     }

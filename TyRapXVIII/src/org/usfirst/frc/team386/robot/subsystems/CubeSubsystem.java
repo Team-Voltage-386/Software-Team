@@ -8,7 +8,6 @@ import org.usfirst.frc.team386.robot.commands.teleop.CubeWithTrigger;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The CubeSubsystem is responsible cube intake and cube release.
@@ -51,8 +50,8 @@ public class CubeSubsystem extends Subsystem {
     public void updateDiagnostics() {
 	// place smart dashboard output here to refresh regularly in either auto or
 	// teleop modes.
-	SmartDashboard.putNumber("Right motor value", right.get());
-	SmartDashboard.putNumber("Left motor value", left.get());
+	// SmartDashboard.putNumber("Right motor value", right.get());
+	// SmartDashboard.putNumber("Left motor value", left.get());
     }
 
     public void initDefaultCommand() {
@@ -62,8 +61,8 @@ public class CubeSubsystem extends Subsystem {
     }
 
     public void stop() {
-	left.set(0);
-	right.set(0);
+	left.set(DEFAULT_SPEED);
+	right.set(-1 * DEFAULT_SPEED);
     }
 
     public void run(double leftSpeed, double rightSpeed) {
@@ -116,6 +115,6 @@ public class CubeSubsystem extends Subsystem {
     }
 
     public boolean hasCube() {
-	return ultraCenter.getInches() < 2 && ultraEdge.getInches() < 2;
+	return ultraCenter.getInches() < 4 && ultraEdge.getInches() < 4;
     }
 }

@@ -4,7 +4,6 @@ import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * A command to drive forward a certain distance in inches.
@@ -32,7 +31,7 @@ public class DriveForward extends Command {
 	this.distance = distance * scaleFactor;
     }
 
-    public DriveForward(int distance, double speed) {
+    public DriveForward(double distance, double speed) {
 	super();
 	requires(Robot.driveSubsystem);
 	this.speed = speed;
@@ -50,7 +49,7 @@ public class DriveForward extends Command {
 	else {
 	    ticksRequired = 6.36 * distance * 4;
 	}
-	SmartDashboard.putNumber("ticks required", ticksRequired);
+	// SmartDashboard.putNumber("ticks required", ticksRequired);
     }
 
     @Override

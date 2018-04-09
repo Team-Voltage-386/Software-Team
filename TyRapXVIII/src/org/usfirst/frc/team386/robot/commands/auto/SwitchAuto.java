@@ -3,6 +3,7 @@ package org.usfirst.frc.team386.robot.commands.auto;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
 import org.usfirst.frc.team386.robot.commands.CubeSuck;
+import org.usfirst.frc.team386.robot.commands.CubeSuckUltra;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetArms;
@@ -177,27 +178,31 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(45));
 	    // addSequential(new GearShift());
 	    addSequential(new DriveForward(60));
+	    // addSequential(new CubeSuck(5));
 	    // addSequential(new GearShift());
 	    addSequential(new TurnRight(45));
 	    // addSequential(new GearShift());
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+
+	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
-	    addSequential(new DriveSeconds(1));
+	    addSequential(new DriveSeconds(1.5));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new CenterSwitchAutoRightDrive());
+	    addParallel(new CubeSuck(5));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new CubeSuck(.5));
 	    addSequential(new CubeRelease(1));
-	    addSequential(new DriveForward(12, -.75));
+	    addSequential(new DriveForward(17.6, -.75));// 12
 
 	    addParallel(new SetElevator(0));
 	    addSequential(new TurnRight(75));
-	    addParallel(new CubeSuck(3));
-	    addSequential(new DriveForward(15, .75));
-	    addSequential(new CubeSuck(.5));
-	    addSequential(new DriveForward(15, -.75));
+	    addParallel(new CubeSuck(9));
+	    addSequential(new DriveForward(25, .75));
+	    addSequential(new CubeSuckUltra(3));
+	    addSequential(new DriveForward(20, -.75));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    addSequential(new TurnLeft(75));
 	    addSequential(new DriveSeconds(1));
@@ -228,26 +233,31 @@ public class SwitchAuto extends InstantCommand {
 	    // addSequential(new GearShift());
 	    addSequential(new DriveForward(60));
 	    // addSequential(new GearShift());
+	    // addSequential(new CubeSuck(5));
 	    addSequential(new TurnLeft(45));
 	    // addSequential(new GearShift());
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+
+	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
-	    addSequential(new DriveSeconds(1));
+	    addSequential(new DriveSeconds(1.5));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new CenterSwitchAutoRightDrive());
+	    addParallel(new CubeSuck(5));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new CubeSuck(.5));
 	    addSequential(new CubeRelease(1));
-	    addSequential(new DriveForward(12, -.75));
+	    addSequential(new DriveForward(20, -.75));// 12, 20
 
 	    addParallel(new SetElevator(0));
 	    addSequential(new TurnLeft(75));
+	    addParallel(new CubeSuck(9));
+	    addSequential(new DriveForward(25, .75));
+	    addSequential(new CubeSuckUltra(3));
 	    addParallel(new CubeSuck(3));
-	    addSequential(new DriveForward(15, .75));
-	    addSequential(new CubeSuck(.5));
-	    addSequential(new DriveForward(15, -.75));
+	    addSequential(new DriveForward(25, -.75));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    addSequential(new TurnRight(75));
 	    addSequential(new DriveSeconds(1));

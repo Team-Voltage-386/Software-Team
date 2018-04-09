@@ -36,7 +36,7 @@ public class CubeVisionThread extends Thread {
     public List<MatOfPoint> finalContours = new ArrayList<>();
     public CvSource HSVOutputStream, rectOutputStream;
     int rectChoice;
-    public SelectorType selectionMethod = SelectorType.leftmost;
+    public SelectorType selectionMethod = SelectorType.bottom;
 
     int smallestI = -1;
 
@@ -83,14 +83,14 @@ public class CubeVisionThread extends Thread {
 	Mat edges = new Mat();
 
 	Size blurSize = new Size(9, 9);
-	Scalar colorStart = new Scalar(10, 100, 25);
-	Scalar colorEnd = new Scalar(50, 255, 255);
+	Scalar colorStart = new Scalar(20, 108, 139);
+	Scalar colorEnd = new Scalar(35, 255, 255);
 	Size erodeSize = new Size(10, 10);
 	Size dilateSize = new Size(10, 10);
 	Size edgeDilateSize = new Size(4, 4);
 	boolean previousState = true;
 	while (!Thread.interrupted()) {
-	    boolean state = SmartDashboard.getBoolean("Enable processing", false);
+	    boolean state = SmartDashboard.getBoolean("Enable processing", true);
 	    if (state) {
 		if (!previousState) {
 		    camera.setFPS(FPS);
@@ -166,9 +166,9 @@ public class CubeVisionThread extends Thread {
 			if (y > closest) {
 			    closest = y;
 			    smallestI = i;
-			    SmartDashboard.putNumber("Closest", closest);
+			    // SmartDashboard.putNumber("Closest", closest);
 			}
-			SmartDashboard.putNumber("SmallestI", smallestI);
+			// SmartDashboard.putNumber("SmallestI", smallestI);
 		    }
 		    break;
 		}
@@ -204,7 +204,7 @@ public class CubeVisionThread extends Thread {
 		}
 		try {
 
-		    SmartDashboard.putNumber("rect choice", rects.get(smallestI).center.y);
+		    // SmartDashboard.putNumber("rect choice", rects.get(smallestI).center.y);
 		} catch (Exception e) {
 
 		}
@@ -214,8 +214,9 @@ public class CubeVisionThread extends Thread {
 		    Point[] vertices = new Point[4];
 		    rects.get(i).points(vertices);
 		    MatOfPoint points = new MatOfPoint(vertices);
-		    Imgproc.putText(base, String.valueOf(Math.round((rects.get(i).center.y))), rects.get(i).center, 1,
-			    1.0, new Scalar(0, 255, 0), 2);
+		    // Imgproc.putText(base, String.valueOf(Math.round((rects.get(i).center.y))),
+		    // rects.get(i).center, 1,
+		    // 1.0, new Scalar(0, 255, 0), 2);
 		    if (i != smallestI)
 			Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 5);
 		    else

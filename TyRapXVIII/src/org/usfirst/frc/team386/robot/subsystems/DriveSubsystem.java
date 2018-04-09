@@ -35,7 +35,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final int MOTOR_CURRENT_LIMIT_AMPS = 15;
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
-    public static final double DEAD_BAND_LIMIT = 0.1;
+    public static final double DEAD_BAND_LIMIT = 0.0001;
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
@@ -123,7 +123,7 @@ public class DriveSubsystem extends Subsystem {
 	rearUltrasonic.setAutomaticMode(true);
 	// frontUltrasonic.setAutomaticMode(true);
 
-	gearShifter.set(FAST_GEAR);
+	gearShifter.set(SLOW_GEAR);
 	timer.start();
     }
 
@@ -157,13 +157,14 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	drive.arcadeDrive(squareKeepSign(adjustSpeed(xSpeed)), squareKeepSign(deadBand(zRotation, DEAD_BAND_LIMIT)));
+	drive.arcadeDrive(adjustSpeed(xSpeed), deadBand(zRotation, DEAD_BAND_LIMIT));
     }
 
     /**
      * Drive using tank-style values: left speed, right speed.
      * 
      * @param ySpeed
+     * 
      *            The left motor speed
      * @param y2Speed
      *            The right motor speed
@@ -272,10 +273,10 @@ public class DriveSubsystem extends Subsystem {
 	updateDiagnostics();
 	// previousTime = time;
 	previousError = error;
-	SmartDashboard.putNumber("Error", error);
-	SmartDashboard.putNumber("proportional", KPCubeVision);
-	SmartDashboard.putNumber("derivative", KDCubeVision);
-	SmartDashboard.putNumber("integral", KICubeVision * integral);
+	// SmartDashboard.putNumber("Error", error);
+	// SmartDashboard.putNumber("proportional", KPCubeVision);
+	// SmartDashboard.putNumber("derivative", KDCubeVision);
+	// SmartDashboard.putNumber("integral", KICubeVision * integral);
     }
 
     /**
@@ -286,10 +287,10 @@ public class DriveSubsystem extends Subsystem {
 	integral = 0;
 	previousError = 0;
 	derivative = 0;
-	KPCubeVision = -.005;// SmartDashboard.getNumber("P", -.01);
-	KDCubeVision = -.05;// SmartDashboard.getNumber("D", -.01);
-	KICubeVision = 0;// SmartDashboard.getNumber("I", -.0);
-	SmartDashboard.putString("Reset", "True");
+	KPCubeVision = .0035;// SmartDashboard.getNumber("P", -.01);// -.005;
+	KDCubeVision = .035;// SmartDashboard.getNumber("D", -.01);// -.05;
+	KICubeVision = 0;// SmartDashboard.getNumber("I", -.0);// 0;
+	// SmartDashboard.putString("Reset", "True");
     }
 
     /**
@@ -399,10 +400,10 @@ public class DriveSubsystem extends Subsystem {
 	else if (value < -.75)
 	    value = -.75;
 	turn(value);
-	SmartDashboard.putNumber("Value", value);
-	SmartDashboard.putNumber("proportional", KP * error);
-	SmartDashboard.putNumber("derivative", KD * derivative);
-	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	// SmartDashboard.putNumber("Value", value);
+	// SmartDashboard.putNumber("proportional", KP * error);
+	// SmartDashboard.putNumber("derivative", KD * derivative);
+	// SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	// SmartDashboard.putNumber("front left motor speed", frontLeft.get());
 	// SmartDashboard.putNumber("front right motor speed", frontRight.get());
     }
@@ -412,9 +413,9 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.1;
-	KD = -.05;
-	tolerance = 5;
+	KP = -.1;// SmartDashboard.getNumber("P", -.1);// -.1;
+	KD = -.0225;// -.05;
+	tolerance = 4;
 	speedThreshold = 20;
 	gyro.reset();
 	this.direction = direction;
@@ -475,7 +476,7 @@ public class DriveSubsystem extends Subsystem {
 	    double error = (gyro.getAngle() - (direction * angle));
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
-	    SmartDashboard.putNumber("Value", value);
+	    // SmartDashboard.putNumber("Value", value);
 	    // if (Math.abs(value) > .35 || derivative > speedThreshold) {
 	    frontLeft.set(value);
 	    frontRight.set(value);
@@ -488,11 +489,11 @@ public class DriveSubsystem extends Subsystem {
 	    // frontRight.set(-.35);
 	    // }
 	    // }
-	    SmartDashboard.putNumber("proportional", KP * error);
-	    SmartDashboard.putNumber("derivative", KD * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	    // SmartDashboard.putNumber("proportional", KP * error);
+	    // SmartDashboard.putNumber("derivative", KD * derivative);
+	    // SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	}
-	SmartDashboard.putString("Using pid", "true");
+	// SmartDashboard.putString("Using pid", "true");
 	stop();
     }
 
@@ -556,10 +557,10 @@ public class DriveSubsystem extends Subsystem {
      * @return The adjusted speed
      */
     private double adjustSpeed(double speed) {
-	if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
-	    return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
-	else
-	    return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	// if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
+	// return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	// else
+	return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
     }
 
     /**
