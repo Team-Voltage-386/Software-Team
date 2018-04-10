@@ -2,7 +2,7 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
-import org.usfirst.frc.team386.robot.commands.auto.SwitchAuto;
+
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**

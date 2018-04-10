@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class CubeSuck extends Command {
+public class CubeSuckUltra extends Command {
     public static final double MOTOR_SPEED = 1;
 
     Timer timer = new Timer();
     double time;
 
-    public CubeSuck(double timeIn) {
+    public CubeSuckUltra(double timeIn) {
 	// Use requires() here to declare subsystem dependencies
 	this.time = timeIn;
 
@@ -33,7 +33,7 @@ public class CubeSuck extends Command {
     @Override
     protected boolean isFinished() {
 	// TODO Auto-generated method stub
-	return timer.get() > time;
+	return timer.get() > time || Robot.cubeSubsystem.hasCube();
     }
 
     @Override

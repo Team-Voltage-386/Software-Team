@@ -2,15 +2,18 @@ package org.usfirst.frc.team386.robot.commands.auto;
 
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
+import org.usfirst.frc.team386.robot.commands.CubeSuck;
+import org.usfirst.frc.team386.robot.commands.CubeSuckUltra;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
+import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetArms;
 import org.usfirst.frc.team386.robot.commands.SetElevator;
 import org.usfirst.frc.team386.robot.commands.TurnLeft;
 import org.usfirst.frc.team386.robot.commands.TurnRight;
 import org.usfirst.frc.team386.robot.commands.teleop.DriveSeconds;
 import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
+import org.usfirst.frc.team386.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -24,7 +27,7 @@ public class SwitchAuto extends InstantCommand {
     /**
      * The elevator encoder tick height for switch firing.
      */
-    public static final int ELEVATOR_SWITCH_HEIGHT = -600; // possibly -540
+    public static final int ELEVATOR_SWITCH_HEIGHT = -600; // possibly -540 NEGATIVE
     public static ScaleAuto scaleAutos = new ScaleAuto();
 
     /**
@@ -92,12 +95,14 @@ public class SwitchAuto extends InstantCommand {
     class LeftSwitchAutoLeft extends CommandGroup {
 
 	LeftSwitchAutoLeft() {
-
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(110));
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
 	    addSequential(new TurnRight(90));
+	    addSequential(new GearShift());
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveSeconds(1));
+	    addSequential(new DriveSeconds(.5));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -110,12 +115,14 @@ public class SwitchAuto extends InstantCommand {
 	LeftSwitchAutoRight() {
 
 	    addSequential(new DriveForward(208, 1));
+	    addSequential(new GearShift());
 	    addSequential(new TurnRight(90));
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(216, 1));
 	    // addSequential(new TurnRight(90));
 	    // addSequential(new SetArms(ArmsSubsystem.LOWERED));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    // addSequential(ne8w DriveForward(42));
+	    // addSequential(new DriveForward(42));
 	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -126,12 +133,14 @@ public class SwitchAuto extends InstantCommand {
     class RightSwitchAutoRight extends CommandGroup {
 
 	RightSwitchAutoRight() {
-
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(110));
+	    addSequential(new GearShift(Robot.driveSubsystem.SLOW_GEAR));
 	    addSequential(new TurnLeft(90));
+	    addSequential(new GearShift());
 	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new DriveSeconds(1));
+	    addSequential(new DriveSeconds(.5));
 	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
 	}
     }
@@ -144,7 +153,9 @@ public class SwitchAuto extends InstantCommand {
 	RightSwitchAutoLeft() {
 
 	    addSequential(new DriveForward(208, 1));
+	    addSequential(new GearShift());
 	    addSequential(new TurnLeft(90));
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(216, 1));
 	    // addSequential(new TurnLeft(90));
 	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
@@ -161,8 +172,41 @@ public class SwitchAuto extends InstantCommand {
 
 	CenterSwitchAutoLeft() {
 
-	    addSequential(new CenterSwitchAutoLeftDrive());
-	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
+	    addSequential(new DriveForward(12));
+
+	    addSequential(new TurnLeft(45));
+	    // addSequential(new GearShift());
+	    addSequential(new DriveForward(60));
+	    // addSequential(new CubeSuck(5));
+	    // addSequential(new GearShift());
+	    addSequential(new TurnRight(45));
+	    // addSequential(new GearShift());
+
+	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new DriveForward(1));
+	    // addSequential(new DriveForward(25));
+	    addSequential(new DriveSeconds(1.5));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
+	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new CenterSwitchAutoRightDrive());
+	    addParallel(new CubeSuck(5));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new CubeSuck(.5));
+	    addSequential(new CubeRelease(1));
+	    addSequential(new DriveForward(17.6, -.75));// 12
+
+	    addParallel(new SetElevator(0));
+	    addSequential(new TurnRight(75));
+	    addParallel(new CubeSuck(9));
+	    addSequential(new DriveForward(25, .75));
+	    addSequential(new CubeSuckUltra(3));
+	    addSequential(new DriveForward(20, -.75));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new TurnLeft(75));
+	    addSequential(new DriveSeconds(1));
+	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 	}
     }
@@ -172,15 +216,7 @@ public class SwitchAuto extends InstantCommand {
      */
     class CenterSwitchAutoLeftDrive extends CommandGroup {
 	CenterSwitchAutoLeftDrive() {
-	    addSequential(new DriveForward(12));// 12
-	    addSequential(new TurnLeft(45));
-	    addSequential(new DriveForward(60)); // 60
-	    addSequential(new TurnRight(45));
-	    addParallel(new SetArms(ArmsSubsystem.LOWERED));
-	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    // addSequential(new DriveForward(1));
-	    // addSequential(new DriveForward(25)); // 9
-	    addSequential(new DriveSeconds(1));
+
 	}
     }
 
@@ -190,19 +226,41 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRight extends CommandGroup {
 
 	CenterSwitchAutoRight() {
+	    addSequential(new GearShift(DriveSubsystem.SLOW_GEAR));
 	    addSequential(new DriveForward(12));
+
 	    addSequential(new TurnRight(45));
+	    // addSequential(new GearShift());
 	    addSequential(new DriveForward(60));
+	    // addSequential(new GearShift());
+	    // addSequential(new CubeSuck(5));
 	    addSequential(new TurnLeft(45));
-	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    // addSequential(new GearShift());
+
 	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    // addSequential(new DriveForward(1));
 	    // addSequential(new DriveForward(25));
+	    addSequential(new DriveSeconds(1.5));
+	    // addSequential(new CubeRelease(CUBE_RELEASE_TIME));
+	    // addSequential(new SetArms(DoubleSolenoid.Value.kForward));
+	    // addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    // addSequential(new CenterSwitchAutoRightDrive());
+	    addParallel(new CubeSuck(5));
+	    addSequential(new SetArms(ArmsSubsystem.LOWERED));
+	    addSequential(new CubeSuck(.5));
+	    addSequential(new CubeRelease(1));
+	    addSequential(new DriveForward(20, -.75));// 12, 20
+
+	    addParallel(new SetElevator(0));
+	    addSequential(new TurnLeft(75));
+	    addParallel(new CubeSuck(9));
+	    addSequential(new DriveForward(25, .75));
+	    addSequential(new CubeSuckUltra(3));
+	    addParallel(new CubeSuck(3));
+	    addSequential(new DriveForward(25, -.75));
+	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
+	    addSequential(new TurnRight(75));
 	    addSequential(new DriveSeconds(1));
-	    addSequential(new CubeRelease(CUBE_RELEASE_TIME));
-	    addSequential(new SetArms(DoubleSolenoid.Value.kForward));
-	    addSequential(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
-	    addSequential(new CenterSwitchAutoRightDrive());
 	    addSequential(new CubeRelease(1));
 	    addSequential(new DriveForward(12, -.75));
 	}
@@ -214,9 +272,13 @@ public class SwitchAuto extends InstantCommand {
     class CenterSwitchAutoRightDrive extends CommandGroup {
 	CenterSwitchAutoRightDrive() {
 	    addSequential(new DriveForward(9));
+	    addSequential(new GearShift());
 	    addSequential(new TurnRight(45));
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(50));
+	    addSequential(new GearShift());
 	    addSequential(new TurnLeft(45));
+	    addSequential(new GearShift());
 	    addSequential(new DriveForward(6));
 	}
     }

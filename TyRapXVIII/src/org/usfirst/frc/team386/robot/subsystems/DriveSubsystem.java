@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -36,7 +35,7 @@ public class DriveSubsystem extends Subsystem {
 
     public static final int MOTOR_CURRENT_LIMIT_AMPS = 15;
     public static final double OPEN_LOOP_RAMP_SECONDS = 0.1;
-    public static final double DEAD_BAND_LIMIT = 0.1;
+    public static final double DEAD_BAND_LIMIT = 0.0001;
 
     public static final double DEFAULT_SPEED_MULTIPLIER = 0.75;
     public static final double BOOST_SPEED_MULTIPLIER = 1.0;
@@ -72,10 +71,8 @@ public class DriveSubsystem extends Subsystem {
     DoubleSolenoid gearShifter = new DoubleSolenoid(RobotMap.gearShiftSolenoidForwardChannel,
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
-    public final boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
-    // TESTBOT CHANGE!!!
-    Encoder leftEncoder = new Encoder(3, 9);
-    // END OF TESTBOT CHANGE!!
+    public boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
+    // Encoder leftEncoder = new Encoder(3, 9);
     // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
     // RobotMap.rightDriveEncoderChannelB);
 
@@ -139,11 +136,11 @@ public class DriveSubsystem extends Subsystem {
 	// teleop modes.
 	// SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
+	SmartDashboard.putBoolean("Shifter", DoubleSolenoid.Value.kForward == gearShifter.get());
 	// SmartDashboard.putNumber(Robot.FRONT_ULTRASONIC,
 	// frontUltrasonic.getRangeMM());
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_1, frontLeft.getSelectedSensorPosition(0));
 	SmartDashboard.putNumber(Robot.ENCODER_TALON_3, frontRight.getSelectedSensorPosition(0));
-	SmartDashboard.putNumber("Left Encoder", leftEncoder.get());// TESTBOT CHANGE!!!
 	// SmartDashboard.putNumber(Robot.RIGHT_ENCODER_RIO, rightEncoder.get());
 	SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	SmartDashboard.putString("Gear shifter state", gearShifter.get().toString());
@@ -160,13 +157,14 @@ public class DriveSubsystem extends Subsystem {
      *            The rotation
      */
     public void driveArcade(double xSpeed, double zRotation) {
-	drive.arcadeDrive(squareKeepSign(adjustSpeed(xSpeed)), squareKeepSign(deadBand(zRotation, DEAD_BAND_LIMIT)));
+	drive.arcadeDrive(adjustSpeed(xSpeed), deadBand(zRotation, DEAD_BAND_LIMIT));
     }
 
     /**
      * Drive using tank-style values: left speed, right speed.
      * 
      * @param ySpeed
+     * 
      *            The left motor speed
      * @param y2Speed
      *            The right motor speed
@@ -225,9 +223,6 @@ public class DriveSubsystem extends Subsystem {
      * Zero all drive encoders.
      */
     public void resetEncoders() {
-	// TESTBOT CHANGES
-	leftEncoder.reset();
-	// END OF TESTBOT CHANGES
 	// rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
 	frontRight.setSelectedSensorPosition(0, 0, 10);
@@ -253,6 +248,8 @@ public class DriveSubsystem extends Subsystem {
      * state for PID control.
      */
     double KP = -.0075, KD = -.1, KI = -.001;
+    double KPCubeVision = -.0075, KDCubeVision = -.1, KICubeVision = -.001;
+
     public double previousTime = 0, time, integral = 0;
     double previousError = 0;
 
@@ -268,17 +265,18 @@ public class DriveSubsystem extends Subsystem {
 
     public void driveWithVision(double speed) {
 	double error = (Robot.cubeVision.getError());
-	if (error == previousError)
+	if (error != previousError)
 	    derivative = (error - previousError) / (CubeVisionThread.FPS);
 	integral += error * (CubeVisionThread.FPS);
-	double value = KP * error + KD * derivative + KI * integral;
+	double value = KPCubeVision * error + KDCubeVision * derivative + KICubeVision * integral;
 	drive.arcadeDrive(-1 * speed, value);
 	updateDiagnostics();
-	previousTime = time;
+	// previousTime = time;
 	previousError = error;
-	SmartDashboard.putNumber("proportional", KP * error);
-	SmartDashboard.putNumber("derivative", KD * derivative);
-	SmartDashboard.putNumber("integral", KI * integral);
+	// SmartDashboard.putNumber("Error", error);
+	// SmartDashboard.putNumber("proportional", KPCubeVision);
+	// SmartDashboard.putNumber("derivative", KDCubeVision);
+	// SmartDashboard.putNumber("integral", KICubeVision * integral);
     }
 
     /**
@@ -287,11 +285,12 @@ public class DriveSubsystem extends Subsystem {
     public void prepareDriveToCube() {
 	previousTime = 0;
 	integral = 0;
-	previousError = Robot.cubeVision.getError();
+	previousError = 0;
 	derivative = 0;
-	KP = SmartDashboard.getNumber("P", -.01);
-	KD = SmartDashboard.getNumber("D", -.01);
-	KI = SmartDashboard.getNumber("I", -.0);
+	KPCubeVision = .0035;// SmartDashboard.getNumber("P", -.01);// -.005;
+	KDCubeVision = .035;// SmartDashboard.getNumber("D", -.01);// -.05;
+	KICubeVision = 0;// SmartDashboard.getNumber("I", -.0);// 0;
+	// SmartDashboard.putString("Reset", "True");
     }
 
     /**
@@ -401,10 +400,10 @@ public class DriveSubsystem extends Subsystem {
 	else if (value < -.75)
 	    value = -.75;
 	turn(value);
-	SmartDashboard.putNumber("Value", value);
-	SmartDashboard.putNumber("proportional", KP * error);
-	SmartDashboard.putNumber("derivative", KD * derivative);
-	SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	// SmartDashboard.putNumber("Value", value);
+	// SmartDashboard.putNumber("proportional", KP * error);
+	// SmartDashboard.putNumber("derivative", KD * derivative);
+	// SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	// SmartDashboard.putNumber("front left motor speed", frontLeft.get());
 	// SmartDashboard.putNumber("front right motor speed", frontRight.get());
     }
@@ -414,9 +413,9 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public void resetPidTurn(double angle, int direction) {
-	KP = -.1;
-	KD = -.05;
-	tolerance = 5;
+	KP = -.1;// SmartDashboard.getNumber("P", -.1);// -.1;
+	KD = -.0225;// -.05;
+	tolerance = 4;
 	speedThreshold = 20;
 	gyro.reset();
 	this.direction = direction;
@@ -477,7 +476,7 @@ public class DriveSubsystem extends Subsystem {
 	    double error = (gyro.getAngle() - (direction * angle));
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
-	    SmartDashboard.putNumber("Value", value);
+	    // SmartDashboard.putNumber("Value", value);
 	    // if (Math.abs(value) > .35 || derivative > speedThreshold) {
 	    frontLeft.set(value);
 	    frontRight.set(value);
@@ -490,11 +489,11 @@ public class DriveSubsystem extends Subsystem {
 	    // frontRight.set(-.35);
 	    // }
 	    // }
-	    SmartDashboard.putNumber("proportional", KP * error);
-	    SmartDashboard.putNumber("derivative", KD * derivative);
-	    SmartDashboard.putNumber("Gyro", gyro.getAngle());
+	    // SmartDashboard.putNumber("proportional", KP * error);
+	    // SmartDashboard.putNumber("derivative", KD * derivative);
+	    // SmartDashboard.putNumber("Gyro", gyro.getAngle());
 	}
-	SmartDashboard.putString("Using pid", "true");
+	// SmartDashboard.putString("Using pid", "true");
 	stop();
     }
 
@@ -558,10 +557,10 @@ public class DriveSubsystem extends Subsystem {
      * @return The adjusted speed
      */
     private double adjustSpeed(double speed) {
-	if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
-	    return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
-	else
-	    return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	// if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
+	// return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
+	// else
+	return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
     }
 
     /**
@@ -580,14 +579,15 @@ public class DriveSubsystem extends Subsystem {
     }
 
     public double getLeftEncoder() {
-	// TESTBOT CHANGES
-	// return frontLeft.getSelectedSensorPosition(0);
-	return leftEncoder.get();
-	// END OF TESTBOT
+	return frontLeft.getSelectedSensorPosition(0);
     }
 
     public double getRightEncoder() {
 	return frontRight.getSelectedSensorPosition(0);
+    }
+
+    public DoubleSolenoid.Value getGearState() {
+	return gearShifter.get();
     }
 
 }
