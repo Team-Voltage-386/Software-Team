@@ -5,6 +5,7 @@ import org.usfirst.frc.team386.robot.subsystems.ArmsSubsystem;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Prepare the robot to climb. This will disconnect the chain so that the intake
@@ -22,10 +23,9 @@ public class PrepForClimb extends InstantCommand {
 		 * Robot.oi.manipulator.getRawButton(RobotMap.prepForClimbButton2)
 		 */) {
 	    new ExecuteSteps().start();
-	    // SmartDashboard.putString("prepClimbErrors", "No error");
+	    SmartDashboard.putString("prepClimbErrors", "No error");
 	} else {
-	    // SmartDashboard.putString("prepClimbErrors", "Error: climb is only allowed
-	    // with 30 seconds of game end");
+	    SmartDashboard.putString("prepClimbErrors", "Error: climb is only allowed with 30 seconds of game end");
 	}
     }
 

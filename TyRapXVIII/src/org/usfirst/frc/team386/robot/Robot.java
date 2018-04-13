@@ -85,7 +85,6 @@ public class Robot extends IterativeRobot {
     public static SendableChooser<Command> chooserMode = new SendableChooser<>();
     public static SendableChooser<String> chooserPosition = new SendableChooser<>();
     public static SendableChooser<Boolean> chooserCrossSide = new SendableChooser<>();
-    public static SendableChooser<Boolean> oldVersion = new SendableChooser<>();
 
     Command autonomousCommand;// = new Stop()
 
@@ -119,20 +118,15 @@ public class Robot extends IterativeRobot {
 	chooserPosition.addObject("Right", RIGHT);
 
 	chooserCrossSide.addDefault("Allow crossing", YES);
+	// chooserCrossSide.addObject("Yes", yes);
 	chooserCrossSide.addObject("Don't allow crossing", NO);
-
-	oldVersion.addDefault("2 cube scale", NO);
-	oldVersion.addObject("Orlando scale", YES);
 	// SmartDashboard.putBoolean("Cross to other Side", chooseCross);
 
 	// SmartDashboard.putData(AUTO_MODE_LABEL, chooser);
 	SmartDashboard.putData("Auto Mode", chooserMode);
 	SmartDashboard.putData("Start Position", chooserPosition);
 	SmartDashboard.putData("Allow Cross Side?", chooserCrossSide);
-	SmartDashboard.putData("Orlando scale", oldVersion);
-	SmartDashboard.putBoolean("Enable processing", true);
-	// SmartDashboard.putData("Run switch", new SwitchAuto());
-	// SmartDashboard.putData("Run scale", new ScaleAuto());
+	SmartDashboard.putBoolean("Enable processing", false);
 	/*
 	 * // Configuration fields // SmartDashboard.putNumber(ELEVATOR_SPEED_LABEL,
 	 * .9); // SmartDashboard.putNumber("ELevator speed down", .75); //
@@ -141,15 +135,11 @@ public class Robot extends IterativeRobot {
 	 * // Diagnostic data // updateDiagnostics();
 	 * 
 	 * // Command buttons for one-time execution
-	 */
-	// SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60));
-	/*
+	 * 
+	 * SmartDashboard.putData(DRIVE_FORWARD_FIVE_FEET_LABEL, new DriveForward(60,
 	 * 0.6)); SmartDashboard.putData(TURN_LEFT_LABEL, new TurnLeft(90));
 	 * SmartDashboard.putData(TURN_RIGHT_LABEL, new TurnRight(90));
-	 */
-	// SmartDashboard.putData("Left 45", new TurnLeft(45));
-	// SmartDashboard.putData("Left 90", new TurnLeft(90));
-	/*
+	 * SmartDashboard.putData("Left 45", new TurnLeft(45));
 	 * SmartDashboard.putData("Right 45", new TurnRight(45));
 	 * SmartDashboard.putData(STOP_LABEL, new Stop());
 	 * SmartDashboard.putData(MOVE_FROM_WALL, new DriveDistanceFromWall(558));
@@ -162,14 +152,10 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putData("Latch chain", new BreakChain());
 	/*
 	 * SmartDashboard.putData("Turn left without pid", new TurnLeftWithoutPid(90));
-	 */
-	// SmartDashboard.putData("Autonomous cube", new
-	// DriveToCubeAuto(CubeVisionThread.SelectorType.bottom, 1));
-	// SmartDashboard.putNumber("P", -.1);
-	// SmartDashboard.putNumber("D", -.05);
-	// SmartDashboard.putNumber("I", -.0);
-	// SmartDashboard.putString("Override", "Don't override");
-    }
+	 * SmartDashboard.putData("Autonomous cube", new DriveToCubeAuto());
+	 * SmartDashboard.putNumber("P", -.01); SmartDashboard.putNumber("D", -.01);
+	 * SmartDashboard.putNumber("I", -.0);
+	 */}
 
     /**
      * This function is called once each time the robot enters Disabled mode. You
@@ -221,7 +207,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void autonomousPeriodic() {
-	// updateDiagnostics();9
+	updateDiagnostics(); // TESTBOT CHANGES
 	Scheduler.getInstance().run();
     }
 
@@ -252,8 +238,8 @@ public class Robot extends IterativeRobot {
      * Renders a collection of diagnostic data to the smart dashboard.
      */
     private void updateDiagnostics() {
-	// driveSubsystem.updateDiagnostics();
-	// elevatorSubsystem.updateDiagnostics();
+	driveSubsystem.updateDiagnostics();
+	elevatorSubsystem.updateDiagnostics();
 	// cubeSubsystem.updateDiagnostics();
 	// cubeVision.updateDiagnostics();
     }

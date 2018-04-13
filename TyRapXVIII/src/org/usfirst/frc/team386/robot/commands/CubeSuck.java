@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class CubeSuck extends Command {
-    public static final double MOTOR_SPEED = 1;
+    public static final double MOTOR_SPEED = .5;
 
     Timer timer = new Timer();
     double time;

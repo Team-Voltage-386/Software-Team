@@ -38,10 +38,8 @@ public class CubeVisionThread extends Thread {
     int rectChoice;
     public SelectorType selectionMethod = SelectorType.bottom;
 
-    int smallestI = -1;
-
     public enum SelectorType {
-	rightmost, leftmost, bottom, largest;
+	rightmost, leftmost, bottom;
     }
 
     public CubeVisionThread() {
@@ -83,14 +81,14 @@ public class CubeVisionThread extends Thread {
 	Mat edges = new Mat();
 
 	Size blurSize = new Size(9, 9);
-	Scalar colorStart = new Scalar(20, 108, 139);
-	Scalar colorEnd = new Scalar(35, 255, 255);
+	Scalar colorStart = new Scalar(10, 100, 25);
+	Scalar colorEnd = new Scalar(50, 255, 255);
 	Size erodeSize = new Size(10, 10);
 	Size dilateSize = new Size(10, 10);
 	Size edgeDilateSize = new Size(4, 4);
 	boolean previousState = true;
 	while (!Thread.interrupted()) {
-	    boolean state = SmartDashboard.getBoolean("Enable processing", true);
+	    boolean state = SmartDashboard.getBoolean("Enable processing", false);
 	    if (state) {
 		if (!previousState) {
 		    camera.setFPS(FPS);
@@ -150,6 +148,7 @@ public class CubeVisionThread extends Thread {
 			rects.add(rect);
 		}
 
+		int smallestI = 0;
 		// This bit was what used to be here
 		// for (int i = 0; i < rects.size(); i++) {
 		// if (rects.get(i).size.height * rects.get(i).size.height < closest) {
@@ -159,18 +158,13 @@ public class CubeVisionThread extends Thread {
 		// }
 		switch (selectionMethod) {
 		case bottom: {
-		    double closest = -1;
-		    smallestI = -1;
+		    double closest = Integer.MAX_VALUE;
 		    for (int i = 0; i < rects.size(); i++) {
-			double y = rects.get(i).center.y;
-			if (y > closest) {
-			    closest = y;
+			if (rects.get(i).center.y < closest) {
+			    closest = rects.get(i).center.y;
 			    smallestI = i;
-			    // SmartDashboard.putNumber("Closest", closest);
 			}
-			// SmartDashboard.putNumber("SmallestI", smallestI);
 		    }
-		    break;
 		}
 		case rightmost: {
 		    double closest = Integer.MIN_VALUE;
@@ -180,7 +174,6 @@ public class CubeVisionThread extends Thread {
 			    smallestI = i;
 			}
 		    }
-		    break;
 		}
 		case leftmost: {
 		    double closest = Integer.MAX_VALUE;
@@ -190,33 +183,14 @@ public class CubeVisionThread extends Thread {
 			    smallestI = i;
 			}
 		    }
-		    break;
 		}
-		case largest: {
-		    double closest = -1;
-		    for (int i = 0; i < rects.size(); i++) {
-			if (rects.get(i).size.height * rects.get(i).size.height < closest) {
-			    closest = rects.get(i).size.height * rects.get(i).size.height;
-			    smallestI = i;
-			}
-		    }
+		default:
 		}
-		}
-		try {
-
-		    // SmartDashboard.putNumber("rect choice", rects.get(smallestI).center.y);
-		} catch (Exception e) {
-
-		}
-
 		rectChoice = smallestI;
 		for (int i = 0; i < rects.size(); i++) {
 		    Point[] vertices = new Point[4];
 		    rects.get(i).points(vertices);
 		    MatOfPoint points = new MatOfPoint(vertices);
-		    // Imgproc.putText(base, String.valueOf(Math.round((rects.get(i).center.y))),
-		    // rects.get(i).center, 1,
-		    // 1.0, new Scalar(0, 255, 0), 2);
 		    if (i != smallestI)
 			Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 5);
 		    else
@@ -262,7 +236,7 @@ public class CubeVisionThread extends Thread {
      * @return The number of pixels the cube is off center
      */
     public int getError() {
-	if (rectChoice >= 0 && rects.size() > rectChoice && rects.get(rectChoice) != null) {
+	if (rectChoice >= 0 && rects.size() > 0 && rects.get(rectChoice) != null) {
 	    try {
 		return (int) (160 - rects.get(rectChoice).center.x);
 	    } catch (NullPointerException e) {
@@ -271,11 +245,6 @@ public class CubeVisionThread extends Thread {
 	} else {
 	    return 0;
 	}
-    }
-
-    public void setSelectionMethod(SelectorType type) {
-	selectionMethod = type;
-
     }
 
 }
