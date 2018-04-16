@@ -8,9 +8,6 @@ General Documentation on the FRC Control System: https://wpilib.screenstepslive.
 
 The Java documentation for the FRC Control System: http://first.wpi.edu/FRC/roborio/release/docs/java/
 
-## SimpleCommandRobot
-
-This was an experimental robot that was developed in the offseason to test out how the command-style robots work. It was developed against the TyRapXVII physical robot.
 
 ## TyRapXVI
 
@@ -24,5 +21,9 @@ This directory contains the 2017 robot code.
 
 This directory contains the 2018 robot code.
 
+## Archive2018
 
-This is a test 	commit to the readme to determine if GH works on school network for commits and pushes/pulls.
+This contains all the experiments and codes created during the 2018 season. It was this season that we won the controls award, marvel at the code when you have free time. 
+
+
+
