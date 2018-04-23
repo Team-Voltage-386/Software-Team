@@ -10,6 +10,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class TurnRight extends Command {
     int angle;
 
+    /**
+     * Starts a new PID turn right
+     * 
+     * @param angle
+     *            The angle to turn right
+     */
+
     public TurnRight(int angle) {
 	super();
 	requires(Robot.driveSubsystem);

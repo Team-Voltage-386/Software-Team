@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class ShiftArms extends InstantCommand {
 
+    /**
+     * Calls the shift arms method
+     */
     public ShiftArms() {
 	super();
 	requires(Robot.armsSubsystem);

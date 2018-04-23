@@ -16,6 +16,14 @@ public class DriveToCubeAuto extends Command {
     CubeVisionThread.SelectorType type;
     double time;
 
+    /**
+     * Drives forward at fast auto mode speed using cube vision to steer
+     * 
+     * @param type
+     *            The selector type used to select a cube
+     * @param time
+     *            The time until the method aborts
+     */
     public DriveToCubeAuto(CubeVisionThread.SelectorType type, double time) {
 	super();
 	requires(Robot.driveSubsystem);

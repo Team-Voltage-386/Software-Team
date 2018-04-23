@@ -12,6 +12,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SetElevator extends Command {
     int ticks;
 
+    /**
+     * Set the elevator to a certain position based on the number of encoder ticks.
+     * 
+     * @param ticksIn
+     *            the encoder ticks to set the elevator to
+     */
     public SetElevator(int ticksIn) {
 	super();
 	requires(Robot.elevatorSubsystem);

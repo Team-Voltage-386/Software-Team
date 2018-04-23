@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class Stop extends InstantCommand {
 
+    /**
+     * Calls DriveSubsystem's stop method
+     */
     public Stop() {
 	super();
 	requires(Robot.driveSubsystem);

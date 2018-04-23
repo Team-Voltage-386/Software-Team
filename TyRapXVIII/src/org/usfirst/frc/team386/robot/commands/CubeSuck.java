@@ -14,6 +14,12 @@ public class CubeSuck extends Command {
     Timer timer = new Timer();
     double time;
 
+    /**
+     * Sucks the cube for a number of seconds
+     * 
+     * @param timeIn
+     *            the number of seconds
+     */
     public CubeSuck(double timeIn) {
 	// Use requires() here to declare subsystem dependencies
 	this.time = timeIn;

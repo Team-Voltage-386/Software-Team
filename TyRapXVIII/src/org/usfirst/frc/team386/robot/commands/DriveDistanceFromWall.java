@@ -15,7 +15,8 @@ public class DriveDistanceFromWall extends Command {
     private boolean goingForward;
 
     /**
-     * The distance from the wall, in millimeters.
+     * Drive the robot a specific distance from a wall, as detected by a rear
+     * ultrasonic.
      * 
      * @param distanceFromWall
      *            Distance in millimeters

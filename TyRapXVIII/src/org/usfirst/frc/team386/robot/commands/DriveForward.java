@@ -12,17 +12,17 @@ public class DriveForward extends Command {
 
     private double speed;
 
+    double ticksRequired;
+    double distance;
+    double scaleFactor = 1;
+    double fastGearMultiplier = .75;
+
     /**
      * Construct the drive forward command with the given distance.
      * 
      * @param distance
      *            The distance in inches
      */
-    double ticksRequired;
-    double distance;
-    double scaleFactor = 1;
-    double fastGearMultiplier = .75;
-
     public DriveForward(int distance) {
 	super();
 	requires(Robot.driveSubsystem);

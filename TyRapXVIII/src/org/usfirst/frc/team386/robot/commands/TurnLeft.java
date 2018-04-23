@@ -12,6 +12,12 @@ public class TurnLeft extends Command {
     int angle;
     Timer timer = new Timer();
 
+    /**
+     * Starts a new PID turn left
+     * 
+     * @param angle
+     *            The angle to turn left
+     */
     public TurnLeft(int angle) {
 	super();
 	requires(Robot.driveSubsystem);

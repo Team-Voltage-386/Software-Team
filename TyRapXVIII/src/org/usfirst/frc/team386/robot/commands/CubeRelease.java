@@ -14,6 +14,12 @@ public class CubeRelease extends Command {
     Timer timer = new Timer();
     double time;
 
+    /**
+     * Ejects the cube for a number of seconds
+     * 
+     * @param timeIn
+     *            the number of seconds
+     */
     public CubeRelease(double timeIn) {
 	// Use requires() here to declare subsystem dependencies
 	this.time = timeIn;

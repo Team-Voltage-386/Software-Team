@@ -14,6 +14,13 @@ public class CubeSuckUltra extends Command {
     Timer timer = new Timer();
     double time;
 
+    /**
+     * Sucks the cube for a number of seconds or until a cube is detected, whichever
+     * is first
+     * 
+     * @param timeIn
+     *            the number of seconds
+     */
     public CubeSuckUltra(double timeIn) {
 	// Use requires() here to declare subsystem dependencies
 	this.time = timeIn;
