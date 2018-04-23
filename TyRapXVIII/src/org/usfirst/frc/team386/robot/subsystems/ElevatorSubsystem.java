@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends Subsystem {
 
     DoubleSolenoid chainBreaker = new DoubleSolenoid(RobotMap.chainBreakerIn, RobotMap.chainBreakerOut);
 
-    DoubleSolenoid latchSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
+    DoubleSolenoid fangsSolenoid = new DoubleSolenoid(RobotMap.latchForwardChannel, RobotMap.latchReverseChannel);
     public DigitalInput lowerElevatorLimitSwitch = new DigitalInput(RobotMap.lowerElevatorLimitSwitch);
     public DigitalInput upperElevatorLimitSwitch = new DigitalInput(RobotMap.upperElevatorLimitSwitch);
     public DigitalInput switchLimitSwitch = new DigitalInput(RobotMap.switchLimitSwitch);
@@ -44,10 +44,16 @@ public class ElevatorSubsystem extends Subsystem {
 	chainBreaker.set(LOCKED);
     }
 
+    /**
+     * Reset's the elevator's encoder
+     */
     public void resetEncoder() {
 	elevatorEncoder.reset();
     }
 
+    /**
+     * Sets the elevator to the default speed (stall speed)
+     */
     public void stopElevator() {
 	elevatorSpark.set(SPEED_NUETRAL);
     }
@@ -56,20 +62,15 @@ public class ElevatorSubsystem extends Subsystem {
      * Update the smart dashboard with diagnostics values.
      */
     public void updateDiagnostics() {
-	// place smart dashboard output here to refresh regularly in either auto or
-	// teleop modes.
 	SmartDashboard.putBoolean("Lower elevator limit switch", lowerElevatorLimitSwitch.get());
 	SmartDashboard.putBoolean("Upper elevator limit switch", upperElevatorLimitSwitch.get());
 	SmartDashboard.putNumber(ELEVATOR_ENCODER_VALUE, elevatorEncoder.get());
-	// SmartDashboard.putBoolean("Fangs", latchSolenoid.get().equals(LOCKED));
+	// SmartDashboard.putBoolean("Fangs", fangsSolenoid.get().equals(LOCKED));
 	// SmartDashboard.putBoolean("Chain break",
 	// chainBreaker.get().equals(UNLOCKED));
 	// SmartDashboard.putBoolean("Switch limit switch", switchLimitSwitch.get());
 	// SmartDashboard.putBoolean("Latch limit switch", latchLimitSwitch.get());
     }
-
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
 
     public void initDefaultCommand() {
 	setDefaultCommand(new ManualElevator());
@@ -79,6 +80,9 @@ public class ElevatorSubsystem extends Subsystem {
 	setDefaultCommand(null);
     }
 
+    /**
+     * Sets the elevator to climb speed (full throttle down)
+     */
     public void climb() {
 	elevatorSpark.set(CLIMB_SPEED);
     }
@@ -88,23 +92,26 @@ public class ElevatorSubsystem extends Subsystem {
      * 
      * @param pov
      *            The POV value (one of the 8 angle values available from the DPad)
-     * @param speed
-     *            The speed at which the elevator moves
+     * @param speedUp
+     *            The speed at which the elevator moves up
+     * @param speedDown
+     *            The speed the elevator moves down at
      */
     public void elevatorFromDPad(int pov, double speedUp, double speedDown, double nuetralSpeed) {
-	// TODO: clean this up so it is easier to understand
-	// SmartDashboard.putString("Running", "True");
+	// if POV is downward
 	if (pov != -1 && pov < 270 && pov > 90) {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(speedDown);
 	    else
 		elevatorSpark.set(0);
+	    // if POV is upward
 	} else if (pov != -1) {
 	    if (upperElevatorLimitSwitch.get())
 		elevatorSpark.set(speedUp);
 	    else {
 		elevatorSpark.set(nuetralSpeed);
 	    }
+	    // If POV isn't pressed
 	} else {
 	    if (lowerElevatorLimitSwitch.get())
 		elevatorSpark.set(nuetralSpeed);
@@ -119,26 +126,26 @@ public class ElevatorSubsystem extends Subsystem {
      * 
      * @param ticks
      *            The encoder ticks
+     * @param down
+     *            Direction of travel False: down True: up
      */
 
     public void setHeight(int ticks, boolean down) {
 	if (down) {
-	    // SmartDashboard.putString("Setting", "Down");
 	    elevatorSpark.set(SPEED_DOWN);
 	} else {
-	    // SmartDashboard.putString("Setting", "Up");
 	    elevatorSpark.set(SPEED_UP);
 	}
     }
 
     /**
-     * Toggle the elevator latching mechanism.
+     * Toggle the elevator's fang mechanism.
      * 
      * This should be triggered at the end of the climb to hold the elevator in
      * place.
      */
     public void toggleElevatorLock() {
-	if (latchSolenoid.get() == LOCKED) {
+	if (fangsSolenoid.get() == LOCKED) {
 	    lock(UNLOCKED);
 	} else {
 	    lock(LOCKED);
@@ -146,12 +153,13 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     /**
-     * Set the lock solenoid to either locked or unlocked.
+     * Set the fang's solenoid to either locked or unlocked.
      * 
      * @param value
+     *            DOubleSolenoid.Value to set
      */
     public void lock(Value value) {
-	latchSolenoid.set(value);
+	fangsSolenoid.set(value);
     }
 
     /**
@@ -168,6 +176,9 @@ public class ElevatorSubsystem extends Subsystem {
 	    chainBreaker.set(LOCKED);
     }
 
+    /**
+     * Stops all functions of the subsystem
+     */
     public void stopSubsystem() {
 	setDefaultCommand(null);
 	elevatorSpark.set(0);
