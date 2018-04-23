@@ -54,13 +54,15 @@ public class ScaleAuto extends InstantCommand {
     }
 
     /**
-     * Select the command to use based on the position.
+     * Select the command to use based on the position. Don't even bother tracing
+     * the logic, this method is too far gone
      * 
      * @param position
      *            The robot starting position
      * @return The Command to start
      */
     private Command select(String position) {
+	// Let this method be a valuable lesson in the uses of switch statements :P
 	if (position.equals(Robot.LEFT)) {
 	    if (Robot.gameData.isScaleLeft()) {
 		if (!Robot.oldVersion.getSelected()) {

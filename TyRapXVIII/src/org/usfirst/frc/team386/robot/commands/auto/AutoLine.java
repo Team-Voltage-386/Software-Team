@@ -18,6 +18,8 @@ public class AutoLine extends InstantCommand {
     protected void initialize() {
 	switch (Robot.chooserPosition.getSelected()) {
 	case Robot.LEFT:
+	    new DriveForward(120).start();
+	    break;
 	case Robot.RIGHT:
 	    new DriveForward(120).start();
 	    break;
