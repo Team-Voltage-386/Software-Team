@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * used in both autonomous or teleoperated mode.
  */
 public class DriveSubsystem extends Subsystem {
+    // Important note, proper notation would be high and low gear
     public static final DoubleSolenoid.Value SLOW_GEAR = DoubleSolenoid.Value.kReverse;
     public static final DoubleSolenoid.Value FAST_GEAR = DoubleSolenoid.Value.kForward;
 
@@ -60,9 +61,11 @@ public class DriveSubsystem extends Subsystem {
     /* extra talons for six motor drives */
     WPI_TalonSRX leftSlave1 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor);
     WPI_TalonSRX rightSlave1 = new WPI_TalonSRX(RobotMap.rightFollowerDriveMotor);
-    // WPI_TalonSRX leftSlave2 = new WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2);
-    // WPI_TalonSRX rightSlave2 = new
-    // WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
+    /*
+     * Commented out because we removed // WPI_TalonSRX leftSlave2 = new
+     * WPI_TalonSRX(RobotMap.leftFollowerDriveMotor2); // WPI_TalonSRX rightSlave2 =
+     * new // WPI_TalonSRX(RobotMap.rightFollowerDriveMotor2);
+     */
 
     DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
 
@@ -72,33 +75,19 @@ public class DriveSubsystem extends Subsystem {
 	    RobotMap.gearShiftSolenoidReverseChannel);
 
     public boolean IS_FAST_GEAR = (gearShifter.get() == FAST_GEAR);
-    // Encoder leftEncoder = new Encoder(3, 9);
-    // Encoder rightEncoder = new Encoder(RobotMap.rightDriveEncoderChannelA,
-    // RobotMap.rightDriveEncoderChannelB);
-
-    // public DigitalInput linesensor = new
-    // DigitalInput(RobotMap.lineSensorChannel);
     public Ultrasonic rearUltrasonic = new Ultrasonic(RobotMap.rearPingChannel, RobotMap.rearEchoChannel);
-    // public Ultrasonic frontUltrasonic = new Ultrasonic(RobotMap.frontPingChannel,
-    // RobotMap.frontEchoChannel);
-    // public AnalogUltrasonic zeroUltra = new AnalogUltrasonic(0, 1, 10);
-    // public AnalogUltrasonic oneUltra = new AnalogUltrasonic(1, 1, 10);
     Command defaultCommand;
 
     Timer timer = new Timer();
 
     public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-    // private DriveToCube driveToCube;
-
-    /*
-     * Construct a new DriveSubsystem.
+    /**
+     * Construct a new DriveSubsystem. No kidding
      */
     public DriveSubsystem() {
 	leftSlave1.follow(frontLeft);
-	// leftSlave2.follow(frontLeft);
 	rightSlave1.follow(frontRight);
-	// rightSlave2.follow(frontRight);
 	frontLeft.configPeakCurrentLimit(kPeakCurrentAmps, 10);
 	frontLeft.configPeakCurrentDuration(kPeakTimeMs, 10); /* this is a necessary call to avoid errata. */
 	frontLeft.configContinuousCurrentLimit(kContinCurrentAmps, 10);
@@ -109,19 +98,12 @@ public class DriveSubsystem extends Subsystem {
 	frontRight.configContinuousCurrentLimit(kContinCurrentAmps, 10);
 	frontRight.enableCurrentLimit(true); /* honor initial setting */
 
-	// frontRight.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS,
-	// NO_TIMEOUT);
-	// frontLeft.configContinuousCurrentLimit(MOTOR_CURRENT_LIMIT_AMPS, NO_TIMEOUT);
-	// frontRight.enableCurrentLimit(true);
-	// frontLeft.enableCurrentLimit(true);
-
 	frontRight.configOpenloopRamp(OPEN_LOOP_RAMP_SECONDS, NO_TIMEOUT);
 	frontLeft.configOpenloopRamp(OPEN_LOOP_RAMP_SECONDS, NO_TIMEOUT);
 
 	compressor.start();
 
 	rearUltrasonic.setAutomaticMode(true);
-	// frontUltrasonic.setAutomaticMode(true);
 
 	gearShifter.set(SLOW_GEAR);
 	timer.start();
@@ -132,8 +114,6 @@ public class DriveSubsystem extends Subsystem {
      */
 
     public void updateDiagnostics() {
-	// place smart dashboard output here to refresh regularly in either auto or
-	// teleop modes.
 	// SmartDashboard.putBoolean(Robot.LINE_SENSOR, linesensor.get());
 	SmartDashboard.putNumber(Robot.REAR_ULTRASONIC, rearUltrasonic.getRangeMM());
 	SmartDashboard.putBoolean("Shifter", DoubleSolenoid.Value.kForward == gearShifter.get());
@@ -174,14 +154,14 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Boost the forward speed.
+     * Boost the forward speed. Not used
      */
     public void startBoost() {
 	speedMultiplier = BOOST_SPEED_MULTIPLIER;
     }
 
     /**
-     * Stop boosting the forward speed.
+     * Stop boosting the forward speed. Not used
      */
     public void stopBoost() {
 	speedMultiplier = DEFAULT_SPEED_MULTIPLIER;
@@ -223,7 +203,6 @@ public class DriveSubsystem extends Subsystem {
      * Zero all drive encoders.
      */
     public void resetEncoders() {
-	// rightEncoder.reset();
 	frontLeft.setSelectedSensorPosition(0, 0, 10);
 	frontRight.setSelectedSensorPosition(0, 0, 10);
     }
@@ -263,61 +242,44 @@ public class DriveSubsystem extends Subsystem {
 
     double derivative;
 
+    /**
+     * Drives forward while turning based on vision values
+     * 
+     * @param speed
+     *            Forward speed
+     */
     public void driveWithVision(double speed) {
 	double error = (Robot.cubeVision.getError());
+
+	// Nessicary to avoid resetting derivative when the frame desn't update fast
+	// enough
 	if (error != previousError)
 	    derivative = (error - previousError) / (CubeVisionThread.FPS);
 	integral += error * (CubeVisionThread.FPS);
 	double value = KPCubeVision * error + KDCubeVision * derivative + KICubeVision * integral;
 	drive.arcadeDrive(-1 * speed, value);
 	updateDiagnostics();
-	// previousTime = time;
 	previousError = error;
-	// SmartDashboard.putNumber("Error", error);
-	// SmartDashboard.putNumber("proportional", KPCubeVision);
-	// SmartDashboard.putNumber("derivative", KDCubeVision);
-	// SmartDashboard.putNumber("integral", KICubeVision * integral);
     }
 
     /**
-     * Prepare to drive to the cube with computer vision assistance in teleop mode.
+     * Resets PID values
      */
     public void prepareDriveToCube() {
 	previousTime = 0;
 	integral = 0;
 	previousError = 0;
 	derivative = 0;
-	KPCubeVision = .0035;// SmartDashboard.getNumber("P", -.01);// -.005;
-	KDCubeVision = .035;// SmartDashboard.getNumber("D", -.01);// -.05;
-	KICubeVision = 0;// SmartDashboard.getNumber("I", -.0);// 0;
-	// SmartDashboard.putString("Reset", "True");
+	KPCubeVision = .0035;
     }
-
-    /**
-     * Execute the drive to the cube with computer vision assistance in telop mode.
-     * 
-     * @param speed
-     *            The speed to drive
-     */
-    // public void driveToCubeTeleop(double speed) {
-    // if (driveToCube == null)
-    // throw new IllegalStateException("Call prepareDriveToCubeTeleop before
-    // executing the assisted drive");
-    // driveToCube.drive(speed);
-    // }
-
-    /**
-     * Complete the drive to cube with computer vision assistance.
-     */
-    // public void completeDriveToCubeTeleop() {
-    // driveToCube = null;
-    // }
 
     /**
      * Drive towards the cube using error adjustment values from the cube vision
      * thread.
      * 
-     * WARNING: this method will not stop unless you disable the robot!
+     * WARNING: this method will not stop unless you disable the robot! Not used,
+     * this structure has been replaced by the more optimal command based structure
+     * (as opposed to the instant commands)
      */
     public void driveToCubeAuto() {
 	while (RobotState.isEnabled()) {
@@ -346,7 +308,9 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Move forward the specific number of inches.
+     * Move forward the specific number of inches. Not used, this structure has been
+     * replaced by the more optimal command based structure (as opposed to the
+     * instant commands)
      * 
      * @param inches
      *            Inches to move forward
@@ -367,30 +331,11 @@ public class DriveSubsystem extends Subsystem {
 	// stop();
     }
 
-    /**
-     * Drive forward until the line sensor detects a line.
-     * 
-     * WARNING! If no line is sensed calling this method will drive forward
-     * indefinitely.
-     */
-    // public void driveForwardToLine() {
-    // while (linesensor.get() && RobotState.isEnabled()) {
-    // arcadeDriveStraight(FAST_AUTO_MODE_SPEED);
-    // updateDiagnostics();
-    // }
-    // stop();
-    // }
-
-    /**
-     * Turn the given angle and direction with a PID feedback loop.
-     * 
-     * @param angle
-     *            The angle to turn
-     * @param direction
-     *            -1 (LEFT), 1 (RIGHT)
-     */
     double tolerance, speedThreshold, direction, angle;
 
+    /**
+     * Turns the robot based on gyro values and PID calculations
+     */
     public void turnWithPid() {
 	double error = (gyro.getAngle() - (direction * angle));
 	double derivative = gyro.getRate();
@@ -400,18 +345,25 @@ public class DriveSubsystem extends Subsystem {
 	else if (value < -.75)
 	    value = -.75;
 	turn(value);
-	// SmartDashboard.putNumber("Value", value);
-	// SmartDashboard.putNumber("proportional", KP * error);
-	// SmartDashboard.putNumber("derivative", KD * derivative);
-	// SmartDashboard.putNumber("Gyro", gyro.getAngle());
-	// SmartDashboard.putNumber("front left motor speed", frontLeft.get());
-	// SmartDashboard.putNumber("front right motor speed", frontRight.get());
     }
 
+    /**
+     * Checks if the PID turn is done based on its current speed and position
+     * 
+     * @return If the PID turn is done
+     */
     public boolean pidTurnDone() {
 	return (Math.abs(direction * gyro.getAngle() - angle) < tolerance && Math.abs(gyro.getRate()) < speedThreshold);
     }
 
+    /**
+     * Resets the PID turn variables
+     * 
+     * @param angle
+     *            The desired angle to turn to
+     * @param direction
+     *            The direction to turn left: -1 right: 1
+     */
     public void resetPidTurn(double angle, int direction) {
 	KP = -.1;// SmartDashboard.getNumber("P", -.1);// -.1;
 	KD = -.0225;// -.05;
@@ -437,20 +389,6 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Turn left the given angle.
-     * 
-     * @param angle
-     *            Turning angle
-     */
-
-    /**
-     * Turn right the given angle.
-     * 
-     * @param angle
-     *            Turning angle
-     */
-
-    /**
      * Stop the robot from moving.
      */
     public void stop() {
@@ -459,7 +397,8 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Turn the given angle and direction with a PID feedback loop.
+     * Turn the given angle and direction with a PID feedback loop. Outdated, left
+     * here mainly for reference
      * 
      * @param angle
      *            The angle to turn
@@ -476,8 +415,6 @@ public class DriveSubsystem extends Subsystem {
 	    double error = (gyro.getAngle() - (direction * angle));
 	    double derivative = gyro.getRate();
 	    double value = KP * error + KD * derivative;
-	    // SmartDashboard.putNumber("Value", value);
-	    // if (Math.abs(value) > .35 || derivative > speedThreshold) {
 	    frontLeft.set(value);
 	    frontRight.set(value);
 	    // } else {
@@ -498,22 +435,6 @@ public class DriveSubsystem extends Subsystem {
     }
 
     /**
-     * Turn the given angle and direction with no PID feedback loop.
-     * 
-     * @param angle
-     *            The angle to turn
-     * @param direction
-     *            -1 (LEFT), 1 (RIGHT)
-     */
-    void oldTurnWithoutPid(double angle, int direction) {
-	gyro.reset();
-	while ((int) Math.abs(gyro.getAngle()) < angle && RobotState.isEnabled()) {
-	    drive.tankDrive(direction * GYRO_TURNING_SPEED, direction * -GYRO_TURNING_SPEED);
-	}
-	stop();
-    }
-
-    /**
      * Drives straight with help from gyro.
      * 
      * @param speed
@@ -521,23 +442,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void arcadeDriveStraight(double speed) {
 	drive.arcadeDrive(speed, GYRO_COMPENSATION * gyro.getAngle());
-    }
-
-    /**
-     * Return 0 if the given value is less than the specified limit.
-     * 
-     * This is used to make sure that the robot only moves forward when an input
-     * value passes a certain threshold.
-     * 
-     * @param in
-     *            The input value
-     * @param limit
-     *            The limit
-     * @return 0 or the speed if the input is greater than the limit
-     */
-    public void highGearTurn() {
-	// TODO Auto-generated method stub
-
     }
 
     private double deadBand(double in, double limit) {
@@ -557,14 +461,13 @@ public class DriveSubsystem extends Subsystem {
      * @return The adjusted speed
      */
     private double adjustSpeed(double speed) {
-	// if (Robot.oi.xboxControl.getRawAxis(RobotMap.breakTrigger) > 30)
-	// return deadBand((-1 * DEFAULT_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
-	// else
 	return deadBand((-1 * BOOST_SPEED_MULTIPLIER * speed), DEAD_BAND_LIMIT);
     }
 
     /**
-     * Reduce the sensitivity of the joystick input to make tank driving easier.
+     * Reduce the sensitivity of the joystick input to make tank driving easier. Not
+     * used, but a useful concept, runs into problems if the robot requires high
+     * power to start moving
      * 
      * @param in
      *            The speed.
@@ -578,14 +481,23 @@ public class DriveSubsystem extends Subsystem {
 	}
     }
 
+    /**
+     * @return the left encoder value
+     */
     public double getLeftEncoder() {
 	return frontLeft.getSelectedSensorPosition(0);
     }
 
+    /**
+     * @return the right encoder value
+     */
     public double getRightEncoder() {
 	return frontRight.getSelectedSensorPosition(0);
     }
 
+    /**
+     * @return the gear shifter's state high: kForward low: kReverse
+     */
     public DoubleSolenoid.Value getGearState() {
 	return gearShifter.get();
     }
