@@ -60,46 +60,73 @@ public class CubeSubsystem extends Subsystem {
 	setDefaultCommand(new CubeWithTrigger());
     }
 
+    /**
+     * Sets intake to the default speed
+     */
     public void stop() {
 	left.set(DEFAULT_SPEED);
 	right.set(-1 * DEFAULT_SPEED);
     }
 
+    /**
+     * Directly sets the speed of the intake motors
+     * 
+     * @param leftSpeed
+     *            The speed for the left motor
+     * @param rightSpeed
+     *            The speed for the right motor
+     */
     public void run(double leftSpeed, double rightSpeed) {
 	left.set(leftSpeed);
 	right.set(rightSpeed);
     }
 
+    /**
+     * Sets both motors to the same speed
+     * 
+     * @param speed
+     *            The speed to set both motors to
+     */
     public void symetricalCube(double speed) {
 	left.set(speed);
 	right.set(-1 * speed);
     }
 
+    /**
+     * Symetrical cube that overrides to run if the left or right value is high
+     * enough, used for manual control
+     * 
+     * @param mainSpeed
+     *            The speed to set both motors to if left and right are to small
+     * @param leftSpeed
+     *            The speed to set the left motor to
+     * @param rightSpeed
+     *            The speed to set the right motor to
+     */
     public void runCombined(double mainSpeed, double leftSpeed, double rightSpeed) {
 	if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1 && Math.abs(mainSpeed) < .1
 		&& !Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
-	    left.set(DEFAULT_SPEED);// * SmartDashboard.getNumber("proportion", 1)
-	    // SmartDashboard.getNumber("defaultSpeed", 0)
+	    left.set(DEFAULT_SPEED);
 	    right.set(-1 * DEFAULT_SPEED);
-	    // SmartDashboard.putString("Status", "default");
 	} else if (Robot.oi.manipulator.getRawButton(RobotMap.halfSpeedEject)) {
 	    left.set(halfSpeedEject);
 	    right.set(-1 * halfSpeedEject);
-	    // SmartDashboard.putString("Status", "eject");
 	} else if (Math.abs(leftSpeed) < .1 && Math.abs(rightSpeed) < .1) {
 	    left.set(mainSpeed);
-	    right.set(-1 * mainSpeed);// -1*
-	    // SmartDashboard.putString("Status", "triggers");
-	    // SmartDashboard.putNumber("mainSpeed", mainSpeed);
+	    right.set(-1 * mainSpeed);
 	} else {
-	    // SmartDashboard.putNumber("leftSpeed", leftSpeed);
-	    // SmartDashboard.putNumber("rightSpeed", rightSpeed);
 	    left.set(leftSpeed);
 	    right.set(-1 * rightSpeed);
-	    // SmartDashboard.putString("Status", "joy");
 	}
     }
 
+    /**
+     * Runs the intake with speed differentials based on ultrasonic sensors. Not
+     * used
+     * 
+     * @param speed
+     *            the base speed for both motors
+     */
     public void runWithUltrasonics(double speed) {
 	double difference = ultraCenter.getInches() - ultraEdge.getInches();
 	if (difference > 2) {
@@ -114,6 +141,11 @@ public class CubeSubsystem extends Subsystem {
 	}
     }
 
+    /**
+     * Uses ultrasonics to detect cube
+     * 
+     * @return If there's a cube in the intake
+     */
     public boolean hasCube() {
 	return ultraCenter.getInches() < 4 && ultraEdge.getInches() < 4;
     }
