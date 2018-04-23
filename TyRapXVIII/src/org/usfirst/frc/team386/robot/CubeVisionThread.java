@@ -40,6 +40,10 @@ public class CubeVisionThread extends Thread {
 
     int smallestI = -1;
 
+    /**
+     * The method by which the vision algorithm selects a cube for the getError
+     * method
+     */
     public enum SelectorType {
 	rightmost, leftmost, bottom, largest;
     }
@@ -97,43 +101,18 @@ public class CubeVisionThread extends Thread {
 		    camera.setExposureManual(33);
 		}
 		cvSink.grabFrame(base);
-
-		// SmartDashboard.putString("image", image.toString());
-		// base.copyTo(mat);
 		Imgproc.blur(base, mat, blurSize);
-		// Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
-		// Size(20, 20));
-		// Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new
-		// Size(20, 20));
-
 		Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2HSV);
-		/*
-		 * SmartDashboard.putNumber("Lower Left 0", mat.get(0, 0)[0]);
-		 * SmartDashboard.putNumber("Lower Left 1", mat.get(0, 0)[1]);
-		 * SmartDashboard.putNumber("Lower Left 2", mat.get(0, 0)[2]);
-		 */
 		Core.inRange(mat, colorStart, colorEnd, mat);
-		// Imgproc.dilate(mat, mat, dilateElement);
-		// Imgproc.erode(mat, mat, erodeElement);
-
-		// for (int r = 0; r < base.rows(); r++) {
-		// for (int c = 0; c < base.cols(); c++) {
-		// if (mat.get(r, c)[0] == 0) {
-		// base.put(r, c, new double[] { 0, 0, 0 });
-		// }
-		// }
-		// }
 		Imgproc.erode(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, erodeSize));
 		Imgproc.dilate(mat, mat, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, dilateSize));
 
 		Imgproc.cvtColor(base, grey, Imgproc.COLOR_BGR2GRAY);
-		// Core.multiply(grey, new Scalar(3), grey);
 		Imgproc.Canny(grey, edges, 100, 200);
 
 		Imgproc.dilate(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, edgeDilateSize));
 
 		Imgproc.erode(edges, edges, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
-		// new Size(20, 20)));
 
 		Core.bitwise_not(edges, edges);
 		Core.bitwise_and(mat, edges, mat);
@@ -143,20 +122,10 @@ public class CubeVisionThread extends Thread {
 		rects.clear();
 		for (int i = 0; i < finalContours.size(); i++) {
 		    RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f(finalContours.get(i).toArray()));
-		    if (rect.size.height > 10 && rect.size.width > 10 /*
-								       * && rect.size.width / rect.size.height > .6 &&
-								       * rect.size.width / rect.size.height < 1.5
-								       */ && rect.angle < 10)
+		    if (rect.size.height > 10 && rect.size.width > 10 && rect.angle < 10)
 			rects.add(rect);
 		}
 
-		// This bit was what used to be here
-		// for (int i = 0; i < rects.size(); i++) {
-		// if (rects.get(i).size.height * rects.get(i).size.height < closest) {
-		// closest = rects.get(i).size.height * rects.get(i).size.height;
-		// smallestI = i;
-		// }
-		// }
 		switch (selectionMethod) {
 		case bottom: {
 		    double closest = -1;
@@ -166,9 +135,7 @@ public class CubeVisionThread extends Thread {
 			if (y > closest) {
 			    closest = y;
 			    smallestI = i;
-			    // SmartDashboard.putNumber("Closest", closest);
 			}
-			// SmartDashboard.putNumber("SmallestI", smallestI);
 		    }
 		    break;
 		}
@@ -202,21 +169,12 @@ public class CubeVisionThread extends Thread {
 		    }
 		}
 		}
-		try {
-
-		    // SmartDashboard.putNumber("rect choice", rects.get(smallestI).center.y);
-		} catch (Exception e) {
-
-		}
 
 		rectChoice = smallestI;
 		for (int i = 0; i < rects.size(); i++) {
 		    Point[] vertices = new Point[4];
 		    rects.get(i).points(vertices);
 		    MatOfPoint points = new MatOfPoint(vertices);
-		    // Imgproc.putText(base, String.valueOf(Math.round((rects.get(i).center.y))),
-		    // rects.get(i).center, 1,
-		    // 1.0, new Scalar(0, 255, 0), 2);
 		    if (i != smallestI)
 			Imgproc.drawContours(base, Arrays.asList(points), -1, new Scalar(255, 255, 255), 5);
 		    else
@@ -234,30 +192,11 @@ public class CubeVisionThread extends Thread {
 		rectOutputStream.putFrame(base);
 	    }
 	    previousState = state;
-	    // try {
-	    // sleep(50);
-	    // } catch (InterruptedException e) {
-	    //
-	    // }
-	}
-    }
-
-    // TODO: is this used?
-    public void setRectangleChoice(int rectIn) {
-	rectChoice = rectIn;
-    }
-
-    // TODO: is this used?
-    public RotatedRect getRectChoice() {
-	try {
-	    return rects.get(rectChoice);
-	} catch (IndexOutOfBoundsException e) {
-	    return new RotatedRect();
 	}
     }
 
     /**
-     * Used to determine if the cube is centered in the camera's view.
+     * Used to determine the displacement of the chosen cube
      * 
      * @return The number of pixels the cube is off center
      */
@@ -273,9 +212,15 @@ public class CubeVisionThread extends Thread {
 	}
     }
 
-    public void setSelectionMethod(SelectorType type) {
-	selectionMethod = type;
+    /**
+     * Sets the selector method to be used to select a cube
+     * 
+     * @param method
+     *            The selection method to be used
+     */
 
+    public void setSelectionMethod(SelectorType method) {
+	selectionMethod = method;
     }
 
 }
