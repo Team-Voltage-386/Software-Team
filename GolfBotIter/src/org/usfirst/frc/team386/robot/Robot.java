@@ -23,31 +23,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-	private static final String kDefaultAuto = "Default";
+	/*private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	private SendableChooser<String> m_chooser = new SendableChooser<>();*/
 
 
-    Spark Swing1,Swing2;
+    Spark Swing1;
     Joystick Club;
     Encoder golfEncoder;
 	
 	@Override
 	public void robotInit() {
-		m_chooser.addDefault("Default Auto", kDefaultAuto);
+		/*m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);
+		SmartDashboard.putData("Auto choices", m_chooser);*/
 		
 		golfEncoder = new Encoder(5, 6, false, Encoder.EncodingType.k4X);
 		golfEncoder.reset();
 		//Swing1 = new Victor (2);
-		Swing2 = new Spark (3);
+		Swing1 = new Spark (3);
 		Club = new Joystick(0);
 		//PowerDistributionPanel PDP = new PowerDistributionPanel(0);
 		boolean isInverted  = true;
-		//Swing1.setInverted(isInverted);
-		Swing2.setInverted(isInverted);
+		Swing1.setInverted(isInverted);
 	}
 
 	@Override
@@ -63,8 +62,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() 
 	{
-		SmartDashboard.putNumber("Golf Encoder", golfEncoder.getRaw());
 		double clubPower = Club.getRawAxis(1);
+		SmartDashboard.putNumber("Golf Encoder", golfEncoder.getRaw());
+		SmartDashboard.putNumber("Club Power Actual", clubPower);
+		SmartDashboard.putNumber("Club Power Modified", clubPower/4);
+		
 		
 		if(Club.getRawButton(1))
 		{
@@ -77,11 +79,11 @@ public class Robot extends IterativeRobot {
 			{
 				if(golfEncoder.getDistance() > 5)
 				{
-					Swing2.set(-0.1);
+					Swing1.set(-0.1);
 				}
 				else if(golfEncoder.getDistance() < -5)
 				{
-					Swing2.set(0.1);
+					Swing1.set(0.1);
 				}
 			}
 		}
@@ -95,7 +97,7 @@ public class Robot extends IterativeRobot {
 			clubPower = Math.max(clubPower, 0);
 		}
 
-		Swing2.set((clubPower/4));
+		Swing1.set((clubPower/4));
 	}
 
 	@Override
