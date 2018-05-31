@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -75,16 +76,24 @@ public class Robot extends IterativeRobot {
 		
 		if(Club.getRawButton(2))
 		{
-			while(golfEncoder.getDistance() != 0)
+			while(golfEncoder.getRaw() > 10 || golfEncoder.getRaw() < -10)
 			{
-				if(golfEncoder.getDistance() > 5)
+				System.out.println("In correction loop");
+				
+				if(golfEncoder.getRaw() > 5)
 				{
-					Swing1.set(-0.1);
+					System.out.println("Greater than");
+					Swing1.set(-0.2);
+					Timer.delay(0.1);
 				}
-				else if(golfEncoder.getDistance() < -5)
+				if(golfEncoder.getRaw() < -5)
 				{
-					Swing1.set(0.1);
+					System.out.println("Less than");
+					Swing1.set(0.2);
+					Timer.delay(0.1);
 				}
+				Timer.delay(0.1);
+				System.out.println("Bottom of Correction loop");
 			}
 		}
 				
@@ -94,7 +103,7 @@ public class Robot extends IterativeRobot {
 		}
 		else if(golfEncoder.getDistance() < -20)
 		{
-			clubPower = Math.max(clubPower, 0);
+			clubPower = Math.max(clubPower, 0);	
 		}
 
 		Swing1.set((clubPower/4));
