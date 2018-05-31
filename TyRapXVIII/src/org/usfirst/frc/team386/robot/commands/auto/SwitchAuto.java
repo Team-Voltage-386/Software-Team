@@ -3,7 +3,6 @@ package org.usfirst.frc.team386.robot.commands.auto;
 import org.usfirst.frc.team386.robot.Robot;
 import org.usfirst.frc.team386.robot.commands.CubeRelease;
 import org.usfirst.frc.team386.robot.commands.CubeSuck;
-import org.usfirst.frc.team386.robot.commands.CubeSuckUltra;
 import org.usfirst.frc.team386.robot.commands.DriveForward;
 import org.usfirst.frc.team386.robot.commands.GearShift;
 import org.usfirst.frc.team386.robot.commands.SetArms;
@@ -203,7 +202,8 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnRight(75));
 	    addParallel(new CubeSuck(9));
 	    addSequential(new DriveForward(25, .75));
-	    addSequential(new CubeSuckUltra(3));
+	    // addSequential(new CubeSuckUltra(3)); // CubeSuckUltra doesnt exist anymore
+	    addSequential(new CubeSuck(3));
 	    addSequential(new DriveForward(20, -.75));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
 	    addSequential(new TurnLeft(75));
@@ -257,7 +257,7 @@ public class SwitchAuto extends InstantCommand {
 	    addSequential(new TurnLeft(75));
 	    addParallel(new CubeSuck(9));
 	    addSequential(new DriveForward(25, .75));
-	    addSequential(new CubeSuckUltra(3));
+	    // addSequential(new CubeSuckUltra(3)); // CubeSuckUltra class doesnt exist anymore
 	    addParallel(new CubeSuck(3));
 	    addSequential(new DriveForward(25, -.75));
 	    addParallel(new SetElevator(ELEVATOR_SWITCH_HEIGHT));
