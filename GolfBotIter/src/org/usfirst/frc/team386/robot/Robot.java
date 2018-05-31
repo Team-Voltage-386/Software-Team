@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 
 
-    Victor Swing1,Swing2;
+    Spark Swing1,Swing2;
     Joystick Club;
     Encoder golfEncoder;
 	
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 		golfEncoder = new Encoder(5, 6, false, Encoder.EncodingType.k4X);
 		golfEncoder.reset();
 		//Swing1 = new Victor (2);
-		Swing2 = new Victor (3);
+		Swing2 = new Spark (3);
 		Club = new Joystick(0);
 		//PowerDistributionPanel PDP = new PowerDistributionPanel(0);
 		boolean isInverted  = true;
@@ -71,7 +71,21 @@ public class Robot extends IterativeRobot {
 			golfEncoder.reset();
 		}
 		
-		
+		if(Club.getRawButton(2))
+		{
+			while(golfEncoder.getDistance() != 0)
+			{
+				if(golfEncoder.getDistance() > 5)
+				{
+					Swing2.set(-0.1);
+				}
+				else if(golfEncoder.getDistance() < -5)
+				{
+					Swing2.set(0.1);
+				}
+			}
+		}
+				
 		if(golfEncoder.getDistance() > 20)
 		{
 			clubPower = Math.min(clubPower, 0);
@@ -80,7 +94,7 @@ public class Robot extends IterativeRobot {
 		{
 			clubPower = Math.max(clubPower, 0);
 		}
-		//Swing1.set(Math.pow(clubPower,2));
+
 		Swing2.set((clubPower/4));
 	}
 
