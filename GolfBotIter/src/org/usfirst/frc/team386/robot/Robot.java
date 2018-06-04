@@ -24,21 +24,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-	/*private static final String kDefaultAuto = "Default";
+	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();*/
+	private SendableChooser<String> m_chooser = new SendableChooser<>();
 
 
     Spark Swing1;
     Joystick Club;
     Encoder golfEncoder;
+    int modifier,maxenc,minenc;
 	
 	@Override
 	public void robotInit() {
-		/*m_chooser.addDefault("Default Auto", kDefaultAuto);
+		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);*/
+		//SmartDashboard.putData("Auto choices", m_chooser);
 		
 		golfEncoder = new Encoder(5, 6, false, Encoder.EncodingType.k4X);
 		golfEncoder.reset();
@@ -48,6 +49,9 @@ public class Robot extends IterativeRobot {
 		//PowerDistributionPanel PDP = new PowerDistributionPanel(0);
 		boolean isInverted  = true;
 		Swing1.setInverted(isInverted);
+		modifier = 1;
+		maxenc = 100;
+		minenc = -100;
 	}
 
 	@Override
@@ -66,7 +70,12 @@ public class Robot extends IterativeRobot {
 		double clubPower = Club.getRawAxis(1);
 		SmartDashboard.putNumber("Golf Encoder", golfEncoder.getRaw());
 		SmartDashboard.putNumber("Club Power Actual", clubPower);
-		SmartDashboard.putNumber("Club Power Modified", clubPower/4);
+		SmartDashboard.putNumber("Power", modifier);
+		SmartDashboard.putNumber("MaxEnc", maxenc );
+		SmartDashboard.putNumber("MinEnc", minenc);
+		SmartDashboard.getNumber("Power", 1);
+		SmartDashboard.getNumber("MaxEnc", 100);
+		SmartDashboard.getNumber("MinEnc", -100);
 		
 		
 		if(Club.getRawButton(1))
@@ -97,16 +106,16 @@ public class Robot extends IterativeRobot {
 			}
 		}
 				
-		if(golfEncoder.getDistance() > 20)
+		if(golfEncoder.getDistance() > maxenc)
 		{
 			clubPower = Math.min(clubPower, 0);
 		}
-		else if(golfEncoder.getDistance() < -20)
+		else if(golfEncoder.getDistance() < minenc)
 		{
 			clubPower = Math.max(clubPower, 0);	
 		}
 
-		Swing1.set((clubPower/4));
+		Swing1.set((clubPower/modifier));
 	}
 
 	@Override
