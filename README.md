@@ -1,6 +1,6 @@
 # Software-Team
 
-This repo contains all software for past and current season robots, scouting software and miscellaneous pieces of software.
+This repo is DEPRECATED. Each project lives in its own repo.
 
 ## Documentation
 
